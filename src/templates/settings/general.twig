@@ -1,0 +1,51 @@
+{#
+/**
+ * EnupalPaypal plugin for Craft CMS 3.x
+ *
+ * @link      https://enupal.com/
+ * @copyright Copyright (c) 2018 Enupal
+ */
+#}
+
+{% extends "enupal-paypal/_layouts/settings" %}
+{% import "_includes/forms" as forms %}
+
+{% set settings = craft.enupalbackup.getSettings() %}
+{% set fullPageForm = true %}
+{% set saveShortcutRedirect = 'enupal-paypal/settings/general' %}
+
+{% set saveButton %}
+	<div class="buttons">
+		<input class="btn submit" type="submit" value="{{ 'Save'|t }}">
+	</div>
+{% endset %}
+
+{% set content %}
+
+	<input type="hidden" name="action" value="enupal-paypal/settings/save-settings">
+
+	<div id="settings-cp">
+
+		{% namespace 'settings' %}
+			{{ forms.field({
+				label: "General settings"|t('enupal-paypal')|upper
+			}, null) }}
+			<hr>
+
+			{{ forms.textField({
+				label: "Amount of backups to keep locally"|t('enupal-paypal'),
+				id: 'backupsAmount',
+				instructions: 'Keep only a configured amount of backups with status Finished'|t('enupal-paypal'),
+				name: 'backupsAmount',
+				value: settings.backupsAmount,
+				size: 10,
+				autofocus: true,
+				first: true,
+				errors: ''
+			}) }}
+
+		{% endnamespace %}
+
+	</div>
+
+{% endset %}

@@ -1,0 +1,70 @@
+{#
+/**
+ * EnupalPaypal plugin for Craft CMS 3.x
+ *
+ * @link      https://enupal.com/
+ * @copyright Copyright (c) 2018 Enupal
+ */
+#}
+
+{% import "_includes/forms" as forms %}
+
+<div class="meta" id="settings">
+	<div class="field" id="isEncrypted-field">
+		<div class="heading">
+			<label id="isEncrypted-label" for="isEncrypted">{{"Status"|t('enupal-paypal')}}</label>
+		</div>
+		<div class="input ltr">
+			{% set labelColor =  backup.backupStatusId == 2 ? 'success' : backup.backupStatusId == 3 ? 'danger' : backup.backupStatusId == 1 ? 'info' : 'warning' %}
+			<div class="bootstrap-iso"><span class="label label-{{labelColor}}">{{backup.getStatusName()}}</span></div>
+		</div>
+	</div>
+	<hr>
+	{% if backup.isEncrypted %}
+		<div class="field" id="isEncrypted-field">
+			<div class="heading">
+				<label id="isEncrypted-label" for="isEncrypted">Encrypted</label>
+			</div>
+			<div class="input ltr">
+				<i class="fa fa-check-square-o fa-fw" aria-hidden="true"></i>
+			</div>
+		</div>
+		<hr>
+	{% endif %}
+	{% if backup.dropbox or backup.aws or backup.ftp or backup.softlayer %}
+		<div class="field">
+			<div class="heading">
+				<label>{{"Uploaded to"|t('enupal-paypal')}}</label>
+			</div>
+			<div class="input ltr">
+				{% if backup.dropbox %}
+						<i title="Dropbox" class="fa fa-dropbox fa-fw green" aria-hidden="true"></i>
+				{% endif %}
+				{% if backup.aws %}
+					<i title="Amazon S3" class="fa fa-amazon fa-fw" aria-hidden="true"></i>
+				{% endif %}
+				{% if backup.ftp %}
+					<i title="FTP" class="fa fa-folder-open fa-fw" aria-hidden="true"></i>
+				{% endif %}
+				{% if backup.softlayer %}
+					<i title="Softlayer Object Storage" class="fa fa-cloud fa-fw" aria-hidden="true"></i>
+				{% endif %}
+			</div>
+		</div>
+		<hr>
+	{% endif %}
+</div><!-- settings div -->
+<hr>
+<div class="meta read-only">
+	<div class="data">
+		<h5 class="heading">{{ "Started at"|t('enupal-paypal') }}</h5>
+		<div class="value">{{ backup.dateCreated|datetime('short') }}</div>
+	</div>
+	{% if backup.backupStatusId == 2 or backup.backupStatusId == 3 %}
+		<div class="data">
+			<h5 class="heading">{{ "Finished at"|t('enupal-paypal') }}</h5>
+			<div class="value">{{ backup.dateUpdated|datetime('short') }}</div>
+		</div>
+	{% endif %}
+</div>
+<hr>

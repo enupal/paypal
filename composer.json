@@ -1,0 +1,49 @@
+{
+  "name": "enupal/paypal",
+  "description": "Create PayPal Buy Now & Donation type buttons",
+  "type": "craft-plugin",
+  "version": "1.0.8",
+  "keywords": [
+    "craft",
+    "cms",
+    "craftcms",
+    "craft-plugin",
+    "paypal",
+    "pay",
+    "checkout",
+    "donation",
+    "e-commerce"
+  ],
+  "autoload": {
+    "psr-4": {
+      "enupal\\paypal\\": "src/"
+    }
+  },
+  "authors": [
+    {
+      "name": "Enupal",
+      "homepage": "http://enupal.com/en"
+    }
+  ],
+  "support": {
+    "email": "info@enupal.com",
+    "issues": "https://github.com/enupal/paypal/issues",
+    "docs": "https://enupal.com/en/craft-plugins/enupal-paypal/docs"
+  },
+  "require": {
+    "craftcms/cms": "^3.0.0-RC1",
+    "mikehaertl/php-shellcommand": "~1.2.5"
+  },
+  "extra": {
+    "name": "Enupal Paypal",
+    "handle": "enupal-paypal",
+    "schemaVersion": "1.0.0",
+    "hasSettings": true,
+    "changelogUrl": "https://raw.githubusercontent.com/enupal/paypal/master/CHANGELOG.md",
+    "developer": "Enupal",
+    "class": "enupal\\paypal\\Paypal",
+    "components": {
+      "app": "enupal\\paypal\\services\\App"
+    }
+  }
+}

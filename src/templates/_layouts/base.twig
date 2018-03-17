@@ -1,0 +1,14 @@
+{#
+/**
+ * EnupalPaypal plugin for Craft CMS 3.x
+ *
+ * @link      https://enupal.com/
+ * @copyright Copyright (c) 2018 Enupal
+ */
+#}
+
+{% extends "_layouts/cp" %}
+
+{% set bodyClass = craft.app.request.segments()|slice(0, 3)|join(' ') %}
+
+{% set selectedSubnavItem = craft.app.request.getSegment(2) == 'backup' ? 'backups' : craft.request.getSegment(2)  %}

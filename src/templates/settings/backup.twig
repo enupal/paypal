@@ -1,0 +1,125 @@
+{#
+/**
+ * EnupalPaypal plugin for Craft CMS 3.x
+ *
+ * @link      https://enupal.com/
+ * @copyright Copyright (c) 2018 Enupal
+ */
+#}
+
+{% extends "enupal-paypal/_layouts/settings" %}
+{% import "_includes/forms" as forms %}
+
+{% set settings = craft.enupalbackup.getSettings() %}
+{% set fullPageForm = true %}
+{% set saveShortcutRedirect = 'enupal-paypal/settings/backup' %}
+
+{% set saveButton %}
+	<div class="buttons">
+		<input class="btn submit" type="submit" value="{{ 'Save'|t }}">
+	</div>
+{% endset %}
+
+{% set content %}
+
+	<input type="hidden" name="action" value="enupal-paypal/settings/save-settings">
+	<input type="hidden" name="backupScenario" value="backupFiles">
+
+	<div id="settings-cp">
+
+		{% namespace 'settings' %}
+			{{ forms.field({
+				label: "Include in files backup"|t('enupal-paypal')|upper,
+				instructions: "Enupal PaypalButtons provides you with powerful control over which files you want to include on your backup besides the database."|t('enupal-paypal'),
+			}, null) }}
+			<hr>
+
+			{{ forms.lightswitchField({
+				label: "Database"|t('enupal-paypal'),
+				id: 'enableDatabase',
+				name: 'enableDatabase',
+				on: settings.enableDatabase,
+				toggle: 'settings-enableDatabase',
+				onLabel: "On"|t('enupal-paypal'),
+				offLabel: "Off"|t('enupal-paypal'),
+				errors: settings.getErrors('enableDatabase'),
+			}) }}
+
+			<div id="settings-enableDatabase" class="{% if not settings.enableDatabase %}hidden{% endif %}">
+				{{ forms.textField({
+					label: "Structure Only"|t('enupal-paypal'),
+					instructions: "Comma separated list of tables where only the table structure will be stored."|t('enupal-paypal'),
+					id: 'excludeData',
+					name: 'excludeData',
+					value: settings.excludeData,
+					autofocus: true,
+					first: true,
+					errors: ''
+				}) }}
+			</div>
+
+			<hr>
+			{{ forms.lightswitchField({
+				label: "Templates"|t('enupal-paypal'),
+				id: 'enableTemplates',
+				name: 'enableTemplates',
+				on: settings.enableTemplates,
+				toggle: 'settings-enableTemplates',
+				onLabel: "On"|t('enupal-paypal'),
+				offLabel: "Off"|t('enupal-paypal'),
+				errors: settings.getErrors('enableTemplates'),
+			}) }}
+
+			<div id="settings-enableTemplates" class="{% if not settings.enableTemplates %}hidden{% endif %}">
+				{{ forms.textField({
+					label: "Exclude Files"|t('enupal-paypal'),
+					instructions: "Comma separated list of paths to exclude."|t('enupal-paypal'),
+					id: 'excludeTemplates',
+					name: 'excludeTemplates',
+					value: settings.excludeTemplates,
+					autofocus: true,
+					first: true,
+					errors: ''
+				}) }}
+			</div>
+			<hr>
+			{{ forms.lightswitchField({
+				label: "Assets"|t('enupal-paypal'),
+				instructions: 'Just local volumes are supported',
+				id: 'enableLocalVolumes',
+				name: 'enableLocalVolumes',
+				on: settings.enableLocalVolumes,
+				toggle: 'settings-enableAssets',
+				onLabel: "On"|t('enupal-paypal'),
+				offLabel: "Off"|t('enupal-paypal'),
+				errors: settings.getErrors('enableLocalVolumes'),
+			}) }}
+
+			<div id="settings-enableAssets" class="{% if not settings.enableLocalVolumes %}hidden{% endif %}">
+				{% set volumes = craft.enupalbackup.getAllLocalVolumes() %}
+
+				{{ forms.checkboxSelect({
+					name: 'volumes',
+					options: volumes,
+					showAllOption: true,
+					values: settings.volumes,
+				}) }}
+			</div>
+
+		<hr>
+			{{ forms.lightswitchField({
+				label: "Logs"|t('enupal-paypal'),
+				instructions: 'PaypalButtons your log files',
+				id: 'enableLogs',
+				name: 'enableLogs',
+				on: settings.enableLogs,
+				onLabel: "On"|t('enupal-paypal'),
+				offLabel: "Off"|t('enupal-paypal'),
+				errors: settings.getErrors('enableLogs'),
+			}) }}
+
+		{% endnamespace %}
+
+	</div>
+
+{% endset %}
