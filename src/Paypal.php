@@ -17,7 +17,7 @@ use craft\web\twig\variables\CraftVariable;
 use craft\services\SystemMessages;
 use craft\events\RegisterEmailMessagesEvent;
 
-use enupal\paypal\variables\BackupVariable;
+use enupal\paypal\variables\PaypalVariable;
 use enupal\paypal\models\Settings;
 
 class Paypal extends \craft\base\Plugin
@@ -54,7 +54,7 @@ class Paypal extends \craft\base\Plugin
             function(Event $event) {
                 /** @var CraftVariable $variable */
                 $variable = $event->sender;
-                $variable->set('enupalPaypal', BackupVariable::class);
+                $variable->set('enupalPaypal', PaypalVariable::class);
             }
         );
 

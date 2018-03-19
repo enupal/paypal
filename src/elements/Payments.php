@@ -157,7 +157,7 @@ class Payments extends Element
         $sources = [
             [
                 'key' => '*',
-                'label' => PaypalPlugin::t('All Backups'),
+                'label' => PaypalPlugin::t('All Buttons'),
             ]
         ];
 
@@ -193,7 +193,7 @@ class Payments extends Element
         $actions[] = Craft::$app->getElements()->createAction([
             'type' => Delete::class,
             'confirmationMessage' => PaypalPlugin::t('Are you sure you want to delete the selected backups?'),
-            'successMessage' => PaypalPlugin::t('Backups deleted.'),
+            'successMessage' => PaypalPlugin::t('Buttons deleted.'),
         ]);
 
         return $actions;

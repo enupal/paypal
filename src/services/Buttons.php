@@ -29,7 +29,7 @@ use yii\base\Exception;
 use craft\models\MailSettings;
 use craft\helpers\MailerHelper;
 
-class Backups extends Component
+class Buttons extends Component
 {
     protected $backupRecord;
 
@@ -129,7 +129,7 @@ class Backups extends Component
     }
 
     /**
-     * Returns all Backups
+     * Returns all Buttons
      *
      * @return null|BackupElement[]
      */
