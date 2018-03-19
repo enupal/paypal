@@ -10,24 +10,24 @@ namespace enupal\paypal\controllers;
 
 use Craft;
 use craft\web\Controller as BaseController;
-use enupal\paypal\PaypalButtons;
+use enupal\paypal\Paypal;
 
 class SettingsController extends BaseController
 {
     /**
      * Save Plugin Settings
      *
-     * @return void
+     * @return \yii\web\Response
+     * @throws \yii\web\BadRequestHttpException
      */
     public function actionSaveSettings()
     {
         $this->requirePostRequest();
         $request = Craft::$app->getRequest();
         $settings = $request->getBodyParam('settings');
-        $scenario = $request->getBodyParam('backupScenario');
 
-        if (!PaypalButtons::$app->settings->saveSettings($settings, $scenario)) {
-            Craft::$app->getSession()->setError(PaypalButtons::t('Couldn’t save settings.'));
+        if (!Paypal::$app->settings->saveSettings($settings)) {
+            Craft::$app->getSession()->setError(Paypal::t('Couldn’t save settings.'));
 
             // Send the settings back to the template
             Craft::$app->getUrlManager()->setRouteParams([
@@ -37,7 +37,7 @@ class SettingsController extends BaseController
             return null;
         }
 
-        Craft::$app->getSession()->setNotice(PaypalButtons::t('Settings saved.'));
+        Craft::$app->getSession()->setNotice(Paypal::t('Settings saved.'));
 
         return $this->redirectToPostedUrl();
     }

@@ -54,7 +54,7 @@ class Paypal extends \craft\base\Plugin
             function(Event $event) {
                 /** @var CraftVariable $variable */
                 $variable = $event->sender;
-                $variable->set('enupalbackup', BackupVariable::class);
+                $variable->set('enupalPaypal', BackupVariable::class);
             }
         );
 
@@ -64,34 +64,13 @@ class Paypal extends \craft\base\Plugin
             function(RegisterEmailMessagesEvent $event) {
                 array_push($event->messages,
                     [
-                        'key' => 'enupal_backup_notification',
-                        'subject' => 'PaypalButton process completed',
-                        'body' => 'We are happy to inform you that the backup process has been completed. PaypalButton Id: {{backup.backupId}}'
+                        'key' => 'enupal_paypal_notification',
+                        'subject' => 'You have received a payment',
+                        'body' => 'We are happy to inform you that the you have received payment with id: {{payment.transactionId}}'
                     ]
                 );
             }
         );
-    }
-
-    protected function afterInstall()
-    {
-        self::$app->backups->installDefaultValues();
-    }
-
-    /**
-     * Performs actions before the plugin is Uninstalled.
-     *
-     * @return bool Whether the plugin should be Uninstalled
-     */
-    protected function beforeUninstall(): bool
-    {
-        $backups = self::$app->backups->getAllBackups();
-
-        foreach ($backups as $key => $backup) {
-            Craft::$app->elements->deleteElementById($backup->id);
-        }
-
-        return true;
     }
 
     protected function createSettingsModel()
@@ -105,11 +84,15 @@ class Paypal extends \craft\base\Plugin
         return array_merge($parent, [
             'subnav' => [
                 'backups' => [
-                    "label" => PaypalButtons::t("Backups"),
-                    "url" => 'enupal-paypal/backups'
+                    "label" => self::t("Payments"),
+                    "url" => 'enupal-paypal/payments'
+                ],
+                'buttons' => [
+                    "label" => self::t("Buttons"),
+                    "url" => 'enupal-paypal/buttons'
                 ],
                 'settings' => [
-                    "label" => PaypalButtons::t("Settings"),
+                    "label" => self::t("Settings"),
                     "url" => 'enupal-paypal/settings'
                 ]
             ]
@@ -161,11 +144,11 @@ class Paypal extends \craft\base\Plugin
             'enupal-paypal/run' =>
                 'enupal-paypal/backups/run',
 
-            'enupal-paypal/backup/new' =>
-                'enupal-paypal/backups/edit-backup',
+            'enupal-paypal/buttons/new' =>
+                'enupal-paypal/buttons/edit-button',
 
-            'enupal-paypal/backup/view/<backupId:\d+>' =>
-                'enupal-paypal/backups/view-backup',
+            'enupal-paypal/payments/view/<paymentId:\d+>' =>
+                'enupal-paypal/payments/view-payment',
         ];
     }
 
@@ -175,11 +158,8 @@ class Paypal extends \craft\base\Plugin
     private function getSiteUrlRules()
     {
         return [
-            'enupal-paypal/finished' =>
-                'enupal-paypal/webhook/finished',
-
-            'enupal-paypal/schedule' =>
-                'enupal-paypal/webhook/schedule'
+            'enupal-paypal/ipn' =>
+                'enupal-paypal/webhook/ipn'
         ];
     }
 }
