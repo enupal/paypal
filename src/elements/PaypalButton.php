@@ -11,6 +11,7 @@ namespace enupal\paypal\elements;
 use Craft;
 use craft\base\Element;
 use craft\elements\db\ElementQueryInterface;
+use enupal\paypal\Paypal;
 use yii\base\ErrorHandler;
 use craft\helpers\UrlHelper;
 use craft\elements\actions\Delete;
@@ -37,7 +38,21 @@ class PaypalButton extends Element
     public $options;
     public $returnUrl;
     public $cancelURL;
-    public $buttonName = 'Buy now';
+    public $buttonName;
+
+    protected $sandboxUrl = 'https://www.sandbox.paypal.com/cgi-bin/webscr';
+    protected $liveUrl = 'https://www.paypal.com/cgi-bin/webscr';
+    protected $env;
+
+    public function init()
+    {
+        parent::init();
+        if (!$this->buttonName){
+            $this->buttonName = $this->type == PaypalType::PAY ? 'Buy Now' : 'Donate';
+        }
+        $settings = Paypal::$app->settings->getSettings();
+        $this->env = $settings->testMode ? 'www.sandbox' : 'www' ;
+    }
 
     /**
      * Returns the field context this element's content uses.

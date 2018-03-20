@@ -309,4 +309,39 @@ class Buttons extends Component
 
         return $button;
     }
+
+    /**
+     * @return array
+     */
+    public function getCurrencies()
+    {
+        $currencies = [];
+        $currencies['AUD'] = 'Australian Dollar - AUD';
+        $currencies['BRL'] = 'Brazilian Real - BRL';
+        $currencies['CAD'] = 'Canadian Dollar - CAD';
+        $currencies['CZK'] = 'Czech Koruna - CZK';
+        $currencies['DKK'] = 'Danish Krone - DKK';
+        $currencies['EUR'] = 'Euro - EUR';
+        $currencies['HKD'] = 'Hong Kong Dollar - HKD';
+        $currencies['HUF'] = 'Hungarian Forint - HUF';
+        $currencies['ILS'] = 'Israeli New Sheqel - ILS';
+        $currencies['JPY'] = 'Japanese Yen - JPY';
+        $currencies['MYR'] = 'Malaysian Ringgit - MYR';
+        $currencies['MXN'] = 'Mexican Peso - MXN';
+        $currencies['NOK'] = 'Norwegian Krone - NOK';
+        $currencies['NZD'] = 'New Zealand Dollar - NZD';
+        $currencies['PHP'] = 'Philippine Peso - PHP';
+        $currencies['PLN'] = 'Polish Zloty - PLN';
+        $currencies['GBP'] = 'Pound Sterling - GBP';
+        $currencies['RUB'] = 'Russian Ruble - RUB';
+        $currencies['SGD'] = 'Singapore Dollar - SGD';
+        $currencies['SEK'] = 'Swedish Krona - SEK';
+        $currencies['CHF'] = 'Swiss Franc - CHF';
+        $currencies['TWD'] = 'Taiwan New Dollar - TWD';
+        $currencies['THB'] = 'Thai Baht - THB';
+        $currencies['TRY'] = 'Turkish Lira - TRY';
+        $currencies['USD'] = 'U.S. Dollar - USD';
+
+        return $currencies;
+    }
 }

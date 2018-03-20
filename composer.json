@@ -2,7 +2,7 @@
   "name": "enupal/paypal",
   "description": "Create PayPal Buy Now & Donation type buttons",
   "type": "craft-plugin",
-  "version": "1.0.8",
+  "version": "1.0.0",
   "keywords": [
     "craft",
     "cms",
