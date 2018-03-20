@@ -25,7 +25,7 @@ use craft\validators\UniqueValidator;
 /**
  * PaypalButton represents a entry element.
  */
-class PaypalButtons extends Element
+class PaypalButton extends Element
 {
     // General - Properties
     // =========================================================================

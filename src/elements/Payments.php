@@ -65,7 +65,7 @@ class Payments extends Element
      */
     public static function refHandle()
     {
-        return 'backups';
+        return 'buttons';
     }
 
     /**
@@ -192,7 +192,7 @@ class Payments extends Element
         // Delete
         $actions[] = Craft::$app->getElements()->createAction([
             'type' => Delete::class,
-            'confirmationMessage' => PaypalPlugin::t('Are you sure you want to delete the selected backups?'),
+            'confirmationMessage' => PaypalPlugin::t('Are you sure you want to delete the selected buttons?'),
             'successMessage' => PaypalPlugin::t('Buttons deleted.'),
         ]);
 

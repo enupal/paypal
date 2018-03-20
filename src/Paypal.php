@@ -83,7 +83,7 @@ class Paypal extends \craft\base\Plugin
         $parent = parent::getCpNavItem();
         return array_merge($parent, [
             'subnav' => [
-                'backups' => [
+                'buttons' => [
                     "label" => self::t("Payments"),
                     "url" => 'enupal-paypal/payments'
                 ],
@@ -142,7 +142,7 @@ class Paypal extends \craft\base\Plugin
     {
         return [
             'enupal-paypal/run' =>
-                'enupal-paypal/backups/run',
+                'enupal-paypal/buttons/run',
 
             'enupal-paypal/buttons/new' =>
                 'enupal-paypal/buttons/edit-button',

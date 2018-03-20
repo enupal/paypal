@@ -11,6 +11,7 @@ namespace enupal\paypal\variables;
 use Craft;
 use enupal\paypal\Paypal;
 use enupal\paypal\PaypalButtons;
+use craft\helpers\Template as TemplateHelper;
 
 /**
  * EnupalPaypal provides an API for accessing information about paypal buttons. It is accessible from templates via `craft.enupalPaypal`.
@@ -57,39 +58,32 @@ class PaypalVariable
      * @throws \Twig_Error_Loader
      * @throws \yii\base\Exception
      */
-    public function displaySlider($buttonHandle, array $options = null)
+    public function displayButton($buttonHandle, array $options = null)
     {
-        $slider = Paypal::$app->buttons->getButtonByHandle($buttonHandle);
-        $templatePath = Slider::$app->sliders->getEnupalSliderPath();
-        $sliderHtml = null;
-        $settings = Slider::$app->sliders->getSettings();
+        $button = Paypal::$app->buttons->getButtonByHandle($buttonHandle);
+        $templatePath = Paypal::$app->buttons->getEnupalPaypalPath();
+        $buttonHtml = null;
+        $settings = Paypal::$app->settings->getSettings();
 
-        if ($slider) {
-            $dataAttributes = Slider::$app->sliders->getDataAttributes($slider);
-            $slidesElements = $slider->getSlides();
-
+        if ($button) {
             $view = Craft::$app->getView();
 
             $view->setTemplatesPath($templatePath);
 
-            $sliderHtml = $view->renderTemplate(
-                'slider', [
-                    'slider' => $slider,
-                    'slidesElements' => $slidesElements,
-                    'dataAttributes' => $dataAttributes,
-                    'htmlHandle' => $settings['htmlHandle'],
-                    'linkHandle' => $settings['linkHandle'],
-                    'openLinkHandle' => $settings['openLinkHandle'],
+            $buttonHtml = $view->renderTemplate(
+                'button', [
+                    'button' => $button,
+                    'settings' => $settings,
                     'options' => $options
                 ]
             );
 
             $view->setTemplatesPath(Craft::$app->path->getSiteTemplatesPath());
         } else {
-            $sliderHtml = Slider::t("Slider {$sliderHandle} not found");
+            $buttonHtml = Paypal::t("Paypal Button {$buttonHandle} not found");
         }
 
-        return TemplateHelper::raw($sliderHtml);
+        return TemplateHelper::raw($buttonHtml);
     }
 }
 
