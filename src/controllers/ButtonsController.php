@@ -106,7 +106,7 @@ class ButtonsController extends BaseController
 
         $variables['settings'] = Paypal::$app->settings->getSettings();
 
-        return $this->renderTemplate('enupal-paypal/buttons/_editButton', $variables);
+        return $this->renderTemplate('enupal-paypal/buttons/_edit', $variables);
     }
 
     /**

@@ -15,37 +15,57 @@
 {% set saveShortcutRedirect = 'enupal-paypal/settings/general' %}
 
 {% set saveButton %}
-	<div class="buttons">
-		<input class="btn submit" type="submit" value="{{ 'Save'|t }}">
-	</div>
+    <div class="buttons">
+        <input class="btn submit" type="submit" value="{{ 'Save'|t }}">
+    </div>
 {% endset %}
 
 {% set content %}
 
-	<input type="hidden" name="action" value="enupal-paypal/settings/save-settings">
+    <input type="hidden" name="action"
+           value="enupal-paypal/settings/save-settings">
 
-	<div id="settings-cp">
+    <div id="settings-cp">
 
-		{% namespace 'settings' %}
-			{{ forms.field({
-				label: "General settings"|t('enupal-paypal')|upper
-			}, null) }}
-			<hr>
+        {% namespace 'settings' %}
+            {{ forms.field({
+                label: "General settings"|t('enupal-paypal')|upper
+            }, null) }}
+            <hr>
 
-			{{ forms.textField({
-				label: "Amount of buttons to keep locally"|t('enupal-paypal'),
-				id: 'backupsAmount',
-				instructions: 'Keep only a configured amount of buttons with status Finished'|t('enupal-paypal'),
-				name: 'backupsAmount',
-				value: settings.backupsAmount,
-				size: 10,
-				autofocus: true,
-				first: true,
-				errors: ''
-			}) }}
+            {{ forms.lightswitchField({
+                label: 'Test Mode'|t('enupal-paypal'),
+                instructions: 'Check this option if you want to enable PayPal sandbox for testing',
+                id: 'testMode',
+                name: 'testMode',
+                on: settings.testMode,
+                onLabel: "On"|t('enupal-paypal'),
+                offLabel: "Off"|t('enupal-paypal'),
+                errors: settings.getErrors('testMode'),
+            }) }}
 
-		{% endnamespace %}
+            {{ forms.textField({
+                label: "Global Return URL"|t('enupal-paypal'),
+                instructions: "Redirect the user to this URL when the pay is successfully"|t('enupal-paypal'),
+                id: 'returnUrl',
+                name: 'returnUrl',
+                value: settings.returnUrl,
+                autofocus: true,
+                errors: settings.getErrors('returnUrl')
+            }) }}
 
-	</div>
+            {{ forms.textField({
+                label: "Global Cancel URL"|t('enupal-paypal'),
+                instructions: "Redirect the user to this URL when they click the cancel button"|t('enupal-paypal'),
+                id: 'cancelUrL',
+                name: 'cancelUrL',
+                value: settings.cancelUrL,
+                autofocus: true,
+                errors: settings.getErrors('cancelUrL')
+            }) }}
+
+        {% endnamespace %}
+
+    </div>
 
 {% endset %}

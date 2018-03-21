@@ -37,7 +37,7 @@ class PaypalButton extends Element
     public $itemId;
     public $options;
     public $returnUrl;
-    public $cancelURL;
+    public $cancelUrL;
     public $buttonName;
 
     protected $sandboxUrl = 'https://www.sandbox.paypal.com/cgi-bin/webscr';
@@ -52,6 +52,7 @@ class PaypalButton extends Element
         }
         $settings = Paypal::$app->settings->getSettings();
         $this->env = $settings->testMode ? 'www.sandbox' : 'www' ;
+        $this->returnUrl = $this->returnUrl ?? $settings->returnUrl;
     }
 
     /**
