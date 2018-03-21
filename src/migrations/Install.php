@@ -66,9 +66,9 @@ class Install extends Migration
             'id' => $this->primaryKey(),
             'transactionId' => $this->string(),
             'firstName' => $this->string(),
-            'lastName' => $this->string,
-            'email' => $this->string,
-            'address' => $this->string,
+            'lastName' => $this->string(),
+            'email' => $this->string(),
+            'address' => $this->string(),
             'total' => $this->money(10, 4),
             'paymentStatus' => $this->string(),
             //

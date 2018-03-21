@@ -15,7 +15,9 @@ class Settings extends Model
     // General
     public $paypalEmail = '';
     public $returnUrl = '';
-    public $cancelURL = '';
+    public $cancelUrL = '';
+    public $testMode = 0;
+    public $defaultCurrency = '';
 
     /**
      * @inheritdoc

@@ -10,7 +10,6 @@ namespace enupal\paypal\services;
 
 use Craft;
 use yii\base\Component;
-use craft\volumes\Local;
 
 class Settings extends Component
 {
@@ -50,59 +49,8 @@ class Settings extends Component
         return $backupPlugin->getSettings();
     }
 
-    public function getAllPlugins()
-    {
-        $plugins = Craft::$app->getPlugins()->getAllPlugins();
-        $response = [];
-
-        foreach ($plugins as $key => $plugin) {
-            $response[] = [
-                'value' => $plugin->getHandle(),
-                'label' => $plugin->name
-            ];
-        }
-
-        return $response;
-    }
-
-    public function getAllLocalVolumes()
-    {
-        $volumes = Craft::$app->getVolumes()->getAllVolumes();
-        $response = [];
-
-        foreach ($volumes as $key => $volume) {
-            if (get_class($volume) == Local::class) {
-                $response[] = [
-                    'value' => $volume->id,
-                    'label' => $volume->name
-                ];
-            }
-        }
-
-        return $response;
-    }
-
-    public function getAllLocalVolumesObjects()
-    {
-        $volumes = Craft::$app->getVolumes()->getAllVolumes();
-        $response = [];
-
-        foreach ($volumes as $key => $volume) {
-            if (get_class($volume) == Local::class) {
-                $response[] = $volume;
-            }
-        }
-
-        return $response;
-    }
-
     public function getPlugin()
     {
         return Craft::$app->getPlugins()->getPlugin('enupal-paypal');
-    }
-
-    public function isWindows()
-    {
-        return defined('PHP_WINDOWS_VERSION_BUILD');
     }
 }

@@ -12,12 +12,12 @@ use craft\base\Component;
 
 class App extends Component
 {
-    public $backups;
     public $settings;
+    public $buttons;
 
     public function init()
     {
-        $this->backups = new Backups();
         $this->settings = new Settings();
+        $this->buttons = new Buttons();
     }
 }

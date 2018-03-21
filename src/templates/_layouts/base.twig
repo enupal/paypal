@@ -11,4 +11,4 @@
 
 {% set bodyClass = craft.app.request.segments()|slice(0, 3)|join(' ') %}
 
-{% set selectedSubnavItem = craft.app.request.getSegment(2) == 'backup' ? 'backups' : craft.request.getSegment(2)  %}
+{% set selectedSubnavItem = craft.app.request.getSegment(2) == 'button' ? 'buttons' : craft.request.getSegment(2)  %}
