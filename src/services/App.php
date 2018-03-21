@@ -9,14 +9,15 @@
 namespace enupal\paypal\services;
 
 use craft\base\Component;
-use enupal\paypal\services\Settings;
 
 class App extends Component
 {
     public $settings;
+    public $buttons;
 
     public function init()
     {
         $this->settings = new Settings();
+        $this->buttons = new Buttons();
     }
 }

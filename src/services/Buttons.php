@@ -30,10 +30,10 @@ class Buttons extends Component
      */
     public function __construct($buttonRecord = null)
     {
-        $this->backupRecord = $buttonRecord;
+        $this->buttonRecord = $buttonRecord;
 
-        if (is_null($this->backupRecord)) {
-            $this->backupRecord = new PaypalButtonRecord();
+        if (is_null($this->buttonRecord)) {
+            $this->buttonRecord = new PaypalButtonRecord();
         }
     }
 
@@ -196,57 +196,6 @@ class Buttons extends Component
     }
 
     /**
-     * Performs a review to check the buttons amount allowed
-     *
-     * @todo should we move this to a job?
-     */
-    public function checkBackupsAmount()
-    {
-        // Amount of buttons to keep
-        $settings = Paypal::$app->settings->getSettings();
-
-        $condition = 'backupStatusId =:finished';
-        $params = [
-            ':finished' => PaypalType::FINISHED
-        ];
-
-        try {
-            $count = ButtonElement::find()->where($condition, $params)->count();
-
-            $totalToDelete = 0;
-
-            if ($count > $settings['backupsAmount']) {
-                $totalToDelete = $count - $settings['backupsAmount'];
-
-                if ($totalToDelete) {
-                    $buttons = ButtonElement::find()
-                        ->where($condition, $params)
-                        ->limit($totalToDelete)
-                        ->orderBy(['enupalbackup_backups.dateCreated' => SORT_ASC])
-                        ->all();
-
-                    foreach ($buttons as $key => $button) {
-                        $response = Craft::$app->elements->deleteElementById($button->id);
-
-                        if ($response) {
-                            Paypal::info('EnupalPaypal has deleted the backup Id: '.$button->backupId);
-                        } else {
-                            Paypal::error('EnupalPaypal has failed to delete the backup Id: '.$button->backupId);
-                        }
-                    }
-                }
-            }
-        } catch (\Throwable $e) {
-            $error = 'Enupal PaypalButton Could not execute the checkBackupsAmount function: '.$e->getMessage().' --Trace: '.json_encode($e->getTrace());
-
-            Paypal::error($error);
-            return false;
-        }
-
-        return true;
-    }
-
-    /**
      * Generate a random string, using a cryptographically secure
      * pseudorandom number generator (random_int)
      *
@@ -343,5 +292,85 @@ class Buttons extends Component
         $currencies['USD'] = 'U.S. Dollar - USD';
 
         return $currencies;
+    }
+
+    /**
+     * @param null $name
+     * @param null $handle
+     *
+     * @return ButtonElement
+     */
+    public function createNewButton($name = null, $handle = null): ButtonElement
+    {
+        $button = new ButtonElement();
+        $name = empty($name) ? 'Button' : $name;
+        $handle = empty($handle) ? 'button' : $handle;
+
+        $button->name = $this->getFieldAsNew('name', $name);
+        $button->handle = $this->getFieldAsNew('handle', $handle);
+        $button->slides = [];
+
+        if ($this->saveSlider($button)) {
+            $settings = $this->getSettings();
+            $sources = null;
+
+            if (isset($settings['volumeId'])) {
+                $folder = (new Query())
+                    ->select('*')
+                    ->from(['{{%volumefolders}}'])
+                    ->where(['volumeId' => $settings['volumeId']])
+                    ->one();
+
+                $defaultSubFolder = new VolumeFolderRecord();
+                $defaultSubFolder->parentId = $folder['id'];
+                $defaultSubFolder->volumeId = $settings['volumeId'];
+                $defaultSubFolder->name = $button->handle;
+                $defaultSubFolder->path = $button->handle."/";
+                $defaultSubFolder->save();
+            }
+        }
+
+        return $button;
+    }
+
+    /**
+     * Create a secuencial string for the "name" and "handle" fields if they are already taken
+     *
+     * @param string
+     * @param string
+     *
+     * @return null|string
+     */
+    public function getFieldAsNew($field, $value)
+    {
+        $newField = null;
+        $i = 1;
+        $band = true;
+        do {
+            $newField = $field == "handle" ? $value.$i : $value." ".$i;
+            $slider = $this->getFieldValue($field, $newField);
+            if (is_null($slider)) {
+                $band = false;
+            }
+
+            $i++;
+        } while ($band);
+
+        return $newField;
+    }
+
+    /**
+     * Returns the value of a given field
+     *
+     * @param string $field
+     * @param string $value
+     *
+     * @return PaypalButtonRecord
+     */
+    public function getFieldValue($field, $value)
+    {
+        $result = PaypalButtonRecord::findOne([$field => $value]);
+
+        return $result;
     }
 }
