@@ -62,7 +62,7 @@ class PaypalButtonsQuery extends ElementQuery
             'enupalpaypal_buttons.itemId',
             'enupalpaypal_buttons.options',
             'enupalpaypal_buttons.returnUrl',
-            'enupalpaypal_buttons.cancelURL',
+            'enupalpaypal_buttons.cancelUrl',
             'enupalpaypal_buttons.buttonName'
         ]);
 

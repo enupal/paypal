@@ -8,63 +8,75 @@
 #}
 
 {% import "_includes/forms" as forms %}
+<div class="meta">
+    <h6>{{ 'General'|t('sprout-forms') }}</h6>
 
-<div class="meta" id="settings">
-	<div class="field" id="isEncrypted-field">
-		<div class="heading">
-			<label id="isEncrypted-label" for="isEncrypted">{{"Status"|t('enupal-paypal')}}</label>
-		</div>
-		<div class="input ltr">
-			{% set labelColor =  backup.backupStatusId == 2 ? 'success' : backup.backupStatusId == 3 ? 'danger' : backup.backupStatusId == 1 ? 'info' : 'warning' %}
-			<div class="bootstrap-iso"><span class="label label-{{labelColor}}">{{backup.getStatusName()}}</span></div>
-		</div>
-	</div>
-	<hr>
-	{% if backup.isEncrypted %}
-		<div class="field" id="isEncrypted-field">
-			<div class="heading">
-				<label id="isEncrypted-label" for="isEncrypted">Encrypted</label>
-			</div>
-			<div class="input ltr">
-				<i class="fa fa-check-square-o fa-fw" aria-hidden="true"></i>
-			</div>
-		</div>
-		<hr>
-	{% endif %}
-	{% if backup.dropbox or backup.aws or backup.ftp or backup.softlayer %}
-		<div class="field">
-			<div class="heading">
-				<label>{{"Uploaded to"|t('enupal-paypal')}}</label>
-			</div>
-			<div class="input ltr">
-				{% if backup.dropbox %}
-						<i title="Dropbox" class="fa fa-dropbox fa-fw green" aria-hidden="true"></i>
-				{% endif %}
-				{% if backup.aws %}
-					<i title="Amazon S3" class="fa fa-amazon fa-fw" aria-hidden="true"></i>
-				{% endif %}
-				{% if backup.ftp %}
-					<i title="FTP" class="fa fa-folder-open fa-fw" aria-hidden="true"></i>
-				{% endif %}
-				{% if backup.softlayer %}
-					<i title="Softlayer Object Storage" class="fa fa-cloud fa-fw" aria-hidden="true"></i>
-				{% endif %}
-			</div>
-		</div>
-		<hr>
-	{% endif %}
-</div><!-- settings div -->
-<hr>
-<div class="meta read-only">
-	<div class="data">
-		<h5 class="heading">{{ "Started at"|t('enupal-paypal') }}</h5>
-		<div class="value">{{ backup.dateCreated|datetime('short') }}</div>
-	</div>
-	{% if backup.backupStatusId == 2 or backup.backupStatusId == 3 %}
-		<div class="data">
-			<h5 class="heading">{{ "Finished at"|t('enupal-paypal') }}</h5>
-			<div class="value">{{ backup.dateUpdated|datetime('short') }}</div>
-		</div>
-	{% endif %}
+    {{ forms.textField({
+        first: true,
+        label: "Name <span class='info'>What this Paypal Button will be called in the CP.</span>"|t('enupal-paypal'),
+        id: 'name',
+        name: 'name',
+        value: paypalButton.name,
+        errors: paypalButton.getErrors('name'),
+        autofocus: true,
+        required: true
+    }) }}
+
+    {{ forms.textField({
+        first: true,
+        label: "Handle <span class='info'>How you’ll refer to this Paypal Button in the templates.</span>"|t('enupal-paypal'),
+        id: 'handle',
+        name: 'handle',
+        value: paypalButton.handle,
+        errors: paypalButton.getErrors('handle'),
+        autofocus: true,
+        required: true
+    }) }}
 </div>
 <hr>
+<div class="meta">
+    <h6>{{ 'Paypal Button'|t('sprout-forms') }}</h6>
+    {% set amountInput %}
+    <div class="flex">
+        <div class="textwrapper">
+            {{ forms.text({
+                label: "Amount <span class='info'>You can leave it in blank if is a donation</span>"|t('enupal-paypal'),
+                id: 'amount',
+                name: 'amount',
+                placeholder: 'Enter price'|t('enupal-paypal'),
+                value: paypalButton.amount
+            }) }}
+        </div>
+        <div class="textwrapper">
+            {{ forms.text({
+                label: "Amount <span class='info'>You can leave it in blank if is a donation</span>"|t('enupal-paypal'),
+                id: 'amount',
+                name: 'amount',
+                value: paypalButton.amount
+            }) }}
+        </div>
+    </div>
+    {% endset %}
+
+    {{ forms.field({
+        id: 'amount',
+        label: 'Amount'|t('enupal-paypal'),
+        required: true,
+        errors: paypalButton.getErrors('amount')|merge(paypalButton.getErrors('stock')),
+    }, amountInput) }}
+</div>
+<hr>
+<div class="meta">
+    <h6>{{ 'Advanced'|t('sprout-forms') }}</h6>
+
+    {{ forms.textField({
+        first: true,
+        label: "Button Name <span class='info'></span>"|t('enupal-paypal'),
+        id: 'buttonName',
+        name: 'buttonName',
+        value: paypalButton.buttonName,
+        errors: paypalButton.getErrors('buttonName'),
+        autofocus: true,
+        required: true
+    }) }}
+</div>

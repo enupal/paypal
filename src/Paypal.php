@@ -141,14 +141,17 @@ class Paypal extends \craft\base\Plugin
     private function getCpUrlRules()
     {
         return [
-            'enupal-paypal/run' =>
-                'enupal-paypal/buttons/run',
-
             'enupal-paypal/buttons/new' =>
                 'enupal-paypal/buttons/edit-button',
 
-            'enupal-paypal/payments/view/<paymentId:\d+>' =>
-                'enupal-paypal/payments/view-payment',
+            'enupal-paypal/buttons/edit/<buttonId:\d+>' =>
+                'enupal-paypal/buttons/edit-button',
+
+            'enupal-paypal/payments/new' =>
+                'enupal-paypal/payments/edit-button',
+
+            'enupal-paypal/payments/edit/<paymentId:\d+>' =>
+                'enupal-paypal/payments/edit-button',
         ];
     }
 

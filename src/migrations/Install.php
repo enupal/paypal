@@ -54,7 +54,7 @@ class Install extends Migration
             'itemId' => $this->string(),
             'options' => $this->string(),
             'returnUrl' => $this->string(),
-            'cancelURL' => $this->string(),
+            'cancelUrl' => $this->string(),
             'buttonName' => $this->string(),
             //
             'dateCreated' => $this->dateTime()->notNull(),

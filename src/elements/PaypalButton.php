@@ -32,12 +32,14 @@ class PaypalButton extends Element
     // =========================================================================
     public $id;
     public $type;
-    public $currency;
+    public $name;
+    public $handle;
+    public $currency = 'USD';
     public $amount;
     public $itemId;
     public $options;
     public $returnUrl;
-    public $cancelUrL;
+    public $cancelUrl;
     public $buttonName;
 
     protected $sandboxUrl = 'https://www.sandbox.paypal.com/cgi-bin/webscr';
@@ -269,7 +271,7 @@ class PaypalButton extends Element
         $record->itemId = $this->itemId;
         $record->options = $this->options;
         $record->returnUrl = $this->returnUrl;
-        $record->cancelURL = $this->cancelURL;
+        $record->cancelUrl = $this->cancelUrl;
         $record->buttonName = $this->buttonName;
 
         $record->save(false);
@@ -290,7 +292,7 @@ class PaypalButton extends Element
                 HandleValidator::class,
                 'reservedWords' => ['id', 'dateCreated', 'dateUpdated', 'uid', 'title']
             ],
-            [['name', 'handle'], UniqueValidator::class, 'targetClass' => SliderRecord::class],
+            [['name', 'handle'], UniqueValidator::class, 'targetClass' => PaypalButtonRecord::class],
         ];
     }
 

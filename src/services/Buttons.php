@@ -90,7 +90,7 @@ class Buttons extends Component
      * @return bool
      * @throws \Throwable
      */
-    public function saveBackup(ButtonElement $button)
+    public function saveButton(ButtonElement $button)
     {
         if ($button->id) {
             $buttonRecord = PaypalButtonRecord::findOne($button->id);
@@ -299,6 +299,8 @@ class Buttons extends Component
      * @param null $handle
      *
      * @return ButtonElement
+     * @throws \Exception
+     * @throws \Throwable
      */
     public function createNewButton($name = null, $handle = null): ButtonElement
     {
@@ -308,27 +310,8 @@ class Buttons extends Component
 
         $button->name = $this->getFieldAsNew('name', $name);
         $button->handle = $this->getFieldAsNew('handle', $handle);
-        $button->slides = [];
 
-        if ($this->saveSlider($button)) {
-            $settings = $this->getSettings();
-            $sources = null;
-
-            if (isset($settings['volumeId'])) {
-                $folder = (new Query())
-                    ->select('*')
-                    ->from(['{{%volumefolders}}'])
-                    ->where(['volumeId' => $settings['volumeId']])
-                    ->one();
-
-                $defaultSubFolder = new VolumeFolderRecord();
-                $defaultSubFolder->parentId = $folder['id'];
-                $defaultSubFolder->volumeId = $settings['volumeId'];
-                $defaultSubFolder->name = $button->handle;
-                $defaultSubFolder->path = $button->handle."/";
-                $defaultSubFolder->save();
-            }
-        }
+        $this->saveButton($button);
 
         return $button;
     }

@@ -11,12 +11,12 @@ namespace enupal\paypal\assetbundles;
 use craft\web\AssetBundle;
 use craft\web\assets\cp\CpAsset;
 
-class BackupAsset extends AssetBundle
+class PaypalButtonAsset extends AssetBundle
 {
     public function init()
     {
         // define the path that your publishable resources live
-        $this->sourcePath = '@enupal/backup/resources/';
+        $this->sourcePath = '@enupal/paypal/resources/';
 
         // define the dependencies
         $this->depends = [
@@ -27,12 +27,12 @@ class BackupAsset extends AssetBundle
         // define the relative path to CSS/JS files that should be registered with the page
         // when this asset bundle is registered
         $this->js = [
-            'js/enupalbackup.js',
+            'js/enupalpaypalbutton.js',
             'js/bootstrap.min.js',
         ];
 
         $this->css = [
-            'css/enupalbackup.css',
+            'css/enupalpaypal.css',
             'css/bootstrap-iso.css'
         ];
 
