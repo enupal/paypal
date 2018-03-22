@@ -80,4 +80,24 @@
         autofocus: true,
         required: true
     }) }}
+
+    {{ forms.textField({
+        label: "Return URL <span class='info'>Redirect the user to this URL when the pay is successfully</span>"|t('enupal-paypal'),
+        id: 'returnUrl',
+        name: 'returnUrl',
+        value: paypalButton.returnUrl,
+        placeholder: '/thank-you',
+        autofocus: true,
+        errors: paypalButton.getErrors('returnUrl')
+    }) }}
+
+    {{ forms.textField({
+        label: "Cancel URL <span class='info'>Redirect the user to this URL when they click the cancel button</span>"|t('enupal-paypal'),
+        id: 'cancelUrl',
+        name: 'cancelUrl',
+        placeholder: '/something-went-wrong',
+        value: paypalButton.cancelUrl,
+        autofocus: true,
+        errors: paypalButton.getErrors('cancelUrl')
+    }) }}
 </div>

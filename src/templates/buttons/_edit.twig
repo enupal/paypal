@@ -50,26 +50,16 @@
 
     {% namespace 'fields' %}
         <div id="fields">
-
-            {{ forms.textField({
-                label: "Return URL"|t('enupal-paypal'),
-                instructions: "Redirect the user to this URL when the pay is successfully"|t('enupal-paypal'),
-                id: 'returnUrl',
-                name: 'returnUrl',
-                value: paypalButton.returnUrl,
-                autofocus: true,
-                errors: paypalButton.getErrors('returnUrl')
-            }) }}
-
-            {{ forms.textField({
-                label: "Cancel URL"|t('enupal-paypal'),
-                instructions: "Redirect the user to this URL when they click the cancel button"|t('enupal-paypal'),
-                id: 'cancelUrl',
-                name: 'cancelUrl',
-                value: paypalButton.cancelUrl,
-                autofocus: true,
-                errors: paypalButton.getErrors('cancelUrl')
-            }) }}
+            <div class="field" id="fields-cancelUrl-field">
+                <div class="heading">
+                    <label id="fields-cancelUrl-label" for="fields-cancelUrl">Button Size and type</label>
+                    <div class="instructions"><p>Redirect the user to this URL when they click the cancel button</p>
+                    </div>
+                </div>
+                <div class="input ltr">
+                    <input class="text fullwidth" type="text" id="fields-cancelUrl" name="fields[cancelUrl]" value="" autofocus="" autocomplete="off">
+                </div>
+            </div>
 
         </div>
     {% endnamespace %}
@@ -80,11 +70,14 @@
         {% include "enupal-paypal/buttons/_sidebar/settings" %}
         <hr>
     {% endnamespace %}
-    {% set dateSubmitted = paypalButton.dateCreated|date('F j, Y') %}
     <div class="meta read-only">
         <div class="data">
-            <h5 class="heading">{{ "Created"|t('enupal-paypal') }}</h5>
-            <div class="value">{{ dateSubmitted }}</div>
+            <h5 class="heading">{{ "Date Created"|t('commerce') }}</h5>
+            <div class="value">{{ paypalButton.dateCreated|date('short') }} {{ paypalButton.dateCreated|time('short') }}</div>
+        </div>
+        <div class="data">
+            <h5 class="heading">{{ "Date Updated"|t('commerce') }}</h5>
+            <div class="value">{{ paypalButton.dateUpdated|date('short') }} {{ paypalButton.dateUpdated|time('short') }}</div>
         </div>
     </div>
 {% endblock %}
