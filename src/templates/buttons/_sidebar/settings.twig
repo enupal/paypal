@@ -8,6 +8,8 @@
 #}
 
 {% import "_includes/forms" as forms %}
+
+{% set currencyOptions = craft.enupalPaypal.getCurrencyIsoOptions() %}
 <div class="meta">
     <h6>{{ 'General'|t('sprout-forms') }}</h6>
 
@@ -43,16 +45,16 @@
                 label: "Amount <span class='info'>You can leave it in blank if is a donation</span>"|t('enupal-paypal'),
                 id: 'amount',
                 name: 'amount',
-                placeholder: 'Enter price'|t('enupal-paypal'),
-                value: paypalButton.amount
+                placeholder: 'Enter amount'|t('enupal-paypal'),
+                value: (paypalButton.amount == '0' ? '0'|number : (paypalButton.amount ? paypalButton.amount|number ?: ''))
             }) }}
         </div>
         <div class="textwrapper">
-            {{ forms.text({
-                label: "Amount <span class='info'>You can leave it in blank if is a donation</span>"|t('enupal-paypal'),
-                id: 'amount',
-                name: 'amount',
-                value: paypalButton.amount
+            {{ forms.selectField({
+                id: 'currency',
+                name: 'currency',
+                options: currencyOptions,
+                value: paypalButton.currency
             }) }}
         </div>
     </div>
@@ -61,8 +63,7 @@
     {{ forms.field({
         id: 'amount',
         label: 'Amount'|t('enupal-paypal'),
-        required: true,
-        errors: paypalButton.getErrors('amount')|merge(paypalButton.getErrors('stock')),
+        errors: paypalButton.getErrors('amount')|merge(paypalButton.getErrors('currency')),
     }, amountInput) }}
 </div>
 <hr>

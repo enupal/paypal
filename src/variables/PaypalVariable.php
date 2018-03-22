@@ -85,5 +85,10 @@ class PaypalVariable
 
         return TemplateHelper::raw($buttonHtml);
     }
+
+    public function getCurrencyIsoOptions()
+    {
+        return Paypal::$app->buttons->getIsoCurrencies();
+    }
 }
 

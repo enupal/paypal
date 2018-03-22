@@ -50,7 +50,7 @@ class Install extends Migration
             'handle' => $this->string()->notNull(),
             'type' => $this->string(),
             'currency' => $this->string(),
-            'amount' => $this->money(10, 4),
+            'amount' => $this->decimal(14, 4)->unsigned(),
             'itemId' => $this->string(),
             'options' => $this->string(),
             'returnUrl' => $this->string(),

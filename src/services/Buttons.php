@@ -265,6 +265,7 @@ class Buttons extends Component
     public function getCurrencies()
     {
         $currencies = [];
+        $currencies['USD'] = 'U.S. Dollar - USD';
         $currencies['AUD'] = 'Australian Dollar - AUD';
         $currencies['BRL'] = 'Brazilian Real - BRL';
         $currencies['CAD'] = 'Canadian Dollar - CAD';
@@ -289,7 +290,41 @@ class Buttons extends Component
         $currencies['TWD'] = 'Taiwan New Dollar - TWD';
         $currencies['THB'] = 'Thai Baht - THB';
         $currencies['TRY'] = 'Turkish Lira - TRY';
-        $currencies['USD'] = 'U.S. Dollar - USD';
+
+        return $currencies;
+    }
+
+    /**
+     * @return array
+     */
+    public function getIsoCurrencies()
+    {
+        $currencies = [];
+        $currencies['USD'] = 'USD';
+        $currencies['AUD'] = 'AUD';
+        $currencies['BRL'] = 'BRL';
+        $currencies['CAD'] = 'CAD';
+        $currencies['CZK'] = 'CZK';
+        $currencies['DKK'] = 'DKK';
+        $currencies['EUR'] = 'EUR';
+        $currencies['HKD'] = 'HKD';
+        $currencies['HUF'] = 'HUF';
+        $currencies['ILS'] = 'ILS';
+        $currencies['JPY'] = 'JPY';
+        $currencies['MYR'] = 'MYR';
+        $currencies['MXN'] = 'MXN';
+        $currencies['NOK'] = 'NOK';
+        $currencies['NZD'] = 'NZD';
+        $currencies['PHP'] = 'PHP';
+        $currencies['PLN'] = 'PLN';
+        $currencies['GBP'] = 'GBP';
+        $currencies['RUB'] = 'RUB';
+        $currencies['SGD'] = 'SGD';
+        $currencies['SEK'] = 'SEK';
+        $currencies['CHF'] = 'CHF';
+        $currencies['TWD'] = 'TWD';
+        $currencies['THB'] = 'THB';
+        $currencies['TRY'] = 'TRY';
 
         return $currencies;
     }
