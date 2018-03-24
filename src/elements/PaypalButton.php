@@ -46,12 +46,12 @@ class PaypalButton extends Element
     /**
      * @var string size
      */
-    public $size = PaypalSize::SMALL;
+    public $size;
 
     /**
      * @var string Currency
      */
-    public $currency = 'USD';
+    public $currency;
 
     /**
      * @var int Amount

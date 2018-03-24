@@ -335,10 +335,10 @@ class Buttons extends Component
     public function getLanguages()
     {
         $languages = [];
-        $languages['da_DK'] = 'Danish';
-        $languages['nl_BE'] = 'Dutch';
         $languages['EN_US'] = 'English';
         $languages['en_GB'] = 'English - UK';
+        $languages['da_DK'] = 'Danish';
+        $languages['nl_BE'] = 'Dutch';
         $languages['fr_CA'] = 'French';
         $languages['de_DE'] = 'German';
         $languages['he_IL'] = 'Hebrew';
