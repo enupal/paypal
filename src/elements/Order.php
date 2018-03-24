@@ -17,15 +17,15 @@ use craft\elements\actions\Delete;
 
 use enupal\paypal\elements\db\PaypalButtonsQuery;
 use enupal\paypal\records\PaypalButton as PaypalButtonRecord;
-use enupal\paypal\enums\PaypalType;
+use enupal\paypal\enums\PaypalSize;
 use enupal\paypal\Paypal as PaypalPlugin;
 use craft\validators\HandleValidator;
 use craft\validators\UniqueValidator;
 
 /**
- * Payments represents a entry element.
+ * Order represents a entry element.
  */
-class Payments extends Element
+class Order extends Element
 {
     // General - Properties
     // =========================================================================
@@ -161,14 +161,14 @@ class Payments extends Element
             ]
         ];
 
-        $statuses = PaypalType::getConstants();
+        $statuses = PaypalSize::getConstants();
 
         $colors = PaypalPlugin::$app->backups->getColorStatuses();
 
         $sources[] = ['heading' => PaypalPlugin::t("PaypalButton Status")];
 
         foreach ($statuses as $code => $status) {
-            if ($status != PaypalType::STARTED) {
+            if ($status != PaypalSize::STARTED) {
                 $key = 'backupStatusId:'.$status;
                 $sources[] = [
                     'status' => $colors[$status],
@@ -251,17 +251,17 @@ class Payments extends Element
                 }
             case 'status':
                 {
-                    $message = $this->backupStatusId == PaypalType::STARTED ?
+                    $message = $this->backupStatusId == PaypalSize::STARTED ?
                         PaypalPlugin::t('Started') :
                         PaypalPlugin::t('Not defined');
 
                     $encryted = '&nbsp;<i class="fa fa-lock" aria-hidden="true"></i>';
 
-                    if ($this->backupStatusId == PaypalType::FINISHED) {
+                    if ($this->backupStatusId == PaypalSize::FINISHED) {
                         $message = '<i class="fa fa-check-square-o" aria-hidden="true"></i>';
-                    } else if ($this->backupStatusId == PaypalType::RUNNING) {
+                    } else if ($this->backupStatusId == PaypalSize::RUNNING) {
                         $message = '<i class="fa fa-circle-o-notch fa-spin fa fa-fw"></i><span class="sr-only">Loading...</span>';
-                    } else if ($this->backupStatusId == PaypalType::ERROR) {
+                    } else if ($this->backupStatusId == PaypalSize::ERROR) {
                         $message = '<i class="fa fa-times" aria-hidden="true"></i>';
                     }
 
@@ -440,7 +440,7 @@ class Payments extends Element
 
     public function getStatusName()
     {
-        $statuses = PaypalType::getConstants();
+        $statuses = PaypalSize::getConstants();
 
         $statuses = array_flip($statuses);
 

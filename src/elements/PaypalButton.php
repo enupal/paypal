@@ -18,7 +18,7 @@ use craft\elements\actions\Delete;
 
 use enupal\paypal\elements\db\PaypalButtonsQuery;
 use enupal\paypal\records\PaypalButton as PaypalButtonRecord;
-use enupal\paypal\enums\PaypalType;
+use enupal\paypal\enums\PaypalSize;
 use enupal\paypal\Paypal as PaypalPlugin;
 use craft\validators\HandleValidator;
 use craft\validators\UniqueValidator;
@@ -28,16 +28,59 @@ use craft\validators\UniqueValidator;
  */
 class PaypalButton extends Element
 {
-    // General - Properties
-    // =========================================================================
+    /**
+     * @inheritdoc
+     */
     public $id;
-    public $type;
+
+    /**
+     * @var string Name.
+     */
     public $name;
+
+    /**
+     * @var string Handle.
+     */
     public $handle;
+
+    /**
+     * @var string size
+     */
+    public $size = PaypalSize::SMALL;
+
+    /**
+     * @var string Currency
+     */
     public $currency = 'USD';
+
+    /**
+     * @var int Amount
+     */
     public $amount;
-    public $itemId;
-    public $options;
+
+    /**
+     * @var int Sku
+     */
+    public $sku;
+
+    public $quantity;
+    public $customerQuantity;
+    public $soldOut;
+    public $soldOutMessage;
+    public $percentDiscount;
+    public $rateDiscount;
+    public $shippingAmount;
+    public $itemWeight;
+    public $itemWeightUnit;
+    public $priceMenuName;
+    public $priceMenuOptions;
+
+    public $showItemName;
+    public $showItemPrice;
+    public $showItemCurrency;
+    public $input1;
+    public $input2;
+
     public $returnUrl;
     public $cancelUrl;
     public $buttonName;
@@ -49,9 +92,7 @@ class PaypalButton extends Element
     public function init()
     {
         parent::init();
-        if (!$this->buttonName){
-            $this->buttonName = $this->type == PaypalType::PAY ? 'Buy Now' : 'Donate';
-        }
+
         $settings = Paypal::$app->settings->getSettings();
         $this->env = $settings->testMode ? 'www.sandbox' : 'www' ;
         $this->returnUrl = $this->returnUrl ?? $settings->returnUrl;
@@ -217,7 +258,8 @@ class PaypalButton extends Element
     {
         $attributes['name'] = ['label' => PaypalPlugin::t('Name')];
         $attributes['handle'] = ['label' => PaypalPlugin::t('Handle')];
-        $attributes['type'] = ['label' => PaypalPlugin::t('Type')];
+        $attributes['amount'] = ['label' => PaypalPlugin::t('Amount')];
+        $attributes['sku'] = ['label' => PaypalPlugin::t('SKU')];
         $attributes['dateCreated'] = ['label' => PaypalPlugin::t('Date Created')];
 
         return $attributes;
@@ -225,7 +267,7 @@ class PaypalButton extends Element
 
     protected static function defineDefaultTableAttributes(string $source): array
     {
-        $attributes = ['name', 'handle', 'type','dateCreated'];
+        $attributes = ['name', 'handle', 'amount', 'sku','dateCreated'];
 
         return $attributes;
     }
@@ -238,7 +280,7 @@ class PaypalButton extends Element
         switch ($attribute) {
             case 'dateCreated':
             {
-                    return $this->dateCreated->format("Y-m-d H:i");
+                return $this->dateCreated->format("Y-m-d H:i");
             }
         }
 
@@ -265,11 +307,10 @@ class PaypalButton extends Element
 
         $record->name = $this->name;
         $record->handle = $this->handle;
-        $record->type = $this->type;
+        $record->size = $this->size;
         $record->currency = $this->currency;
         $record->amount = $this->amount;
-        $record->itemId = $this->itemId;
-        $record->options = $this->options;
+        $record->sku = $this->sku;
         $record->returnUrl = $this->returnUrl;
         $record->cancelUrl = $this->cancelUrl;
         $record->buttonName = $this->buttonName;
@@ -298,7 +339,7 @@ class PaypalButton extends Element
 
     public function getTypeName()
     {
-        $statuses = PaypalType::getConstants();
+        $statuses = PaypalSize::getConstants();
 
         $statuses = array_flip($statuses);
 

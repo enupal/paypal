@@ -15,7 +15,7 @@ use enupal\paypal\Paypal;
 use yii\web\NotFoundHttpException;
 use yii\base\Exception;
 
-use enupal\paypal\enums\PaypalType;
+use enupal\paypal\enums\PaypalSize;
 use enupal\paypal\PaypalButtons;
 use enupal\paypal\elements\PaypalButton as ButtonElement;
 

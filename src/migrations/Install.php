@@ -32,7 +32,7 @@ class Install extends Migration
     public function safeDown()
     {
         $this->dropTableIfExists('{{%enupalpaypal_buttons}}');
-        $this->dropTableIfExists('{{%enupalpaypal_payments}}');
+        $this->dropTableIfExists('{{%enupalpaypal_orders}}');
 
         return true;
     }
@@ -48,11 +48,33 @@ class Install extends Migration
             'id' => $this->primaryKey(),
             'name' => $this->string()->notNull(),
             'handle' => $this->string()->notNull(),
-            'type' => $this->string(),
+            'size' => $this->integer()->defaultValue(0),
             'currency' => $this->string(),
+            'language' => $this->string(),
             'amount' => $this->decimal(14, 4)->unsigned(),
-            'itemId' => $this->string(),
-            'options' => $this->string(),
+            'sku' => $this->string(),
+            // Inventory
+            'quantity' => $this->integer(),
+            'customerQuantity' => $this->boolean(),
+            'soldOut' => $this->boolean(),
+            'soldOutMessage' => $this->string(),
+            // Discounts
+            'percentDiscount' => $this->decimal(14, 4)->notNull()->defaultValue(0),
+            'rateDiscount' => $this->decimal(14, 4)->notNull()->defaultValue(0),
+            // Shipping
+            'shippingAmount' => $this->decimal(14, 4)->notNull()->defaultValue(0),
+            // Weight
+            'itemWeight' => $this->decimal(14, 4)->notNull()->defaultValue(0),
+            'itemWeightUnit' => $this->string(),
+            // Price menu
+            'priceMenuName' => $this->string(),
+            'priceMenuOptions' => $this->text(),
+            // Customer
+            'showItemName' => $this->boolean()->defaultValue(0),
+            'showItemPrice' => $this->boolean()->defaultValue(0),
+            'showItemCurrency' => $this->boolean()->defaultValue(0),
+            'input1' => $this->string(),
+            'input2' => $this->string(),
             'returnUrl' => $this->string(),
             'cancelUrl' => $this->string(),
             'buttonName' => $this->string(),
@@ -62,7 +84,7 @@ class Install extends Migration
             'uid' => $this->uid(),
         ]);
 
-        $this->createTable('{{%enupalpaypal_payments}}', [
+        $this->createTable('{{%enupalpaypal_orders}}', [
             'id' => $this->primaryKey(),
             'transactionId' => $this->string(),
             'firstName' => $this->string(),
@@ -95,9 +117,9 @@ class Install extends Migration
 
         $this->addForeignKey(
             $this->db->getForeignKeyName(
-                '{{%enupalpaypal_payments}}', 'id'
+                '{{%enupalpaypal_orders}}', 'id'
             ),
-            '{{%enupalpaypal_payments}}', 'id',
+            '{{%enupalpaypal_orders}}', 'id',
             '{{%elements}}', 'id', 'CASCADE', null
         );
     }

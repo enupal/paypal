@@ -13,11 +13,16 @@ use craft\base\Model;
 class Settings extends Model
 {
     // General
-    public $paypalEmail = '';
+    public $liveAccount = '';
+    public $sandboxAccount = '';
     public $returnUrl = '';
     public $cancelUrL = '';
     public $testMode = 0;
     public $defaultCurrency = '';
+    public $returnToMerchantText = '';
+    // Tax
+    public $fixedTax = '';
+    public $rateTax = '';
 
     /**
      * @inheritdoc

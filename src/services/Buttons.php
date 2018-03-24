@@ -13,7 +13,7 @@ use yii\base\Component;
 use enupal\paypal\Paypal;
 use enupal\paypal\elements\PaypalButton as ButtonElement;
 use enupal\paypal\records\PaypalButton as PaypalButtonRecord;
-use enupal\paypal\enums\PaypalType;
+use enupal\paypal\enums\PaypalSize;
 
 use yii\base\Exception;
 use craft\models\MailSettings;
@@ -226,8 +226,8 @@ class Buttons extends Component
     public function getColorStatuses()
     {
         $colors = [
-            PaypalType::PAY => 'green',
-            PaypalType::DONATION => 'blue',
+            PaypalSize::PAY => 'green',
+            PaypalSize::DONATION => 'blue',
         ];
 
         return $colors;
@@ -327,6 +327,36 @@ class Buttons extends Component
         $currencies['TRY'] = 'TRY';
 
         return $currencies;
+    }
+
+    /**
+     * @return array
+     */
+    public function getLanguages()
+    {
+        $languages = [];
+        $languages['da_DK'] = 'Danish';
+        $languages['nl_BE'] = 'Dutch';
+        $languages['EN_US'] = 'English';
+        $languages['en_GB'] = 'English - UK';
+        $languages['fr_CA'] = 'French';
+        $languages['de_DE'] = 'German';
+        $languages['he_IL'] = 'Hebrew';
+        $languages['it_IT'] = 'Italian';
+        $languages['ja_JP'] = 'Japanese';
+        $languages['no_NO'] = 'Norwgian';
+        $languages['pl_PL'] = 'Polish';
+        $languages['pt_BR'] = 'Portuguese';
+        $languages['ru_RU'] = 'Russian';
+        $languages['es_ES'] = 'Spanish';
+        $languages['sv_SE'] = 'Swedish';
+        $languages['zh_CN'] = 'Simplified Chinese -China only';
+        $languages['zh_HK'] = 'Traditional Chinese - Hong Kong only';
+        $languages['zh_TW'] = 'Traditional Chinese - Taiwan only';
+        $languages['tr_TR'] = 'Turkish';
+        $languages['th_TH'] = 'Thai';
+
+        return $languages;
     }
 
     /**

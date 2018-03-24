@@ -9,12 +9,14 @@
 namespace enupal\paypal\enums;
 
 /**
- * Paypal type button
+ * Paypal size button
  */
-abstract class PaypalType extends BaseEnum
+abstract class PaypalSize extends BaseEnum
 {
     // Constants
     // =========================================================================
-    const PAY = 0;
-    const DONATION = 1;
+    const SMALL = 0;
+    const BIG = 1;
+    const BIGCC = 2;
+    const GOLD = 3;
 }

@@ -54,16 +54,32 @@ class PaypalButtonsQuery extends ElementQuery
         $this->joinElementTable('enupalpaypal_buttons');
 
         $this->query->select([
+            'enupalpaypal_buttons.id',
             'enupalpaypal_buttons.name',
             'enupalpaypal_buttons.handle',
-            'enupalpaypal_buttons.type',
+            'enupalpaypal_buttons.size',
             'enupalpaypal_buttons.currency',
             'enupalpaypal_buttons.amount',
-            'enupalpaypal_buttons.itemId',
-            'enupalpaypal_buttons.options',
+            'enupalpaypal_buttons.sku',
+            'enupalpaypal_buttons.quantity',
+            'enupalpaypal_buttons.customerQuantity',
+            'enupalpaypal_buttons.soldOut',
+            'enupalpaypal_buttons.soldOutMessage',
+            'enupalpaypal_buttons.percentDiscount',
+            'enupalpaypal_buttons.rateDiscount',
+            'enupalpaypal_buttons.shippingAmount',
+            'enupalpaypal_buttons.itemWeight',
+            'enupalpaypal_buttons.itemWeightUnit',
+            'enupalpaypal_buttons.priceMenuName',
+            'enupalpaypal_buttons.priceMenuOptions',
+            'enupalpaypal_buttons.showItemName',
+            'enupalpaypal_buttons.showItemPrice',
+            'enupalpaypal_buttons.showItemCurrency',
+            'enupalpaypal_buttons.input1',
+            'enupalpaypal_buttons.input2',
             'enupalpaypal_buttons.returnUrl',
             'enupalpaypal_buttons.cancelUrl',
-            'enupalpaypal_buttons.buttonName'
+            'enupalpaypal_buttons.buttonName',
         ]);
 
         if ($this->name) {

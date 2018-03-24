@@ -84,7 +84,7 @@ class Paypal extends \craft\base\Plugin
         return array_merge($parent, [
             'subnav' => [
                 'payments' => [
-                    "label" => self::t("Payments"),
+                    "label" => self::t("Order"),
                     "url" => 'enupal-paypal/payments'
                 ],
                 'buttons' => [
