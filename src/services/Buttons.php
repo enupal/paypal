@@ -365,13 +365,13 @@ class Buttons extends Component
     public function getSizeOptions()
     {
         $sizes = [];
-        $sizes[PaypalSize::BUYSMALL] = Paypal::t('Buy Small');
-        $sizes[PaypalSize::BUYBIG] = Paypal::t('Buy Big');
-        $sizes[PaypalSize::BUYBIGCC] = Paypal::t('Buy Big with Credit Cards');
-        $sizes[PaypalSize::BUYGOLD] = Paypal::t('Buy Gold (English Only)');
-        $sizes[PaypalSize::PAYSMALL] = Paypal::t('Pay Small');
-        $sizes[PaypalSize::PAYBIG] = Paypal::t('Pay Big');
-        $sizes[PaypalSize::PAYBIGCC] = Paypal::t('Pay Big with Credit Cards');
+        $sizes[PaypalSize::BUYSMALL] = Paypal::t('Buy Now - Small');
+        $sizes[PaypalSize::BUYBIG] = Paypal::t('Buy Now - Big');
+        $sizes[PaypalSize::BUYBIGCC] = Paypal::t('Buy Now - Big with Credit Cards');
+        $sizes[PaypalSize::BUYGOLD] = Paypal::t('Buy Now - Gold (English Only)');
+        $sizes[PaypalSize::PAYSMALL] = Paypal::t('Pay Now - Small');
+        $sizes[PaypalSize::PAYBIG] = Paypal::t('Pay Now - Big');
+        $sizes[PaypalSize::PAYBIGCC] = Paypal::t('Pay Now - Big with Credit Cards');
 
         return $sizes;
     }

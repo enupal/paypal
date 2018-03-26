@@ -9,6 +9,7 @@
 namespace enupal\paypal\migrations;
 
 use craft\db\Migration;
+use enupal\paypal\enums\PaypalSize;
 
 /**
  * Installation Migration
@@ -48,7 +49,7 @@ class Install extends Migration
             'id' => $this->primaryKey(),
             'name' => $this->string()->notNull(),
             'handle' => $this->string()->notNull(),
-            'size' => $this->integer()->defaultValue(0),
+            'size' => $this->integer()->defaultValue(PaypalSize::BUYBIGCC),
             'currency' => $this->string()->defaultValue('USD'),
             'language' => $this->string()->defaultValue('en_US'),
             'amount' => $this->decimal(14, 4)->unsigned(),
