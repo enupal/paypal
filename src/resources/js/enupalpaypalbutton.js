@@ -7,6 +7,7 @@
         options: null,
         $sizeSelect: null,
         $languageSelect: null,
+        $unlimitedStock: null,
 
         /**
          * The constructor.
@@ -15,9 +16,11 @@
             // init method
             this.$sizeSelect = $("#fields-size");
             this.$languageSelect = $("#fields-language");
+            this.$unlimitedStock = $("#fields-unlimited-stock");
             this.changeOptions();
             this.addListener(this.$sizeSelect, 'change', 'changeOptions');
             this.addListener(this.$languageSelect, 'change', 'changeOptions');
+            this.addListener(this.$unlimitedStock, 'change', 'handleUnlimitedStock');
         },
 
         changeOptions: function()
@@ -40,6 +43,19 @@
                 }
             }, this));
         },
+
+        handleUnlimitedStock: function(option) {
+            var $checkbox = $(option.currentTarget),
+                $text = $checkbox.parent().prevAll('.textwrapper:first').children('.text:first');
+
+            if ($checkbox.prop('checked')) {
+                $text.prop('disabled', true).addClass('disabled').val('');
+            }
+            else {
+                $text.prop('disabled', false).removeClass('disabled').focus();
+            }
+            
+        }
 
     });
 

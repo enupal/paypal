@@ -45,10 +45,22 @@
 
 {% block content %}
     <input type="hidden" name="action" value="enupal-paypal/buttons/save-button">
-    <input type="hidden" name="handle" value="{{ paypalButton.handle }}">
+    <input type="hidden" name="sku" value="{{ paypalButton.sku }}">
     <input type="hidden" name="buttonId" value="{{ buttonId }}">
 
     {% namespace 'fields' %}
+        {{ forms.textField({
+            first: true,
+            label: "Button Name"|t('enupal-paypal'),
+            instructions: 'What this Paypal Button will be called in the CP. This value will be used to set the <strong>Product Name</strong> in PayPal',
+            id: 'name',
+            name: 'name',
+            value: paypalButton.name,
+            errors: paypalButton.getErrors('name'),
+            autofocus: true,
+            required: true
+        }) }}
+        <hr>
         {% set sizeOptions = craft.enupalPaypal.getSizeOptions() %}
         {% set sizeInput %}
             <div class="flex">

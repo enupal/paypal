@@ -39,9 +39,9 @@ class PaypalButton extends Element
     public $name;
 
     /**
-     * @var string Handle.
+     * @var string Sku
      */
-    public $handle;
+    public $sku;
 
     /**
      * @var string size
@@ -64,16 +64,17 @@ class PaypalButton extends Element
     public $amount;
 
     /**
-     * @var int Sku
+     * @inheritdoc
      */
-    public $sku;
+    public $enabled;
 
     public $quantity;
+    public $hasUnlimitedStock;
     public $customerQuantity;
     public $soldOut;
     public $soldOutMessage;
-    public $percentDiscount;
-    public $rateDiscount;
+    public $discountType;
+    public $discount;
     public $shippingAmount;
     public $itemWeight;
     public $itemWeightUnit;
@@ -239,7 +240,7 @@ class PaypalButton extends Element
      */
     protected static function defineSearchableAttributes(): array
     {
-        return ['name', 'handle'];
+        return ['name', 'sku'];
     }
 
     /**
@@ -250,7 +251,7 @@ class PaypalButton extends Element
         $attributes = [
             'elements.dateCreated' => PaypalPlugin::t('Date Created'),
             'name' => PaypalPlugin::t('Name'),
-            'handle' => PaypalPlugin::t('Handle')
+            'sku' => PaypalPlugin::t('SKU')
         ];
 
         return $attributes;
@@ -262,9 +263,8 @@ class PaypalButton extends Element
     protected static function defineTableAttributes(): array
     {
         $attributes['name'] = ['label' => PaypalPlugin::t('Name')];
-        $attributes['handle'] = ['label' => PaypalPlugin::t('Handle')];
-        $attributes['amount'] = ['label' => PaypalPlugin::t('Amount')];
         $attributes['sku'] = ['label' => PaypalPlugin::t('SKU')];
+        $attributes['amount'] = ['label' => PaypalPlugin::t('Amount')];
         $attributes['dateCreated'] = ['label' => PaypalPlugin::t('Date Created')];
 
         return $attributes;
@@ -272,7 +272,7 @@ class PaypalButton extends Element
 
     protected static function defineDefaultTableAttributes(string $source): array
     {
-        $attributes = ['name', 'handle', 'amount', 'sku', 'dateCreated'];
+        $attributes = ['name', 'amount', 'sku', 'dateCreated'];
 
         return $attributes;
     }
@@ -311,7 +311,6 @@ class PaypalButton extends Element
         }
 
         $record->name = $this->name;
-        $record->handle = $this->handle;
         $record->size = $this->size;
         $record->currency = $this->currency;
         $record->language = $this->language;
@@ -332,14 +331,9 @@ class PaypalButton extends Element
     public function rules()
     {
         return [
-            [['name', 'handle'], 'required'],
-            [['name', 'handle'], 'string', 'max' => 255],
-            [
-                ['handle'],
-                HandleValidator::class,
-                'reservedWords' => ['id', 'dateCreated', 'dateUpdated', 'uid', 'title']
-            ],
-            [['name', 'handle'], UniqueValidator::class, 'targetClass' => PaypalButtonRecord::class],
+            [['name', 'sku'], 'required'],
+            [['name', 'sku'], 'string', 'max' => 255],
+            [['name', 'sku'], UniqueValidator::class, 'targetClass' => PaypalButtonRecord::class],
         ];
     }
 

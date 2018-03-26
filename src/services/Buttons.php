@@ -47,25 +47,23 @@ class Buttons extends Component
      */
     public function getButtonById(int $id, int $siteId = null)
     {
-        $query = ButtonElement::find();
-        $query->id($id);
-        $query->siteId($siteId);
+        $button = Craft::$app->getElements()->getElementById($id, ButtonElement::class, $siteId);
 
-        return $query->one();
+        return $button;
     }
 
     /**
-     * Returns a PaypalButton model if one is found in the database by handle
+     * Returns a PaypalButton model if one is found in the database by sku
      *
-     * @param string $handle
+     * @param string $sku
      * @param int $siteId
      *
      * @return null|\craft\base\ElementInterface
      */
-    public function getButtonByHandle($handle, int $siteId = null)
+    public function getButtonBySku($sku, int $siteId = null)
     {
         $query = ButtonElement::find();
-        $query->handle($handle);
+        $query->handle($sku);
         $query->siteId($siteId);
 
         return $query->one();
@@ -391,7 +389,7 @@ class Buttons extends Component
         $handle = empty($handle) ? 'button' : $handle;
 
         $button->name = $this->getFieldAsNew('name', $name);
-        $button->handle = $this->getFieldAsNew('handle', $handle);
+        $button->sku = $this->getFieldAsNew('sku', $handle);
 
         $this->saveButton($button);
 
@@ -412,7 +410,7 @@ class Buttons extends Component
         $i = 1;
         $band = true;
         do {
-            $newField = $field == "handle" ? $value.$i : $value." ".$i;
+            $newField = $field == "sku" ? $value.$i : $value." ".$i;
             $slider = $this->getFieldValue($field, $newField);
             if (is_null($slider)) {
                 $band = false;

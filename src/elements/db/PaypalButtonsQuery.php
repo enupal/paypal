@@ -19,7 +19,7 @@ class PaypalButtonsQuery extends ElementQuery
     public $id;
     public $dateCreated;
     public $name;
-    public $handle;
+    public $sku;
 
     /**
      * @inheritdoc
@@ -56,18 +56,18 @@ class PaypalButtonsQuery extends ElementQuery
         $this->query->select([
             'enupalpaypal_buttons.id',
             'enupalpaypal_buttons.name',
-            'enupalpaypal_buttons.handle',
             'enupalpaypal_buttons.size',
             'enupalpaypal_buttons.currency',
             'enupalpaypal_buttons.language',
             'enupalpaypal_buttons.amount',
             'enupalpaypal_buttons.sku',
             'enupalpaypal_buttons.quantity',
+            'enupalpaypal_buttons.hasUnlimitedStock',
             'enupalpaypal_buttons.customerQuantity',
             'enupalpaypal_buttons.soldOut',
             'enupalpaypal_buttons.soldOutMessage',
-            'enupalpaypal_buttons.percentDiscount',
-            'enupalpaypal_buttons.rateDiscount',
+            'enupalpaypal_buttons.discountType',
+            'enupalpaypal_buttons.discount',
             'enupalpaypal_buttons.shippingAmount',
             'enupalpaypal_buttons.itemWeight',
             'enupalpaypal_buttons.itemWeightUnit',
@@ -89,9 +89,9 @@ class PaypalButtonsQuery extends ElementQuery
             );
         }
 
-        if ($this->handle) {
+        if ($this->sku) {
             $this->subQuery->andWhere(Db::parseParam(
-                'enupalpaypal_buttons.handle', $this->handle)
+                'enupalpaypal_buttons.sku', $this->sku)
             );
         }
 

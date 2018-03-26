@@ -17,24 +17,20 @@
 
     {{ forms.textField({
         first: true,
-        label: "Name <span class='info'>What this Paypal Button will be called in the CP.</span>"|t('enupal-paypal'),
-        id: 'name',
-        name: 'name',
-        value: paypalButton.name,
-        errors: paypalButton.getErrors('name'),
+        label: "SKU <span class='info'>How you’ll refer to this Paypal Button in the templates.</span>"|t('enupal-paypal'),
+        id: 'sku',
+        name: 'sku',
+        value: paypalButton.sku,
+        errors: paypalButton.getErrors('sku'),
         autofocus: true,
         required: true
     }) }}
 
-    {{ forms.textField({
-        first: true,
-        label: "Handle <span class='info'>How you’ll refer to this Paypal Button in the templates.</span>"|t('enupal-paypal'),
-        id: 'handle',
-        name: 'handle',
-        value: paypalButton.handle,
-        errors: paypalButton.getErrors('handle'),
-        autofocus: true,
-        required: true
+    {{ forms.lightswitchField({
+        label: "Enabled"|t('enupal-paypal'),
+        id: 'enabled',
+        name: 'enabled',
+        on: paypalButton.enabled
     }) }}
 </div>
 <hr>
@@ -75,6 +71,35 @@
         options: languageOptions,
         value: paypalButton.language
     }) }}
+
+    {% set stockInput %}
+        <div class="flex">
+            <div class="textwrapper">
+                {{ forms.text({
+                    id: 'quantity',
+                    name: 'quantity',
+                    value: (paypalButton.hasUnlimitedStock ? '' : (paypalButton.quantity == '0' ? '0': (paypalButton.quantity ? paypalButton.quantity : ''))),
+                    placeholder: 'Enter stock'|t('enupal-paypal'),
+                    disabled: paypalButton.hasUnlimitedStock
+                }) }}
+            </div>
+            <div class="nowrap">
+                {{ forms.checkbox({
+                    id: 'unlimited-stock',
+                    class: 'unlimited-stock',
+                    label: 'Unlimited'|t('enupal-paypal'),
+                    name: 'hasUnlimitedStock',
+                    checked: paypalButton.hasUnlimitedStock,
+                }) }}
+            </div>
+        </div>
+    {% endset %}
+
+    {{ forms.field({
+        id: 'stock',
+        label: 'Stock'|t('enupal-paypal'),
+        errors: paypalButton.getErrors('hasUnlimitedStock')|merge(paypalButton.getErrors('quantity')),
+    }, stockInput) }}
 </div>
 <hr>
 <div class="meta">

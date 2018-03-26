@@ -48,20 +48,20 @@ class Install extends Migration
         $this->createTable('{{%enupalpaypal_buttons}}', [
             'id' => $this->primaryKey(),
             'name' => $this->string()->notNull(),
-            'handle' => $this->string()->notNull(),
+            'sku' => $this->string()->notNull(),
             'size' => $this->integer()->defaultValue(PaypalSize::BUYBIGCC),
             'currency' => $this->string()->defaultValue('USD'),
             'language' => $this->string()->defaultValue('en_US'),
             'amount' => $this->decimal(14, 4)->unsigned(),
-            'sku' => $this->string(),
             // Inventory
             'quantity' => $this->integer(),
+            'hasUnlimitedStock' => $this->boolean()->defaultValue(1),
             'customerQuantity' => $this->boolean(),
             'soldOut' => $this->boolean(),
             'soldOutMessage' => $this->string(),
             // Discounts
-            'percentDiscount' => $this->decimal(14, 4)->notNull()->defaultValue(0),
-            'rateDiscount' => $this->decimal(14, 4)->notNull()->defaultValue(0),
+            'discountType' => $this->integer()->defaultValue(0),
+            'discount' => $this->decimal(14, 4)->notNull()->defaultValue(0),
             // Shipping
             'shippingAmount' => $this->decimal(14, 4)->notNull()->defaultValue(0),
             // Weight
