@@ -128,10 +128,11 @@
     <h6>{{ 'Shipping'|t('sprout-forms') }}</h6>
     {{ forms.textField({
         first: true,
-        label: "Shipping <span class='info'>Shipping amount</span>"|t('enupal-paypal'),
+        label: "Shipping <span class='info'>Shipping amount, leave empty if is free shipping</span>"|t('enupal-paypal'),
         id: 'shippingAmount',
         name: 'shippingAmount',
-        placeholder: 'Enter shipping amount',
+        placeholder: 'Enter amount',
+        unit: paypalButton.currency,
         value: (paypalButton.shippingAmount == '0' ? '0'|number : (paypalButton.shippingAmount ? paypalButton.shippingAmount|number ?: '')),
         errors: paypalButton.getErrors('shippingAmount'),
         autofocus: true,

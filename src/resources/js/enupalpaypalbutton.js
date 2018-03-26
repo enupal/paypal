@@ -17,10 +17,13 @@
             this.$sizeSelect = $("#fields-size");
             this.$languageSelect = $("#fields-language");
             this.$unlimitedStock = $("#fields-unlimited-stock");
+            this.$currencySelect = $("#fields-currency");
+
             this.changeOptions();
             this.addListener(this.$sizeSelect, 'change', 'changeOptions');
             this.addListener(this.$languageSelect, 'change', 'changeOptions');
             this.addListener(this.$unlimitedStock, 'change', 'handleUnlimitedStock');
+            this.addListener(this.$currencySelect, 'change', 'handleCurrencySelect');
         },
 
         changeOptions: function()
@@ -55,6 +58,13 @@
                 $text.prop('disabled', false).removeClass('disabled').focus();
             }
             
+        },
+
+        handleCurrencySelect: function() {
+            var value = this.$currencySelect.val();
+            var $shippingDiv = $("#fields-shippingAmount-field").find(".label, .light");
+
+            $shippingDiv.text(value);
         }
 
     });

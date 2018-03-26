@@ -15,6 +15,6 @@ abstract class DiscountType extends BaseEnum
 {
     // Constants
     // =========================================================================
-    const AMOUNT = 0;
-    const RATE  = 1;
+    const RATE  = 0;
+    const AMOUNT = 1;
 }

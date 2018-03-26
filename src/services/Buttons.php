@@ -509,8 +509,8 @@ class Buttons extends Component
     public function getDiscountOptions()
     {
         $types = [];
-        $types[DiscountType::AMOUNT] = Paypal::t('Amount ($)');
         $types[DiscountType::RATE] = Paypal::t('Rate (%)');
+        $types[DiscountType::AMOUNT] = Paypal::t('Amount');
 
         return $types;
     }
