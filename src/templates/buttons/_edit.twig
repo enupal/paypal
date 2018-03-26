@@ -49,19 +49,29 @@
     <input type="hidden" name="buttonId" value="{{ buttonId }}">
 
     {% namespace 'fields' %}
-        <div id="fields">
-            <div class="field" id="fields-cancelUrl-field">
-                <div class="heading">
-                    <label id="fields-cancelUrl-label" for="fields-cancelUrl">{{ "Button size and style"|t('enupal-paypal') }}</label>
-                    <div class="instructions"><p>{{ "An example of how the PayPal button will look"|t('enupal-paypal') }}</p>
-                    </div>
+        {% set sizeOptions = craft.enupalPaypal.getSizeOptions() %}
+        {% set sizeInput %}
+            <div class="flex">
+                <div class="textwrapper">
+                    {{ forms.selectField({
+                        id: 'size',
+                        name: 'size',
+                        options: sizeOptions,
+                        value: paypalButton.size
+                    }) }}
                 </div>
-                <div class="input ltr">
-                    <input class="text fullwidth" type="text" id="fields-cancelUrl" name="fields[cancelUrl]" value="" autofocus="" autocomplete="off">
+                <div class="textwrapper">
+                    <img id="button-preview" src="" alt="">
                 </div>
             </div>
+        {% endset %}
 
-        </div>
+        {{ forms.field({
+            id: 'size',
+            instructions: '',
+            label: 'Button Size'|t('enupal-paypal'),
+            errors: paypalButton.getErrors('size'),
+        }, sizeInput) }}
     {% endnamespace %}
 {% endblock %}
 
@@ -86,6 +96,6 @@
 {% do view.registerAssetBundle("enupal\\paypal\\assetbundles\\FontAwesomeAsset") %}
 {% js %}
     $(document).ready(function() {
-    new EnupalPaypal();
+        new EnupalPaypal();
     });
 {% endjs %}

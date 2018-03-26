@@ -41,4 +41,21 @@ class SettingsController extends BaseController
 
         return $this->redirectToPostedUrl();
     }
+
+    /**
+     * @return \yii\web\Response
+     * @throws \yii\web\BadRequestHttpException
+     */
+    public function actionGetSizeUrl()
+    {
+        $this->requireAcceptsJson();
+        $request = Craft::$app->getRequest();
+
+        $size = $request->getBodyParam('size');
+        $language = $request->getBodyParam('language');
+
+        $buttonUrl = Paypal::$app->buttons->getButtonSizeUrl($size, $language);
+
+        return $this->asJson(['buttonUrl' => $buttonUrl]);
+    }
 }

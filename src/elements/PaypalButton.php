@@ -54,6 +54,11 @@ class PaypalButton extends Element
     public $currency;
 
     /**
+     * @var string Language
+     */
+    public $language;
+
+    /**
      * @var int Amount
      */
     public $amount;
@@ -94,7 +99,7 @@ class PaypalButton extends Element
         parent::init();
 
         $settings = Paypal::$app->settings->getSettings();
-        $this->env = $settings->testMode ? 'www.sandbox' : 'www' ;
+        $this->env = $settings->testMode ? 'www.sandbox' : 'www';
         $this->returnUrl = $this->returnUrl ?? $settings->returnUrl;
     }
 
@@ -267,7 +272,7 @@ class PaypalButton extends Element
 
     protected static function defineDefaultTableAttributes(string $source): array
     {
-        $attributes = ['name', 'handle', 'amount', 'sku','dateCreated'];
+        $attributes = ['name', 'handle', 'amount', 'sku', 'dateCreated'];
 
         return $attributes;
     }
@@ -279,9 +284,9 @@ class PaypalButton extends Element
     {
         switch ($attribute) {
             case 'dateCreated':
-            {
-                return $this->dateCreated->format("Y-m-d H:i");
-            }
+                {
+                    return $this->dateCreated->format("Y-m-d H:i");
+                }
         }
 
         return parent::tableAttributeHtml($attribute);
@@ -309,6 +314,7 @@ class PaypalButton extends Element
         $record->handle = $this->handle;
         $record->size = $this->size;
         $record->currency = $this->currency;
+        $record->language = $this->language;
         $record->amount = $this->amount;
         $record->sku = $this->sku;
         $record->returnUrl = $this->returnUrl;
@@ -337,6 +343,9 @@ class PaypalButton extends Element
         ];
     }
 
+    /**
+     * @return string
+     */
     public function getTypeName()
     {
         $statuses = PaypalSize::getConstants();
@@ -344,5 +353,21 @@ class PaypalButton extends Element
         $statuses = array_flip($statuses);
 
         return ucwords(strtolower($statuses[$this->type]));
+    }
+
+    /**
+     * @param null   $size
+     * @param string $lang
+     *
+     * @return string
+     * @throws \yii\base\Exception
+     */
+    public function getButtonSizeUrl($size = null, $language = 'en_US')
+    {
+        $buttonSize = $size ?? $this->size;
+        // Small By default
+        $buttonUrl = Paypal::$app->buttons->getButtonSizeUrl($buttonSize, $language);
+
+        return $buttonUrl;
     }
 }

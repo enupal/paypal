@@ -50,7 +50,7 @@ class Install extends Migration
             'handle' => $this->string()->notNull(),
             'size' => $this->integer()->defaultValue(0),
             'currency' => $this->string()->defaultValue('USD'),
-            'language' => $this->string()->defaultValue('EN_US'),
+            'language' => $this->string()->defaultValue('en_US'),
             'amount' => $this->decimal(14, 4)->unsigned(),
             'sku' => $this->string(),
             // Inventory

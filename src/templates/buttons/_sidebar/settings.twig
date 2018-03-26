@@ -10,6 +10,8 @@
 {% import "_includes/forms" as forms %}
 
 {% set currencyOptions = craft.enupalPaypal.getCurrencyIsoOptions() %}
+{% set languageOptions = craft.enupalPaypal.getLanguageOptions() %}
+
 <div class="meta">
     <h6>{{ 'General'|t('sprout-forms') }}</h6>
 
@@ -65,6 +67,14 @@
         label: 'Amount'|t('enupal-paypal'),
         errors: paypalButton.getErrors('amount')|merge(paypalButton.getErrors('currency')),
     }, amountInput) }}
+
+    {{ forms.selectField({
+        label: "Language <span class='info'>PayPal currently supports 18 languages</span>"|t('enupal-paypal'),
+        id: 'language',
+        name: 'language',
+        options: languageOptions,
+        value: paypalButton.language
+    }) }}
 </div>
 <hr>
 <div class="meta">

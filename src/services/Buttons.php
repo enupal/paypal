@@ -332,13 +332,13 @@ class Buttons extends Component
     /**
      * @return array
      */
-    public function getLanguages()
+    public function getLanguageOptions()
     {
         $languages = [];
-        $languages['EN_US'] = 'English';
+        $languages['en_US'] = 'English';
         $languages['en_GB'] = 'English - UK';
         $languages['da_DK'] = 'Danish';
-        $languages['nl_BE'] = 'Dutch';
+        $languages['nl_NL'] = 'Dutch';
         $languages['fr_CA'] = 'French';
         $languages['de_DE'] = 'German';
         $languages['he_IL'] = 'Hebrew';
@@ -357,6 +357,23 @@ class Buttons extends Component
         $languages['th_TH'] = 'Thai';
 
         return $languages;
+    }
+
+    /**
+     * @return array
+     */
+    public function getSizeOptions()
+    {
+        $sizes = [];
+        $sizes[PaypalSize::BUYSMALL] = Paypal::t('Buy Small');
+        $sizes[PaypalSize::BUYBIG] = Paypal::t('Buy Big');
+        $sizes[PaypalSize::BUYBIGCC] = Paypal::t('Buy Big with Credit Cards');
+        $sizes[PaypalSize::BUYGOLD] = Paypal::t('Buy Gold (English Only)');
+        $sizes[PaypalSize::PAYSMALL] = Paypal::t('Pay Small');
+        $sizes[PaypalSize::PAYBIG] = Paypal::t('Pay Big');
+        $sizes[PaypalSize::PAYBIGCC] = Paypal::t('Pay Big with Credit Cards');
+
+        return $sizes;
     }
 
     /**
@@ -420,5 +437,73 @@ class Buttons extends Component
         $result = PaypalButtonRecord::findOne([$field => $value]);
 
         return $result;
+    }
+
+    /**
+     * @param int    $buttonSize
+     *
+     * @param string $language
+     *
+     * @return string
+     * @throws Exception
+     */
+    public function getButtonSizeUrl($buttonSize = 0, $language = 'en_ES')
+    {
+        $buttonUrl = '';
+        $basseUrl = 'https://www.paypalobjects.com/{language}{extra}/i/btn/';
+        $extra = '';
+
+        if ($language == 'nl_NL'){
+            $extra = '/NL/';
+        }
+        if ($language == 'ja_JP'){
+            $extra = '/JP/';
+        }
+
+        switch ($buttonSize) {
+            case PaypalSize::BUYSMALL:
+                {
+                    $buttonUrl = $basseUrl.'btn_buynow_SM.gif';
+                    break;
+                }
+            case PaypalSize::BUYBIG:
+                {
+                    $buttonUrl = $basseUrl.'btn_buynow_LG.gif';
+                    break;
+                }
+            case PaypalSize::BUYBIGCC:
+                {
+                    $buttonUrl =  $basseUrl.'btn_buynowCC_LG.gif';
+                    break;
+                }
+            case PaypalSize::BUYGOLD:
+                {
+                    // just english
+                    $buttonUrl = 'https://www.paypalobjects.com/webstatic/en_US/i/buttons/buy-logo-medium.png';
+                    break;
+                }
+            case PaypalSize::PAYSMALL:
+                {
+                    $buttonUrl = $basseUrl.'btn_paynow_SM.gif';
+                    break;
+                }
+            case PaypalSize::PAYBIG:
+                {
+                    $buttonUrl = $basseUrl.'btn_paynow_LG.gif';
+                    break;
+                }
+            case PaypalSize::PAYBIGCC:
+                {
+                    $buttonUrl = $basseUrl.'btn_paynowCC_LG.gif';
+                    break;
+                }
+        }
+
+        $buttonUrl = Craft::$app->view->renderObjectTemplate($buttonUrl, [
+            'language' => $language,
+            'extra' => $extra
+        ]);
+
+        return $buttonUrl;
     }
 }

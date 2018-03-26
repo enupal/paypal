@@ -59,6 +59,7 @@ class PaypalButtonsQuery extends ElementQuery
             'enupalpaypal_buttons.handle',
             'enupalpaypal_buttons.size',
             'enupalpaypal_buttons.currency',
+            'enupalpaypal_buttons.language',
             'enupalpaypal_buttons.amount',
             'enupalpaypal_buttons.sku',
             'enupalpaypal_buttons.quantity',

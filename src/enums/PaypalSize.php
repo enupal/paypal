@@ -15,8 +15,11 @@ abstract class PaypalSize extends BaseEnum
 {
     // Constants
     // =========================================================================
-    const SMALL = 0;
-    const BIG = 1;
-    const BIGCC = 2;
-    const GOLD = 3;
+    const BUYSMALL = 0;
+    const BUYBIG = 1;
+    const BUYBIGCC = 2;
+    const BUYGOLD = 3;
+    const PAYSMALL = 4;
+    const PAYBIG = 5;
+    const PAYBIGCC = 6;
 }
