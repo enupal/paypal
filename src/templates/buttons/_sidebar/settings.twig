@@ -11,6 +11,7 @@
 
 {% set currencyOptions = craft.enupalPaypal.getCurrencyIsoOptions() %}
 {% set languageOptions = craft.enupalPaypal.getLanguageOptions() %}
+{% set discountOptions = craft.enupalPaypal.getDiscountOptions() %}
 
 <div class="meta">
     <h6>{{ 'General'|t('sprout-forms') }}</h6>
@@ -103,18 +104,42 @@
 </div>
 <hr>
 <div class="meta">
-    <h6>{{ 'Advanced'|t('sprout-forms') }}</h6>
-
+    <h6>{{ 'Discount'|t('sprout-forms') }}</h6>
+    {{ forms.selectField({
+        label: "Discount Type<span class='info'>Reduce the price by a percentage or amount, of the original price.</span>"|t('enupal-paypal'),
+        id: 'discountType',
+        name: 'discountType',
+        options: discountOptions,
+        value: paypalButton.discountType
+    }) }}
     {{ forms.textField({
         first: true,
-        label: "Button Name <span class='info'></span>"|t('enupal-paypal'),
-        id: 'buttonName',
-        name: 'buttonName',
-        value: paypalButton.buttonName,
-        errors: paypalButton.getErrors('buttonName'),
+        label: "Discount <span class='info'>Apply discount to amount</span>"|t('enupal-paypal'),
+        id: 'discount',
+        name: 'discount',
+        placeholder: 'Enter discount',
+        value: (paypalButton.discount == '0' ? '0'|number : (paypalButton.discount ? paypalButton.discount|number ?: '')),
+        errors: paypalButton.getErrors('discount'),
         autofocus: true,
-        required: true
     }) }}
+</div>
+<hr>
+<div class="meta">
+    <h6>{{ 'Shipping'|t('sprout-forms') }}</h6>
+    {{ forms.textField({
+        first: true,
+        label: "Shipping <span class='info'>Shipping amount</span>"|t('enupal-paypal'),
+        id: 'shippingAmount',
+        name: 'shippingAmount',
+        placeholder: 'Enter shipping amount',
+        value: (paypalButton.shippingAmount == '0' ? '0'|number : (paypalButton.shippingAmount ? paypalButton.shippingAmount|number ?: '')),
+        errors: paypalButton.getErrors('shippingAmount'),
+        autofocus: true,
+    }) }}
+</div>
+<hr>
+<div class="meta">
+    <h6>{{ 'Advanced'|t('sprout-forms') }}</h6>
 
     {{ forms.textField({
         label: "Return URL <span class='info'>Redirect the user to this URL when the pay is successfully</span>"|t('enupal-paypal'),

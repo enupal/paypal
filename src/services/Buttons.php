@@ -9,6 +9,7 @@
 namespace enupal\paypal\services;
 
 use Craft;
+use enupal\paypal\enums\DiscountType;
 use yii\base\Component;
 use enupal\paypal\Paypal;
 use enupal\paypal\elements\PaypalButton as ButtonElement;
@@ -503,5 +504,14 @@ class Buttons extends Component
         ]);
 
         return $buttonUrl;
+    }
+
+    public function getDiscountOptions()
+    {
+        $types = [];
+        $types[DiscountType::AMOUNT] = Paypal::t('Amount ($)');
+        $types[DiscountType::RATE] = Paypal::t('Rate (%)');
+
+        return $types;
     }
 }

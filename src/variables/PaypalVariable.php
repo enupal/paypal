@@ -100,5 +100,10 @@ class PaypalVariable
     {
         return Paypal::$app->buttons->getLanguageOptions();
     }
+
+    public function getDiscountOptions()
+    {
+        return Paypal::$app->buttons->getDiscountOptions();
+    }
 }
 

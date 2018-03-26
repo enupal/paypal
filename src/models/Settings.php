@@ -20,6 +20,7 @@ class Settings extends Model
     public $testMode = 0;
     public $defaultCurrency = '';
     public $returnToMerchantText = '';
+    public $weightUnit = 'g';
     // Tax
     public $fixedTax = '';
     public $rateTax = '';

@@ -311,11 +311,17 @@ class PaypalButton extends Element
         }
 
         $record->name = $this->name;
+        $record->sku = $this->sku;
         $record->size = $this->size;
         $record->currency = $this->currency;
         $record->language = $this->language;
         $record->amount = $this->amount;
-        $record->sku = $this->sku;
+        $record->quantity = $this->quantity;
+        $record->hasUnlimitedStock = $this->hasUnlimitedStock;
+        $record->discountType = $this->discountType;
+        $record->discount = $this->discount;
+        $record->shippingAmount = $this->shippingAmount;
+
         $record->returnUrl = $this->returnUrl;
         $record->cancelUrl = $this->cancelUrl;
         $record->buttonName = $this->buttonName;
