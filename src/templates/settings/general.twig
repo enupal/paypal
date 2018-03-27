@@ -10,7 +10,7 @@
 {% extends "enupal-paypal/_layouts/settings" %}
 {% import "_includes/forms" as forms %}
 
-{% set settings = craft.enupalbackup.getSettings() %}
+{% set settings = craft.enupalPaypal.getSettings() %}
 {% set fullPageForm = true %}
 {% set saveShortcutRedirect = 'enupal-paypal/settings/general' %}
 
@@ -44,11 +44,34 @@
                 errors: settings.getErrors('testMode'),
             }) }}
 
+            <hr>
+
+            {{ forms.textField({
+                label: "Live Account"|t('enupal-paypal'),
+                instructions: "Live Account"|t('enupal-paypal'),
+                id: 'liveAccount',
+                name: 'liveAccount',
+                value: settings.liveAccount,
+                autofocus: true,
+                errors: settings.getErrors('liveAccount')
+            }) }}
+
+            {{ forms.textField({
+                label: "Sandbox Account"|t('enupal-paypal'),
+                instructions: "Sandbox Account"|t('enupal-paypal'),
+                id: 'sandboxAccount',
+                name: 'sandboxAccount',
+                value: settings.sandboxAccount,
+                autofocus: true,
+                errors: settings.getErrors('sandboxAccount')
+            }) }}
+            <hr>
             {{ forms.textField({
                 label: "Global Return URL"|t('enupal-paypal'),
                 instructions: "Redirect the user to this URL when the pay is successfully"|t('enupal-paypal'),
                 id: 'returnUrl',
                 name: 'returnUrl',
+                placeholder: '/thank-you',
                 value: settings.returnUrl,
                 autofocus: true,
                 errors: settings.getErrors('returnUrl')
@@ -59,6 +82,7 @@
                 instructions: "Redirect the user to this URL when they click the cancel button"|t('enupal-paypal'),
                 id: 'cancelUrL',
                 name: 'cancelUrL',
+                placeholder: '/something-went-wrong',
                 value: settings.cancelUrL,
                 autofocus: true,
                 errors: settings.getErrors('cancelUrL')

@@ -24,29 +24,30 @@ class Settings extends Component
      */
     public function saveSettings(array $postSettings, string $scenario = null): bool
     {
-        $backupPlugin = $this->getPlugin();
+        $plugin = $this->getPlugin();
+        $settings = $plugin->getSettings();
 
-        $backupPlugin->getSettings()->setAttributes($postSettings, false);
+        $settings->setAttributes($postSettings, false);
 
         if ($scenario) {
-            $backupPlugin->getSettings()->setScenario($scenario);
+            $settings->setScenario($scenario);
         }
 
         // Validate them, now that it's a model
-        if ($backupPlugin->getSettings()->validate() === false) {
+        if ($settings->validate() === false) {
             return false;
         }
 
-        $success = Craft::$app->getPlugins()->savePluginSettings($backupPlugin, $postSettings);
+        $success = Craft::$app->getPlugins()->savePluginSettings($plugin, $postSettings);
 
         return $success;
     }
 
     public function getSettings()
     {
-        $backupPlugin = $this->getPlugin();
+        $plugin = $this->getPlugin();
 
-        return $backupPlugin->getSettings();
+        return $plugin->getSettings();
     }
 
     public function getPlugin()
