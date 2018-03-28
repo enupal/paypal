@@ -10,7 +10,7 @@
 {% extends "enupal-paypal/_layouts/settings" %}
 {% import "_includes/forms" as forms %}
 
-{% set settings = craft.enupalPaypal.getSettings() %}
+{% set settings = craft.paypalButton.getSettings() %}
 {% set fullPageForm = true %}
 {% set saveShortcutRedirect = 'enupal-paypal/settings/notifications' %}
 

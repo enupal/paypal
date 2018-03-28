@@ -9,9 +9,9 @@
 
 {% import "_includes/forms" as forms %}
 
-{% set currencyOptions = craft.enupalPaypal.getCurrencyIsoOptions() %}
-{% set languageOptions = craft.enupalPaypal.getLanguageOptions() %}
-{% set discountOptions = craft.enupalPaypal.getDiscountOptions() %}
+{% set currencyOptions = craft.paypalButton.getCurrencyIsoOptions() %}
+{% set languageOptions = craft.paypalButton.getLanguageOptions() %}
+{% set discountOptions = craft.paypalButton.getDiscountOptions() %}
 
 <div class="meta">
     <h6>{{ 'General'|t('sprout-forms') }}</h6>

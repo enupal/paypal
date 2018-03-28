@@ -1,6 +1,6 @@
 <form class="paypal-button" method="post" action="{{ button.getPaypalUrl() }}" target="_top">
     <input name="item_name" value="{{ button.name }}" type="hidden">
-    <input name="amount" value="{{ button.amount }}" type="hidden">
+    <input name="amount" value="{{ button.amount|number }}" type="hidden">
     <input name="notify_url" value="{{ button.getIpnUrl() }}" type="hidden">
     <input name="return" value="{{ button.returnUrl }}" type="hidden">
     <input name="cancel_return" value="{{ button.cancelUrl }}" type="hidden">

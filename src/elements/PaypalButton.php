@@ -140,7 +140,7 @@ class PaypalButton extends Element
     {
         $this->business = $this->settings->testMode ? $this->settings->sandboxAccount : $this->settings->liveAccount;
 
-        return $this->ipnUrl;
+        return $this->business;
     }
 
     /**
