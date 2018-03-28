@@ -80,7 +80,7 @@ class PaypalVariable
 
             $view->setTemplatesPath(Craft::$app->path->getSiteTemplatesPath());
         } else {
-            $buttonHtml = Paypal::t("Paypal Button {$sku} not found");
+            $buttonHtml = Paypal::t("PayPal Button not found or disabled");
         }
 
         return TemplateHelper::raw($buttonHtml);

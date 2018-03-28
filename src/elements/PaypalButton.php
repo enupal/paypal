@@ -11,6 +11,7 @@ namespace enupal\paypal\elements;
 use Craft;
 use craft\base\Element;
 use craft\elements\db\ElementQueryInterface;
+use enupal\paypal\enums\DiscountType;
 use enupal\paypal\Paypal;
 use yii\base\ErrorHandler;
 use craft\helpers\UrlHelper;
@@ -141,6 +142,39 @@ class PaypalButton extends Element
         $this->business = $this->settings->testMode ? $this->settings->sandboxAccount : $this->settings->liveAccount;
 
         return $this->business;
+    }
+
+    /**
+     * @return string
+     */
+    public function getTax()
+    {
+        $tax = $this->settings->tax ?? null;
+
+        return $tax;
+    }
+
+    /**
+     * @return string
+     */
+    public function getTaxType()
+    {
+        $taxType = null;
+
+        switch ($this->settings->taxType) {
+            case DiscountType::RATE:
+                {
+                    $taxType = 'tax_rate';
+                    break;
+                }
+            case DiscountType::AMOUNT:
+                {
+                    $taxType = 'rate';
+                    break;
+                }
+        }
+
+        return $taxType;
     }
 
     /**
