@@ -35,7 +35,7 @@
             <hr>
             {{ forms.textField({
                 label: "Global Return URL"|t('enupal-paypal'),
-                instructions: "Redirect the user to this URL when the pay is successfully"|t('enupal-paypal'),
+                instructions: "Redirect buyers' to this URL after they complete their payments"|t('enupal-paypal'),
                 id: 'returnUrl',
                 name: 'returnUrl',
                 placeholder: '/thank-you',
@@ -46,13 +46,13 @@
 
             {{ forms.textField({
                 label: "Global Cancel URL"|t('enupal-paypal'),
-                instructions: "Redirect the user to this URL when they click the cancel button"|t('enupal-paypal'),
-                id: 'cancelUrL',
-                name: 'cancelUrL',
+                instructions: "Redirect buyers' to this URL if they cancel checkout before completing their payments."|t('enupal-paypal'),
+                id: 'cancelUrl',
+                name: 'cancelUrl',
                 placeholder: '/something-went-wrong',
-                value: settings.cancelUrL,
+                value: settings.cancelUrl,
                 autofocus: true,
-                errors: settings.getErrors('cancelUrL')
+                errors: settings.getErrors('cancelUrl')
             }) }}
 
         {% endnamespace %}

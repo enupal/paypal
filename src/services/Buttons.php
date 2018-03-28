@@ -64,7 +64,7 @@ class Buttons extends Component
     public function getButtonBySku($sku, int $siteId = null)
     {
         $query = ButtonElement::find();
-        $query->handle($sku);
+        $query->sku($sku);
         $query->siteId($siteId);
 
         return $query->one();

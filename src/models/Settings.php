@@ -19,7 +19,7 @@ class Settings extends Model
     public $testMode = 1;
     // Globals
     public $returnUrl = '';
-    public $cancelUrL = '';
+    public $cancelUrl = '';
     public $defaultCurrency = '';
     public $returnToMerchantText = '';
     public $weightUnit = 'g';

@@ -54,7 +54,7 @@ class Paypal extends \craft\base\Plugin
             function(Event $event) {
                 /** @var CraftVariable $variable */
                 $variable = $event->sender;
-                $variable->set('enupalPaypal', PaypalVariable::class);
+                $variable->set('paypalButton', PaypalVariable::class);
             }
         );
 

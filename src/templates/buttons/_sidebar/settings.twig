@@ -143,7 +143,7 @@
     <h6>{{ 'Advanced'|t('sprout-forms') }}</h6>
 
     {{ forms.textField({
-        label: "Return URL <span class='info'>Redirect the user to this URL when the pay is successfully</span>"|t('enupal-paypal'),
+        label: "Return URL <span class='info'>Redirect buyers' to this URL after they complete their payments</span>"|t('enupal-paypal'),
         id: 'returnUrl',
         name: 'returnUrl',
         value: paypalButton.returnUrl,
@@ -153,7 +153,7 @@
     }) }}
 
     {{ forms.textField({
-        label: "Cancel URL <span class='info'>Redirect the user to this URL when they click the cancel button</span>"|t('enupal-paypal'),
+        label: "Cancel URL <span class='info'>Redirect buyers' to this URL if they cancel checkout before completing their payments.</span>"|t('enupal-paypal'),
         id: 'cancelUrl',
         name: 'cancelUrl',
         placeholder: '/something-went-wrong',

@@ -20,7 +20,6 @@ use enupal\paypal\elements\db\PaypalButtonsQuery;
 use enupal\paypal\records\PaypalButton as PaypalButtonRecord;
 use enupal\paypal\enums\PaypalSize;
 use enupal\paypal\Paypal as PaypalPlugin;
-use craft\validators\HandleValidator;
 use craft\validators\UniqueValidator;
 
 /**
@@ -91,17 +90,57 @@ class PaypalButton extends Element
     public $cancelUrl;
     public $buttonName;
 
-    protected $sandboxUrl = 'https://www.sandbox.paypal.com/cgi-bin/webscr';
-    protected $liveUrl = 'https://www.paypal.com/cgi-bin/webscr';
     protected $env;
+    protected $paypalUrl;
+    protected $ipnUrl;
+    protected $business;
+    protected $settings;
 
     public function init()
     {
         parent::init();
 
-        $settings = Paypal::$app->settings->getSettings();
-        $this->env = $settings->testMode ? 'www.sandbox' : 'www';
-        $this->returnUrl = $this->returnUrl ?? $settings->returnUrl;
+        if (!$this->settings){
+            $this->settings = Paypal::$app->settings->getSettings();
+        }
+
+        $this->env =  $this->settings->testMode ? 'www.sandbox' : 'www';
+
+        $this->returnUrl = $this->returnUrl ?? $this->settings->returnUrl;
+        $this->cancelUrl = $this->cancelUrl ?? $this->settings->cancelUrl;
+
+        $this->business = $this->settings->testMode ? $this->settings->sandboxAccount : $this->settings->liveAccount;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPaypalUrl()
+    {
+        $this->paypalUrl = "https://".$this->env.".paypal.com/cgi-bin/webscr";
+
+        return $this->paypalUrl;
+    }
+
+    /**
+     * @return string
+     * @throws \craft\errors\SiteNotFoundException
+     */
+    public function getIpnUrl()
+    {
+        $this->ipnUrl = Craft::$app->getSites()->getPrimarySite()->baseUrl.'/enupalPaypalIPN';
+
+        return $this->ipnUrl;
+    }
+
+    /**
+     * @return string
+     */
+    public function getBusiness()
+    {
+        $this->business = $this->settings->testMode ? $this->settings->sandboxAccount : $this->settings->liveAccount;
+
+        return $this->ipnUrl;
     }
 
     /**
@@ -362,7 +401,7 @@ class PaypalButton extends Element
      * @return string
      * @throws \yii\base\Exception
      */
-    public function getButtonSizeUrl($size = null, $language = 'en_US')
+    public function getButtonUrl($size = null, $language = 'en_US')
     {
         $buttonSize = $size ?? $this->size;
         // Small By default

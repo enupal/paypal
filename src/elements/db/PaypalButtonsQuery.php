@@ -32,6 +32,38 @@ class PaypalButtonsQuery extends ElementQuery
     /**
      * @inheritdoc
      */
+    public function sku($value)
+    {
+        $this->sku = $value;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getSku()
+    {
+        return $this->sku;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function name($value)
+    {
+        $this->name = $value;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    /**
+     * @inheritdoc
+     */
     public function __construct($elementType, array $config = [])
     {
         // Default orderBy

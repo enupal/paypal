@@ -51,16 +51,16 @@ class PaypalVariable
     /**
      * Returns a complete Paypal Button for display in template
      *
-     * @param string     $buttonHandle
+     * @param string     $sku
      * @param array|null $options
      *
      * @return string
      * @throws \Twig_Error_Loader
      * @throws \yii\base\Exception
      */
-    public function displayButton($buttonHandle, array $options = null)
+    public function displayButton($sku, array $options = null)
     {
-        $button = Paypal::$app->buttons->getButtonByHandle($buttonHandle);
+        $button = Paypal::$app->buttons->getButtonBySku($sku);
         $templatePath = Paypal::$app->buttons->getEnupalPaypalPath();
         $buttonHtml = null;
         $settings = Paypal::$app->settings->getSettings();
@@ -80,7 +80,7 @@ class PaypalVariable
 
             $view->setTemplatesPath(Craft::$app->path->getSiteTemplatesPath());
         } else {
-            $buttonHtml = Paypal::t("Paypal Button {$buttonHandle} not found");
+            $buttonHtml = Paypal::t("Paypal Button {$sku} not found");
         }
 
         return TemplateHelper::raw($buttonHtml);
