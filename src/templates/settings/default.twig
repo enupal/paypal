@@ -1,0 +1,62 @@
+{#
+/**
+ * EnupalPaypal plugin for Craft CMS 3.x
+ *
+ * @link      https://enupal.com/
+ * @copyright Copyright (c) 2018 Enupal
+ */
+#}
+
+{% extends "enupal-paypal/_layouts/settings" %}
+{% import "_includes/forms" as forms %}
+
+{% set settings = craft.enupalPaypal.getSettings() %}
+{% set fullPageForm = true %}
+{% set saveShortcutRedirect = 'enupal-paypal/settings/default' %}
+
+{% set saveButton %}
+    <div class="buttons">
+        <input class="btn submit" type="submit" value="{{ 'Save'|t }}">
+    </div>
+{% endset %}
+
+{% set content %}
+
+    <input type="hidden" name="action"
+           value="enupal-paypal/settings/save-settings">
+
+    <div id="settings-cp">
+
+        {% namespace 'settings' %}
+            {{ forms.field({
+                label: "Default values"|t('enupal-paypal')|upper,
+                instructions: "These are the default settings when create a new Paypal Button and you can override it as per-button basis."|t('enupal-paypal')|upper,
+            }, null) }}
+            <hr>
+            {{ forms.textField({
+                label: "Global Return URL"|t('enupal-paypal'),
+                instructions: "Redirect the user to this URL when the pay is successfully"|t('enupal-paypal'),
+                id: 'returnUrl',
+                name: 'returnUrl',
+                placeholder: '/thank-you',
+                value: settings.returnUrl,
+                autofocus: true,
+                errors: settings.getErrors('returnUrl')
+            }) }}
+
+            {{ forms.textField({
+                label: "Global Cancel URL"|t('enupal-paypal'),
+                instructions: "Redirect the user to this URL when they click the cancel button"|t('enupal-paypal'),
+                id: 'cancelUrL',
+                name: 'cancelUrL',
+                placeholder: '/something-went-wrong',
+                value: settings.cancelUrL,
+                autofocus: true,
+                errors: settings.getErrors('cancelUrL')
+            }) }}
+
+        {% endnamespace %}
+
+    </div>
+
+{% endset %}

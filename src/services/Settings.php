@@ -13,7 +13,6 @@ use yii\base\Component;
 
 class Settings extends Component
 {
-
     /**
      * Saves Settings
      *

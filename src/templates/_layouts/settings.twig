@@ -34,6 +34,12 @@
             <li class="heading"><span>{{ "Advanced"|t('enupal-paypal') }}</span>
             </li>
             <li>
+                <a href="{{ cpUrl('enupal-paypal/settings/default') }}"
+                   {% if selectedSidebarItem == 'default' %}class="sel"{% endif %}><i
+                            class="fa fa-cog fa-fw" aria-hidden="true"></i>&nbsp;{{ "Defaults"|t('enupal-paypal') }}
+                </a>
+            </li>
+            <li>
                 <a href="{{ cpUrl('enupal-paypal/settings/notifications') }}" {% if selectedSidebarItem == 'notifications' %} class="sel" {% endif %}><i
                             class="fa fa-envelope fa-fw" aria-hidden="true"></i>&nbsp;{{ "Notifications"|t('enupal-paypal') }}
                 </a>

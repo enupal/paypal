@@ -25,8 +25,9 @@ class SettingsController extends BaseController
         $this->requirePostRequest();
         $request = Craft::$app->getRequest();
         $settings = $request->getBodyParam('settings');
+        $scenario = $request->getBodyParam('paypalScenario');
 
-        if (!Paypal::$app->settings->saveSettings($settings)) {
+        if (!Paypal::$app->settings->saveSettings($settings, $scenario)) {
             Craft::$app->getSession()->setError(Paypal::t('Couldn’t save settings.'));
 
             // Send the settings back to the template

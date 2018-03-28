@@ -39,7 +39,10 @@ class Settings extends Model
     public function rules()
     {
         return [
-            ['liveAccount', 'required'],
+            [
+                ['liveAccount'],
+                'required', 'on' => 'general'
+            ],
         ];
     }
 }
