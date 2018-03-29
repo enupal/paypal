@@ -13,6 +13,7 @@
 {% set settings = craft.paypalButton.getSettings() %}
 {% set fullPageForm = true %}
 {% set saveShortcutRedirect = 'enupal-paypal/settings/default' %}
+{% set currencyOptions = craft.paypalButton.getCurrencyOptions() %}
 
 {% set saveButton %}
     <div class="buttons">
@@ -54,6 +55,17 @@
                 autofocus: true,
                 errors: settings.getErrors('cancelUrl')
             }) }}
+            <hr>
+
+            {{ forms.selectField({
+                id: 'defaultCurrency',
+                label: "Global Currency"|t('enupal-paypal'),
+                instructions: 'The currency of the payment'|t('enupal-paypal'),
+                name: 'defaultCurrency',
+                options: currencyOptions,
+                value: settings.defaultCurrency
+            }) }}
+
 
         {% endnamespace %}
 

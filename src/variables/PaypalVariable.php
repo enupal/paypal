@@ -91,6 +91,11 @@ class PaypalVariable
         return Paypal::$app->buttons->getIsoCurrencies();
     }
 
+    public function getCurrencyOptions()
+    {
+        return Paypal::$app->buttons->getCurrencies();
+    }
+
     public function getSizeOptions()
     {
         return Paypal::$app->buttons->getSizeOptions();

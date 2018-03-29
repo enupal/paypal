@@ -109,6 +109,7 @@ class PaypalButton extends Element
 
         $this->returnUrl = $this->returnUrl ? $this->returnUrl : $this->settings->returnUrl;
         $this->cancelUrl = $this->cancelUrl ? $this->cancelUrl : $this->settings->cancelUrl;
+        $this->currency = $this->currency ? $this->currency : $this->settings->defaultCurrency;
 
         $this->business = $this->settings->testMode ? $this->settings->sandboxAccount : $this->settings->liveAccount;
     }

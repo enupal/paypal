@@ -389,8 +389,14 @@ class Buttons extends Component
         $name = empty($name) ? 'Button' : $name;
         $handle = empty($handle) ? 'button' : $handle;
 
+        $settings = Paypal::$app->settings->getSettings();
+
         $button->name = $this->getFieldAsNew('name', $name);
         $button->sku = $this->getFieldAsNew('sku', $handle);
+        $button->hasUnlimitedStock = 1;
+        $button->currency = $settings->defaultCurrency ? $settings->defaultCurrency : 'USD';
+        $button->enabled = 1;
+        $button->language = 'en_US';
 
         $this->saveButton($button);
 
