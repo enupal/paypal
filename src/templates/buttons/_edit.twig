@@ -72,9 +72,12 @@
                         value: paypalButton.size
                     }) }}
                 </div>
-                <div class="textwrapper">
-                    <img id="button-preview" src="" alt="">
-                </div>
+            </div>
+            <div class="header" style="text-align: center;">
+                <span class="paypal-instructions"><p>{{ "Preview:"|t('enupal-paypal') }}</p> </span>
+                <p>
+                <img id="button-preview" src="" alt="">
+                </p>
             </div>
         {% endset %}
 
@@ -111,3 +114,10 @@
         new EnupalPaypal();
     });
 {% endjs %}
+
+{% css %}
+    .paypal-instructions {
+    margin-top: 2px;
+    color: #8f98a3;
+    }
+{% endcss %}
