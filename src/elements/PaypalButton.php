@@ -208,6 +208,39 @@ class PaypalButton extends Element
     }
 
     /**
+     * @return string
+     */
+    public function getDiscount()
+    {
+        $discount = $this->discount ?? null;
+
+        return $discount;
+    }
+
+    /**
+     * @return string
+     */
+    public function getDiscountType()
+    {
+        $discountType = null;
+
+        switch ($this->discountType) {
+            case DiscountType::RATE:
+                {
+                    $discountType = 'discount_rate';
+                    break;
+                }
+            case DiscountType::AMOUNT:
+                {
+                    $discountType = 'discount_amount';
+                    break;
+                }
+        }
+
+        return $discountType;
+    }
+
+    /**
      * Returns the field context this element's content uses.
      *
      * @access protected
