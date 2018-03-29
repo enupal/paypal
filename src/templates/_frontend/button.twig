@@ -4,9 +4,10 @@
     {% if button.getTax() %}
     <input name="{{ button.getTaxType() }}" value="{{ button.getTax()|number }}" type="hidden">
     {% endif %}
+    <input name="shipping" value="{{ button.shippingAmount|number }}" type="hidden">
     <input name="notify_url" value="{{ button.getIpnUrl() }}" type="hidden">
-    <input name="return" value="{{ button.returnUrl }}" type="hidden">
-    <input name="cancel_return" value="{{ button.cancelUrl }}" type="hidden">
+    <input name="return" value="{{ button.getReturnUrl() }}" type="hidden">
+    <input name="cancel_return" value="{{ button.getCancelUrl() }}" type="hidden">
     <input name="rm" value="2" type="hidden">
     <input name="currency_code" value="{{ button.currency }}" type="hidden">
     <input name="cmd" value="_xclick" type="hidden">

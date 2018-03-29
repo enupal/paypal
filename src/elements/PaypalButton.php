@@ -107,10 +107,40 @@ class PaypalButton extends Element
 
         $this->env =  $this->settings->testMode ? 'www.sandbox' : 'www';
 
-        $this->returnUrl = $this->returnUrl ?? $this->settings->returnUrl;
-        $this->cancelUrl = $this->cancelUrl ?? $this->settings->cancelUrl;
+        $this->returnUrl = $this->returnUrl ? $this->returnUrl : $this->settings->returnUrl;
+        $this->cancelUrl = $this->cancelUrl ? $this->cancelUrl : $this->settings->cancelUrl;
 
         $this->business = $this->settings->testMode ? $this->settings->sandboxAccount : $this->settings->liveAccount;
+    }
+
+    /**
+     * @return string
+     * @throws \yii\base\Exception
+     */
+    public function getReturnUrl()
+    {
+        $returnUrl = null;
+
+        if ($this->returnUrl){
+            $returnUrl = $this->getSiteUrl($this->returnUrl);
+        }
+
+        return $returnUrl;
+    }
+
+    /**
+     * @return string
+     * @throws \yii\base\Exception
+     */
+    public function getCancelUrl()
+    {
+        $cancelUrl = null;
+
+        if ($this->returnUrl){
+            $cancelUrl = $this->getSiteUrl($this->cancelUrl);
+        }
+
+        return $cancelUrl;
     }
 
     /**
@@ -129,7 +159,7 @@ class PaypalButton extends Element
      */
     public function getIpnUrl()
     {
-        $this->ipnUrl = Craft::$app->getSites()->getPrimarySite()->baseUrl.'/enupalPaypalIPN';
+        $this->ipnUrl = Craft::$app->getSites()->getPrimarySite()->baseUrl.'enupalPaypalIPN';
 
         return $this->ipnUrl;
     }
@@ -442,5 +472,20 @@ class PaypalButton extends Element
         $buttonUrl = Paypal::$app->buttons->getButtonSizeUrl($buttonSize, $language);
 
         return $buttonUrl;
+    }
+
+    /**
+     * @param $url
+     *
+     * @return string
+     * @throws \yii\base\Exception
+     */
+    private function getSiteUrl($url)
+    {
+        if (UrlHelper::isAbsoluteUrl($url)){
+            return $url;
+        }
+
+        return UrlHelper::siteUrl($url);
     }
 }
