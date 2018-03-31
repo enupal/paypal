@@ -10,6 +10,7 @@ namespace enupal\paypal\services;
 
 use Craft;
 use enupal\paypal\enums\DiscountType;
+use enupal\paypal\enums\ShippingOptions;
 use yii\base\Component;
 use enupal\paypal\Paypal;
 use enupal\paypal\elements\PaypalButton as ButtonElement;
@@ -394,6 +395,8 @@ class Buttons extends Component
         $button->name = $this->getFieldAsNew('name', $name);
         $button->sku = $this->getFieldAsNew('sku', $handle);
         $button->hasUnlimitedStock = 1;
+        $button->shippingOption = 0;
+        $button->customerQuantity = 0;
         $button->currency = $settings->defaultCurrency ? $settings->defaultCurrency : 'USD';
         $button->enabled = 1;
         $button->language = 'en_US';
@@ -512,6 +515,9 @@ class Buttons extends Component
         return $buttonUrl;
     }
 
+    /**
+     * @return array
+     */
     public function getDiscountOptions()
     {
         $types = [];
@@ -519,5 +525,18 @@ class Buttons extends Component
         $types[DiscountType::AMOUNT] = Paypal::t('Amount');
 
         return $types;
+    }
+
+    /**
+     * @return array
+     */
+    public function getShippingOptions()
+    {
+        $options = [];
+        $options[ShippingOptions::PROMPT] = Paypal::t('Prompt for an address, but do not require one.');
+        $options[ShippingOptions::DONOTPROMPT] = Paypal::t('Do not prompt for an address.');
+        $options[ShippingOptions::PROMPTANDREQUIRE] = Paypal::t('Prompt for an address and require one.');
+
+        return $options;
     }
 }

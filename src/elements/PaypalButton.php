@@ -75,6 +75,7 @@ class PaypalButton extends Element
     public $soldOutMessage;
     public $discountType;
     public $discount;
+    public $shippingOption;
     public $shippingAmount;
     public $itemWeight;
     public $itemWeightUnit;
@@ -458,6 +459,8 @@ class PaypalButton extends Element
         $record->discountType = $this->discountType;
         $record->discount = $this->discount;
         $record->shippingAmount = $this->shippingAmount;
+        $record->shippingOption = $this->shippingOption;
+        $record->customerQuantity = $this->customerQuantity;
 
         $record->returnUrl = $this->returnUrl;
         $record->cancelUrl = $this->cancelUrl;

@@ -63,6 +63,7 @@ class Install extends Migration
             'discountType' => $this->integer()->defaultValue(0),
             'discount' => $this->decimal(14, 4),
             // Shipping
+            'shippingOption' => $this->integer(),
             'shippingAmount' => $this->decimal(14, 4),
             // Weight
             'itemWeight' => $this->decimal(14, 4)->notNull()->defaultValue(0),

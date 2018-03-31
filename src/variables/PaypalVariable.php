@@ -110,5 +110,10 @@ class PaypalVariable
     {
         return Paypal::$app->buttons->getDiscountOptions();
     }
+
+    public function getShippingOptions()
+    {
+        return Paypal::$app->buttons->getShippingOptions();
+    }
 }
 

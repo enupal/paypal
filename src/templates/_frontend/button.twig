@@ -1,6 +1,9 @@
 <form class="paypal-button" method="post" action="{{ button.getPaypalUrl() }}" target="_blank">
     <input name="item_name" value="{{ button.name }}" type="hidden">
     <input name="amount" value="{{ button.amount|number }}" type="hidden">
+    <input name="item_number" value="{{ button.sku }}" type="hidden">
+    <input name="no_shipping" value="{{ button.shippingOption }}" type="hidden">
+    <input name="undefined_quantity" value="{{ button.customerQuantity }}" type="hidden">
     {% if button.getTax() %}
     <input name="{{ button.getTaxType() }}" value="{{ button.getTax()|number }}" type="hidden">
     {% endif %}

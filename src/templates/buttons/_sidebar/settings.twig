@@ -12,6 +12,7 @@
 {% set currencyOptions = craft.paypalButton.getCurrencyIsoOptions() %}
 {% set languageOptions = craft.paypalButton.getLanguageOptions() %}
 {% set discountOptions = craft.paypalButton.getDiscountOptions() %}
+{% set shippingOptions = craft.paypalButton.getShippingOptions() %}
 
 <div class="meta">
     <h6>{{ 'General'|t('sprout-forms') }}</h6>
@@ -61,7 +62,7 @@
 
     {{ forms.field({
         id: 'amount',
-        label: 'Amount'|t('enupal-paypal'),
+        label: 'Price <span class="info">The price or amount of the product, service, or contribution, not including shipping, handling, or tax. If empty, buyers enter their own amount at the time of payment</span>'|t('enupal-paypal'),
         errors: paypalButton.getErrors('amount')|merge(paypalButton.getErrors('currency')),
     }, amountInput) }}
 
@@ -101,12 +102,19 @@
         label: 'Stock'|t('enupal-paypal'),
         errors: paypalButton.getErrors('hasUnlimitedStock')|merge(paypalButton.getErrors('quantity')),
     }, stockInput) }}
+
+    {{ forms.lightswitchField({
+        label: "Customer Quantity <span class='info'>Enables buyers to specify the quantity.</span>"|t('enupal-paypal'),
+        id: 'customerQuantity',
+        name: 'customerQuantity',
+        on: paypalButton.customerQuantity
+    }) }}
 </div>
 <hr>
 <div class="meta">
     <h6>{{ 'Discount'|t('sprout-forms') }}</h6>
     {{ forms.selectField({
-        label: "Discount Type<span class='info'>Reduce the price by a percentage or amount, of the original price.</span>"|t('enupal-paypal'),
+        label: "Discount Type <span class='info'>Reduce the price by a percentage or amount, of the original price.</span>"|t('enupal-paypal'),
         id: 'discountType',
         name: 'discountType',
         options: discountOptions,
@@ -126,6 +134,15 @@
 <hr>
 <div class="meta">
     <h6>{{ 'Shipping'|t('sprout-forms') }}</h6>
+
+    {{ forms.selectField({
+        label: "Shipping Address"|t('enupal-paypal'),
+        id: 'shippingOption',
+        name: 'shippingOption',
+        options: shippingOptions,
+        value: paypalButton.shippingOption
+    }) }}
+
     {{ forms.textField({
         first: true,
         label: "Shipping <span class='info'>Shipping amount, leave empty if is free shipping</span>"|t('enupal-paypal'),
