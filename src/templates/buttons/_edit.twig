@@ -19,7 +19,7 @@
 
 {% block actionButton %}
     <input type="hidden" name="action" value="enupal-paypal/buttons/save-button">
-    {{ redirectInput('enupal-button/buttons') }}
+    {{ redirectInput('enupal-paypal/buttons') }}
     <input type="hidden" id="buttonId" name="id" value="{{ paypalButton.id is defined ? paypalButton.id : '' }}">
 
     <div class="btngroup submit first">

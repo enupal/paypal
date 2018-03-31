@@ -65,6 +65,10 @@ class PaypalVariable
         $buttonHtml = null;
         $settings = Paypal::$app->settings->getSettings();
 
+        if (!$settings->liveAccount || !$settings->sandboxAccount){
+            return Paypal::t("Please add a valid PayPal account on the plugin settings");
+        }
+
         if ($button) {
             $view = Craft::$app->getView();
 

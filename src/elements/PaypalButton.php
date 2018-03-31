@@ -460,7 +460,7 @@ class PaypalButton extends Element
         $record->discount = $this->discount;
         $record->shippingAmount = $this->shippingAmount;
         $record->shippingOption = $this->shippingOption;
-        $record->customerQuantity = $this->customerQuantity;
+        $record->customerQuantity = $this->customerQuantity ? $this->customerQuantity : 0;
 
         $record->returnUrl = $this->returnUrl;
         $record->cancelUrl = $this->cancelUrl;

@@ -1,6 +1,8 @@
 <form class="paypal-button" method="post" action="{{ button.getPaypalUrl() }}" target="_blank">
     <input name="item_name" value="{{ button.name }}" type="hidden">
+    {% if button.amount %}
     <input name="amount" value="{{ button.amount|number }}" type="hidden">
+    {% endif %}
     <input name="item_number" value="{{ button.sku }}" type="hidden">
     <input name="no_shipping" value="{{ button.shippingOption }}" type="hidden">
     <input name="undefined_quantity" value="{{ button.customerQuantity }}" type="hidden">
@@ -10,7 +12,9 @@
     {% if button.getDiscount() %}
     <input name="{{ button.getDiscountType() }}" value="{{ button.getDiscount()|number }}" type="hidden">
     {% endif %}
+    {% if button.shippingAmount %}
     <input name="shipping" value="{{ button.shippingAmount|number }}" type="hidden">
+    {% endif %}
     <input name="notify_url" value="{{ button.getIpnUrl() }}" type="hidden">
     <input name="return" value="{{ button.getReturnUrl() }}" type="hidden">
     <input name="cancel_return" value="{{ button.getCancelUrl() }}" type="hidden">
