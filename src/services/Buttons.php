@@ -98,8 +98,10 @@ class Buttons extends Component
      */
     public function saveButton(ButtonElement $button)
     {
+        $isNewForm = true;
         if ($button->id) {
             $buttonRecord = PaypalButtonRecord::findOne($button->id);
+            $isNewForm = false;
 
             if (!$buttonRecord) {
                 throw new Exception(Paypal::t('No PaypalButton exists with the ID “{id}”', ['id' => $button->id]));
@@ -113,6 +115,20 @@ class Buttons extends Component
         $transaction = Craft::$app->db->beginTransaction();
 
         try {
+            // Set the field context
+            Craft::$app->content->fieldContext = $button->getFieldContext();
+            if ($isNewForm) {
+                $fieldLayout = $button->getFieldLayout();
+
+                // Save the field layout
+                Craft::$app->getFields()->saveLayout($fieldLayout);
+
+                // Assign our new layout id info to our form model and records
+                $button->fieldLayoutId = $fieldLayout->id;
+                $button->setFieldLayout($fieldLayout);
+                $button->fieldLayoutId = $fieldLayout->id;
+            }
+
             if (Craft::$app->elements->saveElement($button)) {
                 $transaction->commit();
             }
@@ -429,12 +445,12 @@ class Buttons extends Component
         if (!$button) {
             return null;
         }
-
+        // @todo move this to after install and save field id in the settings or just query the field handle
         $fieldsService = Craft::$app->getFields();
 
         $variantNameField = $fieldsService->createField([
             'type' => PlainText::class,
-            'name' => 'Name',
+            'name' => 'Name TEST',
             'handle' => 'variantName',
             'instructions' => '',
             'required' => 1,
@@ -444,7 +460,7 @@ class Buttons extends Component
 
         $variantOptionsField = $fieldsService->createField([
             'type' => Table::class,
-            'name' => 'Options',
+            'name' => 'Options TEST',
             'handle' => 'options',
             'required' => '1',
             'instructions' => 'If Name is Size you can fill this table with: Small          small           10',
@@ -457,7 +473,7 @@ class Buttons extends Component
             'type' => Matrix::class,
             'name' => 'Variants',
             'context' => 'enupalPaypal:',
-            'handle' => 'variants',
+            'handle' => 'enupalPaypalvariants',
             'instructions' => '',
             'settings' => '{"minBlocks":"","maxBlocks":"7","localizeBlocks":""}',
             'translationMethod' => Field::TRANSLATION_METHOD_NONE,
@@ -473,7 +489,6 @@ class Buttons extends Component
 
         $blockType->getFieldLayout()->setFields([$variantNameField, $variantOptionsField]);
         Craft::$app->getMatrix()->saveBlockType($blockType);
-        Craft::$app->getMatrix()->saveSettings($matrixfield);
 
         // Create a tab
         $tabName = "Tab1";
@@ -510,8 +525,8 @@ class Buttons extends Component
         $band = true;
         do {
             $newField = $field == "sku" ? $value.$i : $value." ".$i;
-            $slider = $this->getFieldValue($field, $newField);
-            if (is_null($slider)) {
+            $button = $this->getFieldValue($field, $newField);
+            if (is_null($button)) {
                 $band = false;
             }
 

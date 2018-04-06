@@ -87,6 +87,22 @@
             label: 'Button Size'|t('enupal-paypal'),
             errors: paypalButton.getErrors('size'),
         }, sizeInput) }}
+
+        <hr>
+        {% for tab in paypalButton.getFieldLayout().getTabs() %}
+
+            {% set fields = tab.getFields() %}
+
+            {% for field in fields %}
+                {% include "_includes/field" with {
+                    field:    field,
+                    required: field.required,
+                    element:  paypalButton,
+                    static: null
+                } only %}
+            {% endfor %}
+
+        {% endfor %}
     {% endnamespace %}
 {% endblock %}
 

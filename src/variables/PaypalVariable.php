@@ -19,7 +19,6 @@ use craft\helpers\Template as TemplateHelper;
  */
 class PaypalVariable
 {
-
     /**
      * @return string
      */
