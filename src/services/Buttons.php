@@ -9,6 +9,12 @@
 namespace enupal\paypal\services;
 
 use Craft;
+use craft\base\Field;
+use craft\models\MatrixBlockType;
+use craft\fields\Matrix;
+use craft\fields\PlainText;
+use craft\fields\Table;
+use enupal\paypal\elements\PaypalButton;
 use enupal\paypal\enums\DiscountType;
 use enupal\paypal\enums\ShippingOptions;
 use yii\base\Component;
@@ -401,7 +407,90 @@ class Buttons extends Component
         $button->enabled = 1;
         $button->language = 'en_US';
 
+        // Set default variant
+        $button = $this->addDefaultVariant($button);
+
         $this->saveButton($button);
+
+        return $button;
+    }
+
+
+    /**
+     * This service allows add the variant to a PayPal button
+     *
+     * @param ButtonElement $button
+     *
+     * @return ButtonElement|null
+     * @throws \Throwable
+     */
+    public function addDefaultVariant(ButtonElement $button)
+    {
+        if (!$button) {
+            return null;
+        }
+
+        $fieldsService = Craft::$app->getFields();
+
+        $variantNameField = $fieldsService->createField([
+            'type' => PlainText::class,
+            'name' => 'Name',
+            'handle' => 'variantName',
+            'instructions' => '',
+            'required' => 1,
+            'settings' => '{"placeholder":"Size | Color | ...","code":"","multiline":"","initialRows":"4","charLimit":"","columnType":"text"}',
+            'translationMethod' => Field::TRANSLATION_METHOD_NONE,
+        ]);
+
+        $variantOptionsField = $fieldsService->createField([
+            'type' => Table::class,
+            'name' => 'Options',
+            'handle' => 'options',
+            'required' => '1',
+            'instructions' => 'If Name is Size you can fill this table with: Small          small           10',
+            'settings' => '{"addRowLabel":"Add new option","maxRows":"10","minRows":"1","columns":{"col1":{"heading":"Title","handle":"title","width":"40","type":"singleline"},"col2":{"heading":"Handle","handle":"handle","width":"40","type":"singleline"},"col3":{"heading":"Price","handle":"price","width":"20","type":"number"}},"defaults":{"row1":{"col1":"","col2":"","col3":""}},"columnType":"text"}',
+            'translationMethod' => Field::TRANSLATION_METHOD_NONE,
+        ]);
+
+        // Our variant is a matrix field
+        $matrixfield = $fieldsService->createField([
+            'type' => Matrix::class,
+            'name' => 'Variants',
+            'context' => 'enupalPaypal:',
+            'handle' => 'variants',
+            'instructions' => '',
+            'settings' => '{"minBlocks":"","maxBlocks":"7","localizeBlocks":""}',
+            'translationMethod' => Field::TRANSLATION_METHOD_NONE,
+        ]);
+        // Save our field
+        Craft::$app->content->fieldContext = $button->getFieldContext();
+        Craft::$app->fields->saveField($matrixfield);
+
+        $blockType = new MatrixBlockType();
+        $blockType->fieldId = $matrixfield->id;
+        $blockType->name = 'Variants';
+        $blockType->handle = 'Variants';
+
+        $blockType->getFieldLayout()->setFields([$variantNameField, $variantOptionsField]);
+        Craft::$app->getMatrix()->saveBlockType($blockType);
+        Craft::$app->getMatrix()->saveSettings($matrixfield);
+
+        // Create a tab
+        $tabName = "Tab1";
+        $requiredFields = [];
+        $postedFieldLayout = [];
+
+        // Add our new field
+        if ($matrixfield !== null && $matrixfield->id != null) {
+            $postedFieldLayout[$tabName][] = $matrixfield->id;
+        }
+
+        // Set the field layout
+        $fieldLayout = Craft::$app->fields->assembleLayout($postedFieldLayout, $requiredFields);
+
+        $fieldLayout->type = PaypalButton::class;
+        // Set the tab to the form
+        $button->setFieldLayout($fieldLayout);
 
         return $button;
     }
