@@ -448,25 +448,36 @@ class Buttons extends Component
         // @todo move this to after install and save field id in the settings or just query the field handle
         $fieldsService = Craft::$app->getFields();
 
-        $variantNameField = $fieldsService->createField([
-            'type' => PlainText::class,
-            'name' => 'Name TEST',
-            'handle' => 'variantName',
-            'instructions' => '',
-            'required' => 1,
-            'settings' => '{"placeholder":"Size | Color | ...","code":"","multiline":"","initialRows":"4","charLimit":"","columnType":"text"}',
-            'translationMethod' => Field::TRANSLATION_METHOD_NONE,
-        ]);
-
-        $variantOptionsField = $fieldsService->createField([
-            'type' => Table::class,
-            'name' => 'Options TEST',
-            'handle' => 'options',
-            'required' => '1',
-            'instructions' => 'If Name is Size you can fill this table with: Small          small           10',
-            'settings' => '{"addRowLabel":"Add new option","maxRows":"10","minRows":"1","columns":{"col1":{"heading":"Title","handle":"title","width":"40","type":"singleline"},"col2":{"heading":"Handle","handle":"handle","width":"40","type":"singleline"},"col3":{"heading":"Price","handle":"price","width":"20","type":"number"}},"defaults":{"row1":{"col1":"","col2":"","col3":""}},"columnType":"text"}',
-            'translationMethod' => Field::TRANSLATION_METHOD_NONE,
-        ]);
+        $matrixSettings = [
+            'minBlocks' => "",
+            'maxBlocks' => 7,
+            'blockTypes' => [
+                'new1' => [
+                    'name' => 'Variants',
+                    'handle' => 'variants',
+                    'fields' => [
+                        'new1' => [
+                            'type' => PlainText::class,
+                            'name' => 'Name TEST',
+                            'handle' => 'variantName',
+                            'instructions' => '',
+                            'required' => 1,
+                            'typesettings' => '{"placeholder":"Size | Color | ...","code":"","multiline":"","initialRows":"4","charLimit":"","columnType":"text"}',
+                            'translationMethod' => Field::TRANSLATION_METHOD_NONE,
+                        ],
+                        'new2' => [
+                            'type' => Table::class,
+                            'name' => 'Options',
+                            'handle' => 'options',
+                            'required' => '1',
+                            'instructions' => 'If Name is Size you can fill this table with: Small          small           10',
+                            'typesettings' => '{"addRowLabel":"Add new option","maxRows":"10","minRows":"1","columns":{"col1":{"heading":"Title","handle":"title","width":"40","type":"singleline"},"col2":{"heading":"Handle","handle":"handle","width":"40","type":"singleline"},"col3":{"heading":"Price","handle":"price","width":"20","type":"number"}},"defaults":{"row1":{"col1":"","col2":"","col3":""}},"columnType":"text"}',
+                            'translationMethod' => Field::TRANSLATION_METHOD_NONE,
+                        ],
+                    ]
+                ]
+            ]
+        ];
 
         // Our variant is a matrix field
         $matrixfield = $fieldsService->createField([
@@ -474,21 +485,14 @@ class Buttons extends Component
             'name' => 'Variants',
             'context' => 'enupalPaypal:',
             'handle' => 'enupalPaypalvariants',
+            'settings' => json_encode($matrixSettings),
             'instructions' => '',
-            'settings' => '{"minBlocks":"","maxBlocks":"7","localizeBlocks":""}',
             'translationMethod' => Field::TRANSLATION_METHOD_NONE,
         ]);
+
         // Save our field
         Craft::$app->content->fieldContext = $button->getFieldContext();
         Craft::$app->fields->saveField($matrixfield);
-
-        $blockType = new MatrixBlockType();
-        $blockType->fieldId = $matrixfield->id;
-        $blockType->name = 'Variants';
-        $blockType->handle = 'Variants';
-
-        $blockType->getFieldLayout()->setFields([$variantNameField, $variantOptionsField]);
-        Craft::$app->getMatrix()->saveBlockType($blockType);
 
         // Create a tab
         $tabName = "Tab1";
