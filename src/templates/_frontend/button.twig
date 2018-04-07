@@ -22,6 +22,22 @@
         {{ hiddenFieldsHtml|raw }}
         <br>
     {% endif %}
+    {% if button.enupalPaypalBasicVariants is defined and button.enupalPaypalBasicVariants %}
+        {% set pricedOptionsBlock = button.enupalPaypalBasicVariants.first() %}
+        {% for basicOptionsBlock in button.enupalPaypalBasicVariants %}
+            <input type="hidden" name="on{{ loop.index }}" value="{{ basicOptionsBlock.variantName }}">
+            <label class="basicVariantsLabel" for="os{{ loop.index }}">{{ basicOptionsBlock.variantName }}</label>
+            <select class="basicVariants" name="os{{ loop.index }}" id="os{{ loop.index }}">
+                {% for row in basicOptionsBlock.options %}
+                    {% if loop.first %}
+                        <option value="Select a {{ basicOptionsBlock.variantName }}">{{ "Select a"|t }} {{ basicOptionsBlock.variantName }}</option>
+                    {% endif %}
+                    <option value="{{ row.handle }}">{{ row.optionLabel }}</option>
+                {% endfor %}
+            </select>
+            <br>
+        {% endfor %}
+    {% endif %}
     <input name="item_number" value="{{ button.sku }}" type="hidden">
     <input name="no_shipping" value="{{ button.shippingOption }}" type="hidden">
     <input name="undefined_quantity" value="{{ button.customerQuantity }}" type="hidden">
