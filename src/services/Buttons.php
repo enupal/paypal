@@ -10,7 +10,6 @@ namespace enupal\paypal\services;
 
 use Craft;
 use craft\base\Field;
-use craft\models\MatrixBlockType;
 use craft\fields\Matrix;
 use craft\fields\PlainText;
 use craft\fields\Table;
