@@ -9,6 +9,12 @@
 namespace enupal\paypal\services;
 
 use Craft;
+use craft\base\Field;
+use craft\models\MatrixBlockType;
+use craft\fields\Matrix;
+use craft\fields\PlainText;
+use craft\fields\Table;
+use enupal\paypal\elements\PaypalButton;
 use enupal\paypal\enums\DiscountType;
 use enupal\paypal\enums\ShippingOptions;
 use yii\base\Component;
@@ -24,6 +30,9 @@ use craft\helpers\MailerHelper;
 class Buttons extends Component
 {
     protected $buttonRecord;
+
+    const VARIANTS_PRICED_HANDLE = 'enupalPaypalPricedVariants';
+    const VARIANTS_BASIC_HANDLE = 'enupalPaypalBasicVariants';
 
     /**
      * Constructor
@@ -92,8 +101,10 @@ class Buttons extends Component
      */
     public function saveButton(ButtonElement $button)
     {
+        $isNewForm = true;
         if ($button->id) {
             $buttonRecord = PaypalButtonRecord::findOne($button->id);
+            $isNewForm = false;
 
             if (!$buttonRecord) {
                 throw new Exception(Paypal::t('No PaypalButton exists with the ID “{id}”', ['id' => $button->id]));
@@ -107,6 +118,20 @@ class Buttons extends Component
         $transaction = Craft::$app->db->beginTransaction();
 
         try {
+            // Set the field context
+            Craft::$app->content->fieldContext = $button->getFieldContext();
+            if ($isNewForm) {
+                $fieldLayout = $button->getFieldLayout();
+
+                // Save the field layout
+                Craft::$app->getFields()->saveLayout($fieldLayout);
+
+                // Assign our new layout id info to our form model and records
+                $button->fieldLayoutId = $fieldLayout->id;
+                $button->setFieldLayout($fieldLayout);
+                $button->fieldLayoutId = $fieldLayout->id;
+            }
+
             if (Craft::$app->elements->saveElement($button)) {
                 $transaction->commit();
             }
@@ -401,9 +426,159 @@ class Buttons extends Component
         $button->enabled = 1;
         $button->language = 'en_US';
 
+        // Set default variant
+        $button = $this->addDefaultVariant($button);
+
         $this->saveButton($button);
 
         return $button;
+    }
+
+
+    /**
+     * This service allows add the variant to a PayPal button
+     *
+     * @param ButtonElement $button
+     *
+     * @return ButtonElement|null
+     */
+    public function addDefaultVariant(ButtonElement $button)
+    {
+        if (!$button) {
+            return null;
+        }
+
+        $currentFieldContext = Craft::$app->getContent()->fieldContext;
+        Craft::$app->getContent()->fieldContext = 'enupalPaypal:';
+
+        $matrixPricedField = Craft::$app->fields->getFieldByHandle(self::VARIANTS_PRICED_HANDLE);
+        $matrixBasicField = Craft::$app->fields->getFieldByHandle(self::VARIANTS_BASIC_HANDLE);
+        // Give back the current field context
+        Craft::$app->getContent()->fieldContext = $currentFieldContext;
+
+        if (is_null($matrixPricedField) || is_null($matrixBasicField)){
+            // Can't add variants to this button (Someone delete the fields)
+            // Let's not throw an exception and just return the Button element with not variants
+            Paypal::error("Can't add variants to PayPal Button");
+            return $button;
+        }
+
+        // Create a tab
+        $tabName = "Tab1";
+        $requiredFields = [];
+        $postedFieldLayout = [];
+
+        // Add our variant fields
+        if ($matrixPricedField !== null && $matrixPricedField->id != null) {
+            $postedFieldLayout[$tabName][] = $matrixPricedField->id;
+        }
+
+        if ($matrixBasicField !== null && $matrixBasicField->id != null) {
+            $postedFieldLayout[$tabName][] = $matrixBasicField->id;
+        }
+
+        // Set the field layout
+        $fieldLayout = Craft::$app->fields->assembleLayout($postedFieldLayout, $requiredFields);
+
+        $fieldLayout->type = PaypalButton::class;
+        // Set the tab to the form
+        $button->setFieldLayout($fieldLayout);
+
+        return $button;
+    }
+
+    /**
+     * Add the default two Matrix fields for variants
+     * @throws \Throwable
+     */
+    public function createDefaultVariantFields()
+    {
+        $fieldsService = Craft::$app->getFields();
+
+        $matrixSettings = [
+            'minBlocks' => "",
+            'maxBlocks' => 1,
+            'blockTypes' => [
+                'new1' => [
+                    'name' => 'Priced Variants',
+                    'handle' => 'variants',
+                    'fields' => [
+                        'new1' => [
+                            'type' => PlainText::class,
+                            'name' => 'Name',
+                            'handle' => 'variantName',
+                            'instructions' => '',
+                            'required' => 1,
+                            'typesettings' => '{"placeholder":"Size, Color, Version, etc..","code":"","multiline":"","initialRows":"4","charLimit":"","columnType":"text"}',
+                            'translationMethod' => Field::TRANSLATION_METHOD_NONE,
+                        ],
+                        'new2' => [
+                            'type' => Table::class,
+                            'name' => 'Options',
+                            'handle' => 'options',
+                            'required' => '1',
+                            'instructions' => 'If Name is Size you can fill this table with: Small          small           10',
+                            'typesettings' => '{"addRowLabel":"Add new option","maxRows":"10","minRows":"1","columns":{"col1":{"heading":"Option Label","handle":"optionLabel","width":"40%","type":"singleline"},"col2":{"heading":"Handle (Unique)","handle":"handle","width":"40%","type":"singleline"},"col3":{"heading":"Price","handle":"price","width":"20%","type":"number"}},"defaults":{"row1":{"col1":"","col2":"","col3":""}},"columnType":"text"}',
+                            'translationMethod' => Field::TRANSLATION_METHOD_NONE,
+                        ],
+                    ]
+                ]
+            ]
+        ];
+
+        // Our variant is a matrix field
+        $matrixPriceField = $fieldsService->createField([
+            'type' => Matrix::class,
+            'name' => 'Variants with priced options',
+            'context' => 'enupalPaypal:',
+            'handle' => self::VARIANTS_PRICED_HANDLE,
+            'settings' => json_encode($matrixSettings),
+            'instructions' => '',
+            'translationMethod' => Field::TRANSLATION_METHOD_NONE,
+        ]);
+
+        // Basic variant (no price)
+        $matrixSettingsBasic = $matrixSettings;
+        $matrixSettingsBasic['blockTypes']['new1']['fields']['new2']['typesettings'] = '{"addRowLabel":"Add new option","maxRows":"10","minRows":"1","columns":{"col1":{"heading":"Option Label","handle":"optionLabel","width":"40%","type":"singleline"},"col2":{"heading":"Handle (Unique)","handle":"handle","width":"40%","type":"singleline"}},"defaults":{"row1":{"col1":"","col2":""}},"columnType":"text"}';
+        $matrixSettingsBasic['maxBlocks'] = 6;
+        $matrixSettingsBasic['blockTypes']['new1']['name'] = 'Basic Variants';
+        $matrixBasicField = $fieldsService->createField([
+            'type' => Matrix::class,
+            'name' => 'Variants',
+            'handle' => self::VARIANTS_BASIC_HANDLE,
+            'context' => 'enupalPaypal:',
+            'settings' => json_encode($matrixSettingsBasic),
+            'instructions' => '',
+            'translationMethod' => Field::TRANSLATION_METHOD_NONE,
+        ]);
+
+        // Save our fields
+        $currentFieldContext = Craft::$app->getContent()->fieldContext;
+        Craft::$app->getContent()->fieldContext = 'enupalPaypal:';
+        Craft::$app->fields->saveField($matrixPriceField);
+        Craft::$app->fields->saveField($matrixBasicField);
+        // Give back the current field context
+        Craft::$app->getContent()->fieldContext = $currentFieldContext;
+    }
+
+    public function deleteVariantFields()
+    {
+        // Save our fields
+        $currentFieldContext = Craft::$app->getContent()->fieldContext;
+        Craft::$app->getContent()->fieldContext = 'enupalPaypal:';
+
+        $matrixPricedField = Craft::$app->fields->getFieldByHandle(self::VARIANTS_PRICED_HANDLE);
+        $matrixBasicField = Craft::$app->fields->getFieldByHandle(self::VARIANTS_BASIC_HANDLE);
+
+        if ($matrixPricedField){
+            Craft::$app->fields->deleteFieldById($matrixPricedField->id);
+        }
+
+        if ($matrixBasicField){
+            Craft::$app->fields->deleteFieldById($matrixBasicField->id);
+        }
+        // Give back the current field context
+        Craft::$app->getContent()->fieldContext = $currentFieldContext;
     }
 
     /**
@@ -421,8 +596,8 @@ class Buttons extends Component
         $band = true;
         do {
             $newField = $field == "sku" ? $value.$i : $value." ".$i;
-            $slider = $this->getFieldValue($field, $newField);
-            if (is_null($slider)) {
+            $button = $this->getFieldValue($field, $newField);
+            if (is_null($button)) {
                 $band = false;
             }
 

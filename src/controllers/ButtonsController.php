@@ -83,7 +83,7 @@ class ButtonsController extends BaseController
         } else {
             if ($buttonId !== null) {
                 if ($button === null) {
-                    // Get the Slider
+                    // Get the button
                     $button = Paypal::$app->buttons->getButtonById($buttonId);
 
                     if (!$button) {

@@ -11,21 +11,22 @@ namespace enupal\paypal;
 use Craft;
 use craft\events\RegisterUrlRulesEvent;
 use craft\web\UrlManager;
+use enupal\paypal\services\App;
 use yii\base\Event;
-use craft\events\DefineComponentsEvent;
 use craft\web\twig\variables\CraftVariable;
 use craft\services\SystemMessages;
 use craft\events\RegisterEmailMessagesEvent;
 
 use enupal\paypal\variables\PaypalVariable;
 use enupal\paypal\models\Settings;
+use craft\base\Plugin;
 
-class Paypal extends \craft\base\Plugin
+class Paypal extends Plugin
 {
     /**
      * Enable use of PaypalButton::$app-> in place of Craft::$app->
      *
-     * @var [type]
+     * @var App
      */
     public static $app;
 
@@ -73,11 +74,33 @@ class Paypal extends \craft\base\Plugin
         );
     }
 
+    /**
+     * @inheritdoc
+     */
+    protected function afterInstall()
+    {
+        Paypal::$app->buttons->createDefaultVariantFields();
+    }
+
+    /**
+     * @inheritdoc
+     */
+    protected function afterUninstall()
+    {
+        Paypal::$app->buttons->deleteVariantFields();
+    }
+
+    /**
+     * @inheritdoc
+     */
     protected function createSettingsModel()
     {
         return new Settings();
     }
 
+    /**
+     * @inheritdoc
+     */
     public function getCpNavItem()
     {
         $parent = parent::getCpNavItem();
@@ -100,9 +123,7 @@ class Paypal extends \craft\base\Plugin
     }
 
     /**
-     * Settings HTML
-     *
-     * @return string
+     * @inheritdoc
      */
     protected function settingsHtml()
     {

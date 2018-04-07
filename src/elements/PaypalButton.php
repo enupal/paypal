@@ -10,9 +10,9 @@ namespace enupal\paypal\elements;
 
 use Craft;
 use craft\base\Element;
+use craft\behaviors\FieldLayoutBehavior;
 use craft\elements\db\ElementQueryInterface;
 use enupal\paypal\enums\DiscountType;
-use enupal\paypal\Paypal;
 use yii\base\ErrorHandler;
 use craft\helpers\UrlHelper;
 use craft\elements\actions\Delete;
@@ -98,12 +98,25 @@ class PaypalButton extends Element
     protected $business;
     protected $settings;
 
+    /**
+     * @inheritdoc
+     */
+    public function behaviors()
+    {
+        return array_merge(parent::behaviors(), [
+            'fieldLayout' => [
+                'class' => FieldLayoutBehavior::class,
+                'elementType' => self::class
+            ],
+        ]);
+    }
+
     public function init()
     {
         parent::init();
 
         if (!$this->settings){
-            $this->settings = Paypal::$app->settings->getSettings();
+            $this->settings = PaypalPlugin::$app->settings->getSettings();
         }
 
         $this->env =  $this->settings->testMode ? 'www.sandbox' : 'www';
@@ -276,7 +289,7 @@ class PaypalButton extends Element
      */
     public static function hasContent(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -301,6 +314,17 @@ class PaypalButton extends Element
     public static function hasStatuses(): bool
     {
         return true;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getFieldLayout()
+    {
+        $behaviors = $this->getBehaviors();
+        $fieldLayout = $behaviors['fieldLayout'];
+
+        return $fieldLayout->getFieldLayout();
     }
 
     /**
@@ -506,7 +530,7 @@ class PaypalButton extends Element
     {
         $buttonSize = $size ?? $this->size;
         // Small By default
-        $buttonUrl = Paypal::$app->buttons->getButtonSizeUrl($buttonSize, $language);
+        $buttonUrl = PaypalPlugin::$app->buttons->getButtonSizeUrl($buttonSize, $language);
 
         return $buttonUrl;
     }
