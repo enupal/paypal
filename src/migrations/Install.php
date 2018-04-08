@@ -95,6 +95,7 @@ class Install extends Migration
             'quantity' => $this->integer(),
             'orderStatusId' => $this->integer(),
             'paypalTransactionId' => $this->string(),
+            'transactionInfo' => $this->text(),
             'buyerEmail' => $this->string(),
             'buyerName' => $this->string(),
             //

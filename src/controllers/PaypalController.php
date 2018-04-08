@@ -12,8 +12,8 @@ use Craft;
 use craft\web\Controller as BaseController;
 
 use enupal\paypal\contracts\PaypalIPN;
+use enupal\paypal\elements\Order;
 use enupal\paypal\Paypal;
-use enupal\paypal\PaypalButtons;
 
 class PaypalController extends BaseController
 {
@@ -37,8 +37,13 @@ class PaypalController extends BaseController
             }
 
             if ($ipn->verifyIPN()) {
-                $item_name = $_POST['item_name'];
-                $item_number = $_POST['item_number'];
+                $order = new Order();
+                $button = Paypal::$app->buttons->getButtonBySku($_POST['item_number']);
+                if ($button){
+                    $order->buttonId = $button->id;
+                }
+
+
                 $payment_status = $_POST['payment_status'];
                 $payment_amount = $_POST['mc_gross'];
                 $payment_currency = $_POST['mc_currency'];
