@@ -13,15 +13,16 @@
         <select class="pricedVariants" name="os0" id="os0">
             {% for row in pricedOptionsBlock.options %}
                 {% if loop.first %}
-                    <option value="Select a {{ pricedOptionsBlock.variantName }}">{{ "Select a"|t }} {{ pricedOptionsBlock.variantName }}</option>
+                    <option value="">{{ "Select a"|t }} {{ pricedOptionsBlock.variantName|t }}</option>
                 {% endif %}
-                <option value="{{ row.handle }}">{{ row.optionLabel }}</option>
+                <option value="{{ row.handle }}">{{ row.optionLabel|t }}</option>
                 {% set hiddenFieldsHtml = hiddenFieldsHtml ~ '<input type="hidden" name="option_select'~loop.index0~'" value="'~row.handle~'"><input type="hidden" name="option_amount'~loop.index0~'" value="'~row.price|number~'">' %}
             {% endfor %}
         </select>
         {{ hiddenFieldsHtml|raw }}
         <br>
     {% endif %}
+    {# <!-- Provide a drop-down menu option basic variants. --> #}
     {% if button.enupalPaypalBasicVariants is defined and button.enupalPaypalBasicVariants %}
         {% set pricedOptionsBlock = button.enupalPaypalBasicVariants.first() %}
         {% for basicOptionsBlock in button.enupalPaypalBasicVariants %}
@@ -32,7 +33,7 @@
                     {% if loop.first %}
                         <option value="Select a {{ basicOptionsBlock.variantName }}">{{ "Select a"|t }} {{ basicOptionsBlock.variantName }}</option>
                     {% endif %}
-                    <option value="{{ row.handle }}">{{ row.optionLabel }}</option>
+                    <option value="{{ row.handle }}">{{ row.optionLabel|t }}</option>
                 {% endfor %}
             </select>
             <br>
@@ -52,6 +53,7 @@
     {% endif %}
     <input name="notify_url" value="{{ button.getIpnUrl() }}" type="hidden">
     <input name="return" value="{{ button.getReturnUrl() }}" type="hidden">
+    <input name="lc" value="{{ button.language }}" type="hidden">
     <input name="cancel_return" value="{{ button.getCancelUrl() }}" type="hidden">
     <input name="rm" value="2" type="hidden">
     <input name="currency_code" value="{{ button.currency }}" type="hidden">

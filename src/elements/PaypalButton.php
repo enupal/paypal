@@ -521,16 +521,17 @@ class PaypalButton extends Element
 
     /**
      * @param null   $size
-     * @param string $lang
+     * @param string $language
      *
      * @return string
      * @throws \yii\base\Exception
      */
-    public function getButtonUrl($size = null, $language = 'en_US')
+    public function getButtonUrl($size = null, $language = null)
     {
         $buttonSize = $size ?? $this->size;
+        $lang = $language ?? $this->language;
         // Small By default
-        $buttonUrl = PaypalPlugin::$app->buttons->getButtonSizeUrl($buttonSize, $language);
+        $buttonUrl = PaypalPlugin::$app->buttons->getButtonSizeUrl($buttonSize, $lang);
 
         return $buttonUrl;
     }

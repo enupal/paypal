@@ -183,7 +183,7 @@ class Paypal extends Plugin
     {
         return [
             'enupal-paypal/ipn' =>
-                'enupal-paypal/webhook/ipn'
+                'enupal-paypal/paypal/ipn'
         ];
     }
 }

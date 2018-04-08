@@ -10,6 +10,7 @@ namespace enupal\paypal\services;
 
 use Craft;
 use yii\base\Component;
+use enupal\paypal\models\Settings as SettingsModel;
 
 class Settings extends Component
 {
@@ -42,6 +43,9 @@ class Settings extends Component
         return $success;
     }
 
+    /**
+     * @return SettingsModel
+     */
     public function getSettings()
     {
         $plugin = $this->getPlugin();
@@ -49,6 +53,9 @@ class Settings extends Component
         return $plugin->getSettings();
     }
 
+    /**
+     * @return \craft\base\PluginInterface|null
+     */
     public function getPlugin()
     {
         return Craft::$app->getPlugins()->getPlugin('enupal-paypal');
