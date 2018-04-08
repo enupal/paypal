@@ -88,13 +88,14 @@ class Install extends Migration
 
         $this->createTable('{{%enupalpaypal_orders}}', [
             'id' => $this->primaryKey(),
-            'transactionId' => $this->string(),
-            'firstName' => $this->string(),
-            'lastName' => $this->string(),
-            'email' => $this->string(),
-            'address' => $this->string(),
-            'total' => $this->money(10, 4),
-            'paymentStatus' => $this->string(),
+            'number' => $this->string(),
+            'currency' => $this->string(),
+            'amount' => $this->decimal(14, 4)->unsigned(),
+            'buttonId' => $this->integer(),
+            'quantity' => $this->integer(),
+            'paypalTransactionId' => $this->string(),
+            'buyerEmail' => $this->string(),
+            'buyerName' => $this->string(),
             //
             'dateCreated' => $this->dateTime()->notNull(),
             'dateUpdated' => $this->dateTime()->notNull(),

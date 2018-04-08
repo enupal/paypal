@@ -106,9 +106,9 @@ class Paypal extends Plugin
         $parent = parent::getCpNavItem();
         return array_merge($parent, [
             'subnav' => [
-                'payments' => [
-                    "label" => self::t("Order"),
-                    "url" => 'enupal-paypal/payments'
+                'orders' => [
+                    "label" => self::t("Orders"),
+                    "url" => 'enupal-paypal/orders'
                 ],
                 'buttons' => [
                     "label" => self::t("Buttons"),

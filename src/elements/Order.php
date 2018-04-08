@@ -15,11 +15,10 @@ use yii\base\ErrorHandler;
 use craft\helpers\UrlHelper;
 use craft\elements\actions\Delete;
 
-use enupal\paypal\elements\db\PaypalButtonsQuery;
-use enupal\paypal\records\PaypalButton as PaypalButtonRecord;
-use enupal\paypal\enums\PaypalSize;
+use enupal\paypal\elements\db\OrdersQuery;
+use enupal\paypal\records\Order as OrderRecord;
+use enupal\paypal\enums\OrderStatus;
 use enupal\paypal\Paypal as PaypalPlugin;
-use craft\validators\HandleValidator;
 use craft\validators\UniqueValidator;
 
 /**
@@ -30,25 +29,27 @@ class Order extends Element
     // General - Properties
     // =========================================================================
     public $id;
-    public $type;
-    public $currency;
-    public $amount;
-    public $itemId;
-    public $options;
-    public $returnUrl;
-    public $cancelURL;
-    public $buttonName = 'Buy now';
 
     /**
-     * Returns the field context this element's content uses.
-     *
-     * @access protected
-     * @return string
+     * @var string Number
      */
-    public function getFieldContext(): string
-    {
-        return 'enupalPaypal:'.$this->id;
-    }
+    public $number;
+
+    /**
+     * @var string Paypal Transaction Id
+     */
+    public $paypalTransactionId;
+
+    /**
+     * @var int Number
+     */
+    public $quantity;
+
+    public $buttonId;
+    public $currency;
+    public $amount;
+    public $buyerEmail;
+    public $buyerName;
 
     /**
      * Returns the element type name.
@@ -57,7 +58,7 @@ class Order extends Element
      */
     public static function displayName(): string
     {
-        return PaypalPlugin::t('Paypal Buttons');
+        return PaypalPlugin::t('Orders');
     }
 
     /**
@@ -65,7 +66,7 @@ class Order extends Element
      */
     public static function refHandle()
     {
-        return 'buttons';
+        return 'orders';
     }
 
     /**
@@ -106,7 +107,7 @@ class Order extends Element
     public function getCpEditUrl()
     {
         return UrlHelper::cpUrl(
-            'enupal-paypal/buttons/edit/'.$this->id
+            'enupal-paypal/orders/edit/'.$this->id
         );
     }
 
@@ -119,8 +120,7 @@ class Order extends Element
     public function __toString()
     {
         try {
-            // @todo - For some reason the Title returns null possible Craft3 bug
-            return $this->name;
+            return $this->number;
         } catch (\Exception $e) {
             ErrorHandler::convertExceptionToError($e);
         }
@@ -129,11 +129,11 @@ class Order extends Element
     /**
      * @inheritdoc
      *
-     * @return PaypalButtonsQuery The newly created [[PaypalButtonsQuery]] instance.
+     * @return OrdersQuery The newly created [[OrdersQuery]] instance.
      */
     public static function find(): ElementQueryInterface
     {
-        return new PaypalButtonsQuery(get_called_class());
+        return new OrdersQuery(get_called_class());
     }
 
     /**
@@ -142,9 +142,9 @@ class Order extends Element
      */
     public function getStatus()
     {
-        $statusId = $this->backupStatusId;
+        $statusId = $this->status;
 
-        $colors = PaypalPlugin::$app->backups->getColorStatuses();
+        $colors = PaypalPlugin::$app->orders->getColorStatuses();
 
         return $colors[$statusId];
     }
@@ -161,22 +161,20 @@ class Order extends Element
             ]
         ];
 
-        $statuses = PaypalSize::getConstants();
+        $statuses = OrderStatus::getConstants();
 
-        $colors = PaypalPlugin::$app->backups->getColorStatuses();
+        $colors = PaypalPlugin::$app->orders->getColorStatuses();
 
-        $sources[] = ['heading' => PaypalPlugin::t("PaypalButton Status")];
+        $sources[] = ['heading' => PaypalPlugin::t("Order Status")];
 
         foreach ($statuses as $code => $status) {
-            if ($status != PaypalSize::STARTED) {
-                $key = 'backupStatusId:'.$status;
-                $sources[] = [
-                    'status' => $colors[$status],
-                    'key' => $key,
-                    'label' => ucwords(strtolower($code)),
-                    'criteria' => ['backupStatusId' => $status]
-                ];
-            }
+            $key = 'orderStatusId:'.$status;
+            $sources[] = [
+                'status' => $colors[$status],
+                'key' => $key,
+                'label' => ucwords(strtolower($code)),
+                'criteria' => ['orderStatusId' => $status]
+            ];
         }
 
         return $sources;
@@ -192,8 +190,8 @@ class Order extends Element
         // Delete
         $actions[] = Craft::$app->getElements()->createAction([
             'type' => Delete::class,
-            'confirmationMessage' => PaypalPlugin::t('Are you sure you want to delete the selected buttons?'),
-            'successMessage' => PaypalPlugin::t('Buttons deleted.'),
+            'confirmationMessage' => PaypalPlugin::t('Are you sure you want to delete the selected orders?'),
+            'successMessage' => PaypalPlugin::t('Orders deleted.'),
         ]);
 
         return $actions;
@@ -204,7 +202,7 @@ class Order extends Element
      */
     protected static function defineSearchableAttributes(): array
     {
-        return ['backupId'];
+        return ['number', 'paypalTransactionId'];
     }
 
     /**
@@ -224,9 +222,9 @@ class Order extends Element
      */
     protected static function defineTableAttributes(): array
     {
-        $attributes['backupId'] = ['label' => PaypalPlugin::t('PaypalButton Id')];
-        $attributes['size'] = ['label' => PaypalPlugin::t('Size')];
-        $attributes['dateCreated'] = ['label' => PaypalPlugin::t('Date')];
+        $attributes['number'] = ['label' => PaypalPlugin::t('Order Number')];
+        $attributes['amount'] = ['label' => PaypalPlugin::t('Total')];
+        $attributes['dateCreated'] = ['label' => PaypalPlugin::t('Date Ordered')];
         $attributes['status'] = ['label' => PaypalPlugin::t('Status')];
 
         return $attributes;
@@ -234,7 +232,7 @@ class Order extends Element
 
     protected static function defineDefaultTableAttributes(string $source): array
     {
-        $attributes = ['backupId', 'size', 'dateCreated', 'status'];
+        $attributes = ['number', 'amount', 'dateCreated', 'status'];
 
         return $attributes;
     }
@@ -245,111 +243,13 @@ class Order extends Element
     protected function tableAttributeHtml(string $attribute): string
     {
         switch ($attribute) {
-            case 'size':
-                {
-                    return $this->getTotalSize();
-                }
-            case 'status':
-                {
-                    $message = $this->backupStatusId == PaypalSize::STARTED ?
-                        PaypalPlugin::t('Started') :
-                        PaypalPlugin::t('Not defined');
-
-                    $encryted = '&nbsp;<i class="fa fa-lock" aria-hidden="true"></i>';
-
-                    if ($this->backupStatusId == PaypalSize::FINISHED) {
-                        $message = '<i class="fa fa-check-square-o" aria-hidden="true"></i>';
-                    } else if ($this->backupStatusId == PaypalSize::RUNNING) {
-                        $message = '<i class="fa fa-circle-o-notch fa-spin fa fa-fw"></i><span class="sr-only">Loading...</span>';
-                    } else if ($this->backupStatusId == PaypalSize::ERROR) {
-                        $message = '<i class="fa fa-times" aria-hidden="true"></i>';
-                    }
-
-                    if ($this->isEncrypted) {
-                        $message .= $encryted;
-                    }
-
-                    return $message;
-                }
             case 'dateCreated':
                 {
-                    return $this->dateCreated->format("Y-m-d H:i");;
+                    return $this->dateCreated->format("Y-m-d H:i");
                 }
         }
 
         return parent::tableAttributeHtml($attribute);
-    }
-
-    public function getDatabaseFile()
-    {
-        $base = PaypalPlugin::$app->backups->getDatabasePath();
-
-        if (!$this->databaseFileName) {
-            return null;
-        }
-
-        return $base.$this->databaseFileName;
-    }
-
-    public function getTemplateFile()
-    {
-        $base = PaypalPlugin::$app->backups->getTemplatesPath();
-
-        if (!$this->templateFileName) {
-            return null;
-        }
-
-        return $base.$this->templateFileName;
-    }
-
-    public function getLogFile()
-    {
-        $base = PaypalPlugin::$app->backups->getLogsPath();
-
-        if (!$this->logFileName) {
-            return null;
-        }
-
-        return $base.$this->logFileName;
-    }
-
-    public function getAssetFile()
-    {
-        $base = PaypalPlugin::$app->backups->getAssetsPath();
-
-        if (!$this->assetFileName) {
-            return null;
-        }
-
-        return $base.$this->assetFileName;
-    }
-
-
-    public function getTotalSize()
-    {
-        $total = 0;
-
-        if ($this->assetSize) {
-            $total += $this->assetSize;
-        }
-
-        if ($this->templateSize) {
-            $total += $this->templateSize;
-        }
-
-        if ($this->databaseSize) {
-            $total += $this->databaseSize;
-        }
-
-        if ($this->logSize) {
-            $total += $this->logSize;
-        }
-
-        if ($total == 0) {
-            return "";
-        }
-
-        return PaypalPlugin::$app->backups->getSizeFormatted($total);
     }
 
     /**
@@ -358,37 +258,26 @@ class Order extends Element
      */
     public function afterSave(bool $isNew)
     {
-        // Get the PaypalButton record
+        // Get the Order record
         if (!$isNew) {
-            $record = PaypalButtonRecord::findOne($this->id);
+            $record = OrderRecord::findOne($this->id);
 
             if (!$record) {
-                throw new Exception('Invalid PaypalButton ID: '.$this->id);
+                throw new Exception('Invalid Order ID: '.$this->id);
             }
         } else {
-            $record = new PaypalButtonRecord();
+            $record = new OrderRecord();
             $record->id = $this->id;
         }
 
-        $record->backupId = $this->backupId;
-        $record->time = $this->time;
-        $record->databaseFileName = $this->databaseFileName;
-        $record->databaseSize = $this->databaseSize;
-        $record->assetFileName = $this->assetFileName;
-        $record->assetSize = $this->assetSize;
-        $record->templateFileName = $this->templateFileName;
-        $record->templateSize = $this->templateSize;
-        $record->logFileName = $this->logFileName;
-        $record->logSize = $this->logSize;
-        $record->backupStatusId = $this->backupStatusId;
-        $record->aws = $this->aws;
-        $record->dropbox = $this->dropbox;
-        $record->rsync = $this->rsync;
-        $record->ftp = $this->ftp;
-        $record->softlayer = $this->softlayer;
-        $record->isEncrypted = $this->isEncrypted;
-        $record->logMessage = $this->logMessage;
-
+        $record->number = $this->number;
+        $record->currency = $this->currency;
+        $record->amount = $this->amount;
+        $record->buttonId = $this->buttonId;
+        $record->quantity = $this->quantity;
+        $record->paypalTransactionId = $this->paypalTransactionId;
+        $record->buyerEmail = $this->buyerEmail;
+        $record->buyerName = $this->buyerName;
         $record->save(false);
 
         parent::afterSave($isNew);
@@ -397,53 +286,20 @@ class Order extends Element
     /**
      * @inheritdoc
      */
-    public function beforeDelete(): bool
-    {
-        // Let's delete all the info
-        $files = [];
-        $files[] = $this->getDatabaseFile();
-        $files[] = $this->getTemplateFile();
-        $files[] = $this->getAssetFile();
-        $files[] = $this->getLogFile();
-        $files[] = PaypalPlugin::$app->backups->getLogPath($this->backupId);
-
-        foreach ($files as $file) {
-            if ($file) {
-                if (file_exists($file)) {
-                    unlink($file);
-                } else {
-                    // File not found.
-                    PaypalPlugin::error(PaypalPlugin::t('Unable to delete the file: '.$file));
-                }
-            }
-        }
-
-        return true;
-    }
-
-    /**
-     * @inheritdoc
-     */
     public function rules()
     {
         return [
-            [['name', 'handle'], 'required'],
-            [['name', 'handle'], 'string', 'max' => 255],
-            [
-                ['handle'],
-                HandleValidator::class,
-                'reservedWords' => ['id', 'dateCreated', 'dateUpdated', 'uid', 'title']
-            ],
-            [['name', 'handle'], UniqueValidator::class, 'targetClass' => SliderRecord::class],
+            [['number'], 'required'],
+            [['number'], UniqueValidator::class, 'targetClass' => OrderRecord::class],
         ];
     }
 
     public function getStatusName()
     {
-        $statuses = PaypalSize::getConstants();
+        $statuses = OrderStatus::getConstants();
 
         $statuses = array_flip($statuses);
 
-        return ucwords(strtolower($statuses[$this->backupStatusId]));
+        return ucwords(strtolower($statuses[$this->status]));
     }
 }

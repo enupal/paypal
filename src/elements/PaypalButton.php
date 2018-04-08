@@ -174,7 +174,7 @@ class PaypalButton extends Element
      */
     public function getIpnUrl()
     {
-        $this->ipnUrl = Craft::$app->getSites()->getPrimarySite()->baseUrl.'enupalPaypalIPN';
+        $this->ipnUrl = Craft::$app->getSites()->getPrimarySite()->baseUrl.'enupal-paypal/ipn';
 
         return $this->ipnUrl;
     }

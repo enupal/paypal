@@ -22,9 +22,15 @@ class App extends Component
      */
     public $buttons;
 
+    /**
+     * @var Orders
+     */
+    public $orders;
+
     public function init()
     {
         $this->settings = new Settings();
         $this->buttons = new Buttons();
+        $this->orders = new Orders();
     }
 }
