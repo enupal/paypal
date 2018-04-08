@@ -45,6 +45,11 @@ class Order extends Element
      */
     public $quantity;
 
+    /**
+     * @var int Order Status Id
+     */
+    public $orderStatusId = OrderStatus::NEW;
+
     public $buttonId;
     public $currency;
     public $amount;
@@ -142,7 +147,7 @@ class Order extends Element
      */
     public function getStatus()
     {
-        $statusId = $this->status;
+        $statusId = $this->orderStatusId;
 
         $colors = PaypalPlugin::$app->orders->getColorStatuses();
 
@@ -300,6 +305,6 @@ class Order extends Element
 
         $statuses = array_flip($statuses);
 
-        return ucwords(strtolower($statuses[$this->status]));
+        return ucwords(strtolower($statuses[$this->orderStatusId]));
     }
 }

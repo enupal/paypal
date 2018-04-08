@@ -93,6 +93,7 @@ class Install extends Migration
             'amount' => $this->decimal(14, 4)->unsigned(),
             'buttonId' => $this->integer(),
             'quantity' => $this->integer(),
+            'orderStatusId' => $this->integer(),
             'paypalTransactionId' => $this->string(),
             'buyerEmail' => $this->string(),
             'buyerName' => $this->string(),

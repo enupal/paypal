@@ -19,6 +19,7 @@ class OrdersQuery extends ElementQuery
     public $dateCreated;
     public $number;
     public $buttonId;
+    public $paypalTransactionId;
 
     /**
      * @inheritdoc
@@ -47,6 +48,22 @@ class OrdersQuery extends ElementQuery
     /**
      * @inheritdoc
      */
+    public function paypalTransactionId($value)
+    {
+        $this->paypalTransactionId = $value;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getPaypalTransactionId()
+    {
+        return $this->paypalTransactionId;
+    }
+
+    /**
+     * @inheritdoc
+     */
     public function __construct($elementType, array $config = [])
     {
         // Default orderBy
@@ -69,26 +86,27 @@ class OrdersQuery extends ElementQuery
         $this->joinElementTable('enupalpaypal_orders');
 
         $this->query->select([
-            'enupalpaypal_buttons.id',
-            'enupalpaypal_buttons.number',
-            'enupalpaypal_buttons.currency',
-            'enupalpaypal_buttons.amount',
-            'enupalpaypal_buttons.buttonId',
-            'enupalpaypal_buttons.quantity',
-            'enupalpaypal_buttons.paypalTransactionId',
-            'enupalpaypal_buttons.buyerEmail',
-            'enupalpaypal_buttons.buyerName'
+            'enupalpaypal_orders.id',
+            'enupalpaypal_orders.number',
+            'enupalpaypal_orders.currency',
+            'enupalpaypal_orders.amount',
+            'enupalpaypal_orders.buttonId',
+            'enupalpaypal_orders.quantity',
+            'enupalpaypal_orders.paypalTransactionId',
+            'enupalpaypal_orders.buyerEmail',
+            'enupalpaypal_orders.buyerName',
+            'enupalpaypal_orders.orderStatusId'
         ]);
 
         if ($this->number) {
             $this->subQuery->andWhere(Db::parseParam(
-                'enupalpaypal_buttons.number', $this->number)
+                'enupalpaypal_orders.number', $this->number)
             );
         }
 
         if ($this->paypalTransactionId) {
             $this->subQuery->andWhere(Db::parseParam(
-                'enupalpaypal_buttons.paypalTransactionId', $this->paypalTransactionId)
+                'enupalpaypal_orders.paypalTransactionId', $this->paypalTransactionId)
             );
         }
 
