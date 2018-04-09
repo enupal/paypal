@@ -302,6 +302,15 @@ class Order extends Element
         $record->email = $this->email;
         $record->firstName = $this->firstName;
         $record->lastName = $this->lastName;
+        $record->shipping = $this->shipping;
+        $record->tax = $this->tax;
+        $record->addressCity = $this->addressCity;
+        $record->addressCountry = $this->addressCountry;
+        $record->addressState = $this->addressState;
+        $record->addressCountryCode = $this->addressCountryCode;
+        $record->addressName = $this->addressName;
+        $record->addressStreet = $this->addressStreet;
+        $record->addressZip = $this->addressZip;
         $record->save(false);
 
         parent::afterSave($isNew);

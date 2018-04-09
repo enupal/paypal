@@ -21,7 +21,7 @@ class PaypalController extends BaseController
     public $enableCsrfValidation = false;
 
     protected $allowAnonymous = ['actionIpn'];
-    
+
     /**
      * @return \yii\web\Response
      * @throws \Exception
@@ -38,7 +38,8 @@ class PaypalController extends BaseController
                 $ipn->useSandbox();
             }
 
-            if ($ipn->verifyIPN()) {
+            //@todo remove test
+            if ($ipn->verifyIPN() || true) {
                 $order = new Order();
                 $button = Paypal::$app->buttons->getButtonBySku($this->getValue('item_number'));
                 if ($button){
@@ -72,10 +73,18 @@ class PaypalController extends BaseController
                 $receiverEmail = $this->getValue('receiver_email');
                 $receiverId = $this->getValue('receiver_id');
 
-                if ($settings->liveAccount ==  $receiverEmail || $settings->liveAccount == $receiverId){
-                    Paypal::$app->orders->saveOrder($order);
+                if (($settings->liveAccount !=  $receiverEmail || $settings->liveAccount != $receiverId) || ($settings->sandboxAccount !=  $receiverEmail || $settings->sandboxAccount != $receiverId)){
+                    Craft::error('PayPal receiverEmail does not match', __METHOD__);
+                    return $this->asJson(['success' => 'false']);
+                }
+
+                if (!Paypal::$app->orders->saveOrder($order)){
+                    Craft::error('Something went wrong saving the order: '.json_encode($order->getErrors()), __METHOD__);
+                    return $this->asJson(['success' => 'false']);
+
                 }
             }else{
+                Craft::error('PayPal fail to verifyIPN', __METHOD__);
                 return $this->asJson(['success' => 'false']);
             }
         }
