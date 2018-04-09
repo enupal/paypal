@@ -445,6 +445,14 @@ class PaypalButton extends Element
     protected function tableAttributeHtml(string $attribute): string
     {
         switch ($attribute) {
+            case 'amount':
+                {
+                    if ($this->$attribute >= 0) {
+                        return Craft::$app->getFormatter()->asCurrency($this->$attribute, $this->currency);
+                    }
+
+                    return Craft::$app->getFormatter()->asCurrency($this->$attribute * -1, $this->currency);
+                }
             case 'dateCreated':
                 {
                     return $this->dateCreated->format("Y-m-d H:i");

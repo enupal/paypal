@@ -22,6 +22,7 @@ class Install extends Migration
     public function safeUp()
     {
         $this->createTables();
+        $this->createIndexes();
         $this->addForeignKeys();
 
         return true;
@@ -88,13 +89,13 @@ class Install extends Migration
 
         $this->createTable('{{%enupalpaypal_orders}}', [
             'id' => $this->primaryKey(),
+            'buttonId' => $this->integer(),
             'testMode' => $this->boolean()->defaultValue(0),
             'number' => $this->string(),
             'currency' => $this->string(),
             'total' => $this->decimal(14, 4)->unsigned(),
             'shipping' => $this->decimal(14, 4)->unsigned(),
             'tax' => $this->decimal(14, 4)->unsigned(),
-            'buttonId' => $this->integer(),
             'quantity' => $this->integer(),
             'orderStatusId' => $this->integer(),
             'paypalTransactionId' => $this->string(),
@@ -114,6 +115,25 @@ class Install extends Migration
             'dateUpdated' => $this->dateTime()->notNull(),
             'uid' => $this->uid(),
         ]);
+    }
+
+    /**
+     * Creates the indexes.
+     *
+     * @return void
+     */
+    protected function createIndexes()
+    {
+        $this->createIndex(
+            $this->db->getIndexName(
+                '{{%enupalpaypal_orders}}',
+                'buttonId',
+                false, true
+            ),
+            '{{%enupalpaypal_orders}}',
+            'buttonId',
+            false
+        );
     }
 
     /**
@@ -137,6 +157,14 @@ class Install extends Migration
             ),
             '{{%enupalpaypal_orders}}', 'id',
             '{{%elements}}', 'id', 'CASCADE', null
+        );
+
+        $this->addForeignKey(
+            $this->db->getForeignKeyName(
+                '{{%enupalpaypal_orders}}', 'buttonId'
+            ),
+            '{{%enupalpaypal_orders}}', 'buttonId',
+            '{{%enupalpaypal_buttons}}', 'id', 'CASCADE', null
         );
     }
 }
