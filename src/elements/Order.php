@@ -30,6 +30,8 @@ class Order extends Element
     // =========================================================================
     public $id;
 
+    public $testMode;
+
     /**
      * @var string Number
      */
@@ -39,6 +41,11 @@ class Order extends Element
      * @var string Paypal Transaction Id
      */
     public $paypalTransactionId;
+
+    /**
+     * @var string Paypal Transaction Info
+     */
+    public $transactionInfo;
 
     /**
      * @var int Number
@@ -52,9 +59,20 @@ class Order extends Element
 
     public $buttonId;
     public $currency;
-    public $amount;
-    public $buyerEmail;
-    public $buyerName;
+    public $total;
+    public $shipping;
+    public $tax;
+    public $email;
+    public $firstName;
+    public $lastName;
+    // Shipping
+    public $addressCity;
+    public $addressCountry;
+    public $addressState;
+    public $addressCountryCode;
+    public $addressName;
+    public $addressStreet;
+    public $addressZip;
 
     /**
      * Returns the element type name.
@@ -228,7 +246,7 @@ class Order extends Element
     protected static function defineTableAttributes(): array
     {
         $attributes['number'] = ['label' => PaypalPlugin::t('Order Number')];
-        $attributes['amount'] = ['label' => PaypalPlugin::t('Total')];
+        $attributes['total'] = ['label' => PaypalPlugin::t('Total')];
         $attributes['dateCreated'] = ['label' => PaypalPlugin::t('Date Ordered')];
         $attributes['status'] = ['label' => PaypalPlugin::t('Status')];
 
@@ -237,7 +255,7 @@ class Order extends Element
 
     protected static function defineDefaultTableAttributes(string $source): array
     {
-        $attributes = ['number', 'amount', 'dateCreated', 'status'];
+        $attributes = ['number', 'total', 'dateCreated', 'status'];
 
         return $attributes;
     }
@@ -277,12 +295,13 @@ class Order extends Element
 
         $record->number = $this->number;
         $record->currency = $this->currency;
-        $record->amount = $this->amount;
+        $record->total = $this->total;
         $record->buttonId = $this->buttonId;
         $record->quantity = $this->quantity;
         $record->paypalTransactionId = $this->paypalTransactionId;
-        $record->buyerEmail = $this->buyerEmail;
-        $record->buyerName = $this->buyerName;
+        $record->email = $this->email;
+        $record->firstName = $this->firstName;
+        $record->lastName = $this->lastName;
         $record->save(false);
 
         parent::afterSave($isNew);

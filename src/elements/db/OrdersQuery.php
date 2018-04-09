@@ -87,15 +87,25 @@ class OrdersQuery extends ElementQuery
 
         $this->query->select([
             'enupalpaypal_orders.id',
+            'enupalpaypal_orders.testMode',
             'enupalpaypal_orders.number',
             'enupalpaypal_orders.currency',
-            'enupalpaypal_orders.amount',
+            'enupalpaypal_orders.total',
             'enupalpaypal_orders.buttonId',
             'enupalpaypal_orders.quantity',
             'enupalpaypal_orders.paypalTransactionId',
-            'enupalpaypal_orders.buyerEmail',
-            'enupalpaypal_orders.buyerName',
-            'enupalpaypal_orders.orderStatusId'
+            'enupalpaypal_orders.transactionInfo',
+            'enupalpaypal_orders.email',
+            'enupalpaypal_orders.firstName',
+            'enupalpaypal_orders.lastName',
+            'enupalpaypal_orders.orderStatusId',
+            'enupalpaypal_orders.addressCity',
+            'enupalpaypal_orders.addressCountry',
+            'enupalpaypal_orders.addressState',
+            'enupalpaypal_orders.addressCountryCode',
+            'enupalpaypal_orders.addressName',
+            'enupalpaypal_orders.addressStreet',
+            'enupalpaypal_orders.addressZip'
         ]);
 
         if ($this->number) {

@@ -21,9 +21,11 @@ class PaypalController extends BaseController
     public $enableCsrfValidation = false;
 
     protected $allowAnonymous = ['actionIpn'];
-
+    
     /**
+     * @return \yii\web\Response
      * @throws \Exception
+     * @throws \Throwable
      */
     public function actionIpn()
     {
@@ -38,24 +40,61 @@ class PaypalController extends BaseController
 
             if ($ipn->verifyIPN()) {
                 $order = new Order();
-                $button = Paypal::$app->buttons->getButtonBySku($_POST['item_number']);
+                $button = Paypal::$app->buttons->getButtonBySku($this->getValue('item_number'));
                 if ($button){
                     $order->buttonId = $button->id;
                 }
 
+                $order->transactionInfo = json_encode($_POST);
+                $order->number = Paypal::$app->orders->getRandomStr();
+                $order->paypalTransactionId = $this->getValue('txn_id');
+                $order->email = $this->getValue('payer_email');
+                $order->firstName = $this->getValue('first_name');
+                $order->lastName = $this->getValue('last_name');
+                $order->total = $this->getValue('mc_gross');
+                $order->currency = $this->getValue('mc_currency');
+                $order->quantity = $this->getValue('quantity');
+                $order->shipping = $this->getValue('shipping');
+                $order->tax = $this->getValue('tax');
+                //Shipping
+                $order->addressCity = $this->getValue('address_city');
+                $order->addressCountry = $this->getValue('address_country');
+                $order->addressState = $this->getValue('address_state');
+                $order->addressCountryCode = $this->getValue('address_country_code');
+                $order->addressName = $this->getValue('address_name');
+                $order->addressStreet = $this->getValue('address_street');
+                $order->addressZip = $this->getValue('address_zip');
 
-                $payment_status = $_POST['payment_status'];
-                $payment_amount = $_POST['mc_gross'];
-                $payment_currency = $_POST['mc_currency'];
-                $txn_id = $_POST['txn_id'];
-                $receiver_email = $_POST['receiver_email'];
-                $payer_email = $_POST['payer_email'];
+                if ($this->getValue('test_ipn')){
+                    $order->testMode = 1;
+                }
+
+                $receiverEmail = $this->getValue('receiver_email');
+                $receiverId = $this->getValue('receiver_id');
+
+                if ($settings->liveAccount ==  $receiverEmail || $settings->liveAccount == $receiverId){
+                    Paypal::$app->orders->saveOrder($order);
+                }
             }else{
                 return $this->asJson(['success' => 'false']);
             }
         }
 
         return $this->asJson(['success' => 'true']);
+    }
+
+    /**
+     * @param $key
+     *
+     * @return string|null
+     */
+    private function getValue($key)
+    {
+        if (!isset($_POST[$key])){
+            return null;
+        }
+
+        return $_POST[$key];
     }
 
 }
