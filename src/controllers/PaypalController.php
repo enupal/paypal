@@ -54,7 +54,7 @@ class PaypalController extends BaseController
                 $order->email = $this->getValue('payer_email');
                 $order->firstName = $this->getValue('first_name');
                 $order->lastName = $this->getValue('last_name');
-                $order->total = $this->getValue('mc_gross');
+                $order->totalPrice = $this->getValue('mc_gross');
                 $order->currency = $this->getValue('mc_currency');
                 $order->quantity = $this->getValue('quantity');
                 $order->shipping = $this->getValue('shipping');

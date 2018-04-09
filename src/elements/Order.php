@@ -59,7 +59,7 @@ class Order extends Element
 
     public $buttonId;
     public $currency;
-    public $total;
+    public $totalPrice;
     public $shipping;
     public $tax;
     public $email;
@@ -246,7 +246,7 @@ class Order extends Element
     protected static function defineTableAttributes(): array
     {
         $attributes['number'] = ['label' => PaypalPlugin::t('Order Number')];
-        $attributes['total'] = ['label' => PaypalPlugin::t('Total')];
+        $attributes['totalPrice'] = ['label' => PaypalPlugin::t('Total')];
         $attributes['dateCreated'] = ['label' => PaypalPlugin::t('Date Ordered')];
         $attributes['status'] = ['label' => PaypalPlugin::t('Status')];
 
@@ -255,7 +255,7 @@ class Order extends Element
 
     protected static function defineDefaultTableAttributes(string $source): array
     {
-        $attributes = ['number', 'total', 'dateCreated', 'status'];
+        $attributes = ['number', 'totalPrice', 'dateCreated', 'status'];
 
         return $attributes;
     }
@@ -266,7 +266,7 @@ class Order extends Element
     protected function tableAttributeHtml(string $attribute): string
     {
         switch ($attribute) {
-            case 'total':
+            case 'totalPrice':
                 {
                     if ($this->$attribute >= 0) {
                         return Craft::$app->getFormatter()->asCurrency($this->$attribute, $this->currency);
@@ -303,7 +303,7 @@ class Order extends Element
 
         $record->number = $this->number;
         $record->currency = $this->currency;
-        $record->total = $this->total;
+        $record->totalPrice = $this->totalPrice;
         $record->buttonId = $this->buttonId;
         $record->quantity = $this->quantity;
         $record->paypalTransactionId = $this->paypalTransactionId;

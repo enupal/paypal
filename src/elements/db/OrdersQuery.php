@@ -20,6 +20,7 @@ class OrdersQuery extends ElementQuery
     public $number;
     public $buttonId;
     public $paypalTransactionId;
+    public $totalPrice;
 
     /**
      * @inheritdoc
@@ -43,6 +44,22 @@ class OrdersQuery extends ElementQuery
     public function getNumber()
     {
         return $this->number;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function totalPrice($value)
+    {
+        $this->totalPrice = $value;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getTotalPrice()
+    {
+        return $this->totalPrice;
     }
 
     /**
@@ -90,7 +107,7 @@ class OrdersQuery extends ElementQuery
             'enupalpaypal_orders.testMode',
             'enupalpaypal_orders.number',
             'enupalpaypal_orders.currency',
-            'enupalpaypal_orders.total',
+            'enupalpaypal_orders.totalPrice',
             'enupalpaypal_orders.buttonId',
             'enupalpaypal_orders.quantity',
             'enupalpaypal_orders.paypalTransactionId',

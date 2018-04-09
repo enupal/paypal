@@ -144,7 +144,7 @@ class Orders extends Component
      * @return string
      * @throws \Exception
      */
-    public function getRandomStr($length = 8, $keyspace = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ')
+    public function getRandomStr($length = 12, $keyspace = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ')
     {
         $str = '';
         $max = mb_strlen($keyspace, '8bit') - 1;

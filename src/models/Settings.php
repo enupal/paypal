@@ -20,7 +20,7 @@ class Settings extends Model
     // Globals
     public $returnUrl = '';
     public $cancelUrl = '';
-    public $defaultCurrency = '';
+    public $defaultCurrency = 'USD';
     public $returnToMerchantText = '';
     public $weightUnit = 'g';
     // Tax

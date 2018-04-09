@@ -93,7 +93,7 @@ class Install extends Migration
             'testMode' => $this->boolean()->defaultValue(0),
             'number' => $this->string(),
             'currency' => $this->string(),
-            'total' => $this->decimal(14, 4)->unsigned(),
+            'totalPrice' => $this->decimal(14, 4)->unsigned(),
             'shipping' => $this->decimal(14, 4)->unsigned(),
             'tax' => $this->decimal(14, 4)->unsigned(),
             'quantity' => $this->integer(),
