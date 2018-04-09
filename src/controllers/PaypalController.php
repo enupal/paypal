@@ -13,6 +13,7 @@ use craft\web\Controller as BaseController;
 
 use enupal\paypal\contracts\PaypalIPN;
 use enupal\paypal\elements\Order;
+use enupal\paypal\enums\OrderStatus;
 use enupal\paypal\Paypal;
 
 class PaypalController extends BaseController
@@ -46,6 +47,7 @@ class PaypalController extends BaseController
                     $order->buttonId = $button->id;
                 }
 
+                $order->orderStatusId = OrderStatus::NEW;
                 $order->transactionInfo = json_encode($_POST);
                 $order->number = Paypal::$app->orders->getRandomStr();
                 $order->paypalTransactionId = $this->getValue('txn_id');
@@ -65,6 +67,7 @@ class PaypalController extends BaseController
                 $order->addressName = $this->getValue('address_name');
                 $order->addressStreet = $this->getValue('address_street');
                 $order->addressZip = $this->getValue('address_zip');
+                $order->testMode = 0;
 
                 if ($this->getValue('test_ipn')){
                     $order->testMode = 1;
@@ -73,7 +76,13 @@ class PaypalController extends BaseController
                 $receiverEmail = $this->getValue('receiver_email');
                 $receiverId = $this->getValue('receiver_id');
 
-                if (($settings->liveAccount !=  $receiverEmail || $settings->liveAccount != $receiverId) || ($settings->sandboxAccount !=  $receiverEmail || $settings->sandboxAccount != $receiverId)){
+                $result = ($settings->liveAccount ==  $receiverEmail || $settings->liveAccount != $receiverId);
+
+                if ($order->testMode){
+                    $result = ($settings->sandboxAccount ==  $receiverEmail || $settings->sandboxAccount == $receiverId);
+                }
+
+                if (!$result){
                     Craft::error('PayPal receiverEmail does not match', __METHOD__);
                     return $this->asJson(['success' => 'false']);
                 }

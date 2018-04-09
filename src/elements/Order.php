@@ -165,7 +165,7 @@ class Order extends Element
      */
     public function getStatus()
     {
-        $statusId = $this->orderStatusId;
+        $statusId = $this->orderStatusId ?? OrderStatus::NEW;
 
         $colors = PaypalPlugin::$app->orders->getColorStatuses();
 
@@ -266,6 +266,14 @@ class Order extends Element
     protected function tableAttributeHtml(string $attribute): string
     {
         switch ($attribute) {
+            case 'total':
+                {
+                    if ($this->$attribute >= 0) {
+                        return Craft::$app->getFormatter()->asCurrency($this->$attribute, $this->currency);
+                    }
+
+                    return Craft::$app->getFormatter()->asCurrency($this->$attribute * -1, $this->currency);
+                }
             case 'dateCreated':
                 {
                     return $this->dateCreated->format("Y-m-d H:i");
