@@ -447,8 +447,8 @@ class PaypalButton extends Element
         switch ($attribute) {
             case 'amount':
                 {
-                    if ($this->$attribute >= 0) {
-                        return Craft::$app->getFormatter()->asCurrency($this->$attribute, $this->currency);
+                    if ($this->getBasePrice()) {
+                        return Craft::$app->getFormatter()->asCurrency($this->getBasePrice(), $this->currency);
                     }
 
                     return Craft::$app->getFormatter()->asCurrency($this->$attribute * -1, $this->currency);
@@ -557,5 +557,21 @@ class PaypalButton extends Element
         }
 
         return UrlHelper::siteUrl($url);
+    }
+
+    /**
+     * @return number|null
+     */
+    public function getBasePrice()
+    {
+        if ($this->amount){
+            return $this->amount;
+        }
+        if (isset($this->enupalPaypalPricedVariants[0]->options[0])){
+            $row = $this->enupalPaypalPricedVariants[0]->options[0];
+            return $row['price'] ?? null;
+        }
+
+        return null;
     }
 }

@@ -1,3 +1,4 @@
+{% set button = order.getButton() %}
 <div class="order-details pane">
     <table id="" class="data fullwidth collapsible">
         <thead>
@@ -14,10 +15,10 @@
 
         <tr class="infoRow">
             <td>
-                <a href="{{ order.getButton().cpEditUrl }}">{{ order.getButton().name }}</a>
+                <a href="{{ button.cpEditUrl }}">{{ button.name }}</a>
             </td>
             <td>
-                {{ order.getBasePrice()|currency(order.currency) }}
+                {{ button.getBasePrice()|currency(order.currency) }}
             </td>
             <td>
                 {{ order.quantity }}
@@ -25,7 +26,7 @@
             <td></td>
             <td></td>
             <td>
-                <span class="right">{{ order.totalPrice|currency(order.currency) }}</span>
+                <span class="right">{{ order.getBasePrice()|currency(order.currency) }}</span>
             </td>
             <td>
                     <span class="tableRowInfo" data-icon="info"
