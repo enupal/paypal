@@ -14,7 +14,7 @@ Craft.PaypalButton.OrderTableView = Craft.TableElementIndexView.extend({
         endDatepicker: null,
 
         $chartExplorer: null,
-        $totalPriceValue: null,
+        $totalValue: null,
         $chartContainer: null,
         $spinner: null,
         $error: null,
@@ -46,13 +46,13 @@ Craft.PaypalButton.OrderTableView = Craft.TableElementIndexView.extend({
                 $startDateContainer = $('<div class="datewrapper"></div>').appendTo($dateRange),
                 $to = $('<span class="to light">to</span>').appendTo($dateRange),
                 $endDateContainer = $('<div class="datewrapper"></div>').appendTo($dateRange),
-                $totalPrice = $('<div class="totalPrice"></div>').appendTo($chartHeader),
-                $totalPriceLabel = $('<div class="totalPrice-label light">' + Craft.t('enupal-paypal', 'Total Revenue') + '</div>').appendTo($totalPrice),
-                $totalPriceValueWrapper = $('<div class="totalPrice-value-wrapper"></div>').appendTo($totalPrice),
-                $totalPriceValue = $('<span class="totalPrice-value">&nbsp;</span>').appendTo($totalPriceValueWrapper);
+                $total = $('<div class="total"></div>').appendTo($chartHeader),
+                $totalLabel = $('<div class="total-label light">' + Craft.t('commerce', 'Total Revenue') + '</div>').appendTo($total),
+                $totalValueWrapper = $('<div class="total-value-wrapper"></div>').appendTo($total),
+                $totalValue = $('<span class="total-value">&nbsp;</span>').appendTo($totalValueWrapper);
 
             this.$chartExplorer = $chartExplorer;
-            this.$totalPriceValue = $totalPriceValue;
+            this.$totalValue = $totalValue;
             this.$chartContainer = $('<div class="chart-container"></div>').appendTo($chartExplorer);
             this.$spinner = $('<div class="spinner hidden" />').prependTo($chartHeader);
             this.$error = $('<div class="error"></div>').appendTo(this.$chartContainer);
@@ -144,10 +144,8 @@ Craft.PaypalButton.OrderTableView = Craft.TableElementIndexView.extend({
             this.$error.addClass('hidden');
             this.$chart.removeClass('error');
 
-
             Craft.postActionRequest('enupal-paypal/charts/get-revenue-data', requestData, $.proxy(function(response, textStatus) {
                 this.$spinner.addClass('hidden');
-
                 if (textStatus === 'success' && typeof(response.error) === 'undefined') {
                     if (!this.chart) {
                         this.chart = new Craft.charts.Area(this.$chart);
@@ -164,10 +162,10 @@ Craft.PaypalButton.OrderTableView = Craft.TableElementIndexView.extend({
 
                     this.chart.draw(chartDataTable, chartSettings);
 
-                    this.$totalPriceValue.html(response.totalPriceHtml);
+                    this.$totalValue.html(response.totalHtml);
                 }
                 else {
-                    var msg = Craft.t('enupal-paypal', 'An unknown error occurred.');
+                    var msg = Craft.t('commerce', 'An unknown error occurred.');
 
                     if (typeof(response) !== 'undefined' && response && typeof(response.error) !== 'undefined') {
                         msg = response.error;

@@ -17,9 +17,12 @@ use enupal\paypal\Paypal;
 
 class ChartsController extends ElementIndexesController
 {
+    // Public Methods
+    // =========================================================================
+
 
     /**
-     * Returns the data needed to display a Paypal Revenue chart.
+     * Returns the data needed to display a Revenue chart.
      *
      * @return \yii\web\Response
      * @throws \yii\base\Exception
@@ -41,27 +44,28 @@ class ChartsController extends ElementIndexesController
             ->limit(null);
 
         // Get the chart data table
-        $dataTable = ChartHelper::getRunChartDataFromQuery($query, $startDate, $endDate, 'enupalpaypal_orders.dateCreated', 'sum', '[[enupalpaypal_orders.totalPrice]]', [
+        $dataTable = ChartHelper::getRunChartDataFromQuery($query, $startDate, $endDate, 'enupalpaypal_orders.dateOrdered', 'sum', '[[enupalpaypal_orders.totalPrice]]', [
             'intervalUnit' => $intervalUnit,
             'valueLabel' => Craft::t('enupal-paypal', 'Revenue'),
             'valueType' => 'currency',
         ]);
 
-        // Get the totalPrice revenue
-        $totalPrice = 0;
+        // Get the total revenue
+        $total = 0;
 
         foreach ($dataTable['rows'] as $row) {
-            $totalPrice += $row[1];
+            $total += $row[1];
         }
 
         // Return everything
         $settings = Paypal::$app->settings->getSettings();
-        $totalPriceHtml = Craft::$app->getFormatter()->asCurrency($totalPrice, $settings->defaultCurrency);
+        $currency = $settings->defaultCurrency;
+        $totalHtml = Craft::$app->getFormatter()->asCurrency($total, strtoupper($currency));
 
         return $this->asJson([
             'dataTable' => $dataTable,
-            'totalPrice' => $totalPrice,
-            'totalPriceHtml' => $totalPriceHtml,
+            'total' => $total,
+            'totalHtml' => $totalHtml,
 
             'formats' => ChartHelper::formats(),
             'orientation' => Craft::$app->getLocale()->getOrientation(),

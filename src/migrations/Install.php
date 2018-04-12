@@ -33,8 +33,8 @@ class Install extends Migration
      */
     public function safeDown()
     {
-        $this->dropTableIfExists('{{%enupalpaypal_buttons}}');
         $this->dropTableIfExists('{{%enupalpaypal_orders}}');
+        $this->dropTableIfExists('{{%enupalpaypal_buttons}}');
 
         return true;
     }
@@ -53,7 +53,7 @@ class Install extends Migration
             'size' => $this->integer()->defaultValue(PaypalSize::BUYBIGCC),
             'currency' => $this->string()->defaultValue('USD'),
             'language' => $this->string()->defaultValue('en_US'),
-            'amount' => $this->decimal(14, 4)->unsigned(),
+            'amount' => $this->decimal(14, 4)->defaultValue(0),
             // Inventory
             'quantity' => $this->integer(),
             'hasUnlimitedStock' => $this->boolean()->defaultValue(1),
@@ -93,10 +93,11 @@ class Install extends Migration
             'testMode' => $this->boolean()->defaultValue(0),
             'number' => $this->string(),
             'currency' => $this->string(),
-            'totalPrice' => $this->decimal(14, 4)->unsigned(),
-            'shipping' => $this->decimal(14, 4)->unsigned(),
-            'tax' => $this->decimal(14, 4)->unsigned(),
+            'totalPrice' => $this->decimal(14, 4)->defaultValue(0),
+            'shipping' => $this->decimal(14, 4)->defaultValue(0),
+            'tax' => $this->decimal(14, 4)->defaultValue(0),
             'quantity' => $this->integer(),
+            'dateOrdered' => $this->dateTime(),
             'orderStatusId' => $this->integer(),
             'paypalTransactionId' => $this->string(),
             'transactionInfo' => $this->text(),
@@ -113,7 +114,7 @@ class Install extends Migration
             //
             'dateCreated' => $this->dateTime()->notNull(),
             'dateUpdated' => $this->dateTime()->notNull(),
-            'uid' => $this->uid(),
+            'uid' => $this->uid()
         ]);
     }
 

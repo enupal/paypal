@@ -1,0 +1,66 @@
+<div class="order-info">
+
+    <div class="order-info-box">
+        <table class="fullwidth data borderless">
+            <tr>
+                <td><strong>{{ "Reference"|t('enupal-paypal') }}</strong>
+                </td>
+                <td>
+                    <span id="order-number-short">{{ order.number }}</span>
+                </td>
+            </tr>
+            <tr>
+                <h6>Customer</h6>
+            </tr>
+            <tr>
+                <td><strong>{{ "First Name"|t('enupal-paypal') }}</strong>
+                </td>
+                <td>
+                    {{ order.firstName }}
+                </td>
+            </tr>
+            <tr>
+                <td><strong>{{ "Last Name"|t('enupal-paypal') }}</strong>
+                </td>
+                <td>
+                    {{ order.lastName }}
+                </td>
+            </tr>
+            <tr>
+                <td><strong>{{ "Email"|t('enupal-paypal') }}</strong>
+                </td>
+                <td>
+                    <a href="{{ order.email }}">{{ order.email }}</a>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <strong>{{ "Order Date"|t('enupal-paypal') }}</strong>
+                </td>
+                <td>
+                    <div id="order-completion" class="hidden">
+                        <span title="{{ order.dateOrdered|date('r') }}">{{ order.dateOrdered|date('D jS M Y') }}</span>
+                    </div>
+                </td>
+            </tr>
+
+            <tr>
+                <td><strong>{{ "Total Price"|t('enupal-paypal') }}</strong>
+                </td>
+                <td>{{ order.totalPrice|currency(order.currency) }}</td>
+            </tr>
+            <tr>
+                <td>
+                    <strong>{{ "Paypal ID"|t('enupal-paypal') }} </strong>
+                </td>
+                <td>{{ order.paypalTransactionId }}</td>
+            </tr>
+            <tr>
+                <td>
+                    <strong>{{ "Order Currency"|t('enupal-paypal') }} </strong>
+                </td>
+                <td>{{ order.currency }}</td>
+            </tr>
+        </table>
+    </div>
+</div>

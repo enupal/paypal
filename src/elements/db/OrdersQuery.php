@@ -21,6 +21,7 @@ class OrdersQuery extends ElementQuery
     public $buttonId;
     public $paypalTransactionId;
     public $totalPrice;
+    public $dateOrdered;
 
     /**
      * @inheritdoc
@@ -122,7 +123,8 @@ class OrdersQuery extends ElementQuery
             'enupalpaypal_orders.addressCountryCode',
             'enupalpaypal_orders.addressName',
             'enupalpaypal_orders.addressStreet',
-            'enupalpaypal_orders.addressZip'
+            'enupalpaypal_orders.addressZip',
+            'enupalpaypal_orders.dateOrdered'
         ]);
 
         if ($this->number) {
@@ -135,6 +137,14 @@ class OrdersQuery extends ElementQuery
             $this->subQuery->andWhere(Db::parseParam(
                 'enupalpaypal_orders.paypalTransactionId', $this->paypalTransactionId)
             );
+        }
+
+        if ($this->dateCreated) {
+            $this->subQuery->andWhere(Db::parseDateParam('enupalpaypal_orders.dateCreated', $this->dateCreated));
+        }
+
+        if ($this->dateOrdered) {
+            $this->subQuery->andWhere(Db::parseDateParam('enupalpaypal_orders.dateOrdered', $this->dateOrdered));
         }
 
         if ($this->orderBy !== null && empty($this->orderBy) && !$this->structureId && !$this->fixedOrder) {

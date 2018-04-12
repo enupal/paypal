@@ -11,6 +11,7 @@ namespace enupal\paypal\elements;
 use Craft;
 use craft\base\Element;
 use craft\elements\db\ElementQueryInterface;
+use craft\helpers\Db;
 use yii\base\ErrorHandler;
 use craft\helpers\UrlHelper;
 use craft\elements\actions\Delete;
@@ -73,6 +74,9 @@ class Order extends Element
     public $addressName;
     public $addressStreet;
     public $addressZip;
+
+    public $dateCreated;
+    public $dateOrdered;
 
     /**
      * Returns the element type name.
@@ -180,7 +184,7 @@ class Order extends Element
         $sources = [
             [
                 'key' => '*',
-                'label' => PaypalPlugin::t('All Buttons'),
+                'label' => PaypalPlugin::t('All Orders'),
             ]
         ];
 
@@ -234,7 +238,9 @@ class Order extends Element
     protected static function defineSortOptions(): array
     {
         $attributes = [
-            'elements.dateCreated' => PaypalPlugin::t('Date Created')
+            'dateOrdered' => PaypalPlugin::t('Date Ordered'),
+            'number' => PaypalPlugin::t('Order Number'),
+            'totalPrice' => PaypalPlugin::t('Total'),
         ];
 
         return $attributes;
@@ -247,15 +253,25 @@ class Order extends Element
     {
         $attributes['number'] = ['label' => PaypalPlugin::t('Order Number')];
         $attributes['totalPrice'] = ['label' => PaypalPlugin::t('Total')];
-        $attributes['dateCreated'] = ['label' => PaypalPlugin::t('Date Ordered')];
+        $attributes['dateOrdered'] = ['label' => PaypalPlugin::t('Date Ordered')];
         $attributes['status'] = ['label' => PaypalPlugin::t('Status')];
 
         return $attributes;
     }
 
+    /**
+     * @inheritdoc
+     */
+    public function datetimeAttributes(): array
+    {
+        $attributes = parent::datetimeAttributes();
+        $attributes[] = 'dateOrdered';
+        return $attributes;
+    }
+
     protected static function defineDefaultTableAttributes(string $source): array
     {
-        $attributes = ['number', 'totalPrice', 'dateCreated', 'status'];
+        $attributes = ['number', 'totalPrice', 'dateOrdered', 'status'];
 
         return $attributes;
     }
@@ -273,10 +289,6 @@ class Order extends Element
                     }
 
                     return Craft::$app->getFormatter()->asCurrency($this->$attribute * -1, $this->currency);
-                }
-            case 'dateCreated':
-                {
-                    return $this->dateCreated->format("Y-m-d H:i");
                 }
         }
 
@@ -301,6 +313,7 @@ class Order extends Element
             $record->id = $this->id;
         }
 
+        $record->dateOrdered = Db::prepareDateForDb(new \DateTime());
         $record->number = $this->number;
         $record->currency = $this->currency;
         $record->totalPrice = $this->totalPrice;
@@ -333,6 +346,17 @@ class Order extends Element
             [['number'], 'required'],
             [['number'], UniqueValidator::class, 'targetClass' => OrderRecord::class],
         ];
+    }
+
+
+    /**
+     * @return \craft\base\ElementInterface|null
+     */
+    public function getButton()
+    {
+        $button = PaypalPlugin::$app->buttons->getButtonById($this->id);
+
+        return $button;
     }
 
     public function getStatusName()
