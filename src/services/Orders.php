@@ -167,4 +167,20 @@ class Orders extends Component
 
         return $colors;
     }
+
+    /**
+     * @param Order $order
+     *
+     * @return Order
+     */
+    public function populateButtonFromPost(Order $order)
+    {
+        $request = Craft::$app->getRequest();
+
+        $postFields = $request->getBodyParam('fields');
+
+        $order->setAttributes($postFields, false);
+
+        return $order;
+    }
 }

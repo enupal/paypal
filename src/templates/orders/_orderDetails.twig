@@ -2,9 +2,9 @@
     <table id="" class="data fullwidth collapsible">
         <thead>
         <tr>
-            <th scope="col">{{ 'Button'|t('commerce') }}</th>
-            <th scope="col">{{ 'Price'|t('commerce') }}</span></th>
-            <th scope="col">{{ 'Quantity'|t('commerce') }}</th>
+            <th scope="col">{{ 'Button'|t('enupal-paypal') }}</th>
+            <th scope="col">{{ 'Price'|t('enupal-paypal') }}</span></th>
+            <th scope="col">{{ 'Quantity'|t('enupal-paypal') }}</th>
             <th scope="col"></th>
             <th scope="col"></th>
             <th scope="col"></th>
@@ -17,11 +17,12 @@
                 <a href="{{ order.getButton().cpEditUrl }}">{{ order.getButton().name }}</a>
             </td>
             <td>
-                {{ order.totalPrice|currency(order.currency) }}
+                {{ order.getBasePrice()|currency(order.currency) }}
             </td>
             <td>
                 {{ order.quantity }}
             </td>
+            <td></td>
             <td></td>
             <td>
                 <span class="right">{{ order.totalPrice|currency(order.currency) }}</span>
@@ -35,56 +36,39 @@
                 <tr>
                     <td></td>
                     <td>
-                        <strong>{{ "Shipping "|t('enupal-paypal')}}</strong><br>{{ adjustment.name|title }}
-                        <span class="info"><strong>{{ adjustment.type|title|t('commerce') }} {{ "Adjustment"|t('commerce') }}</strong><br> {{ adjustment.description }}</span>
+                        <strong>{{ "Shipping "|t('enupal-paypal')}}</strong><br>
                     </td>
                     <td></td>
                     <td></td>
                     <td></td>
                     <td>
-                        <span class="right">{{ adjustment.amount|currency(order.currency) }}</span>
+                        <span class="right">{{ order.shipping|currency(order.currency) }}</span>
                     </td>
                     <td></td>
                 </tr>
-        <tr>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td><strong>{{ "Items Total (with adjustments)" }}</strong></td>
-            <td>
-                <span class="right">{{ order.itemTotal|currency(order.currency) }}</span>
-            </td>
-            <td></td>
-        </tr>
+                <tr>
+                    <td></td>
+                    <td>
+                        <strong>{{ "Tax "|t('enupal-paypal')}}</strong><br>
+                    </td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>
+                        <span class="right">{{ order.tax|currency(order.currency) }}</span>
+                    </td>
+                    <td></td>
+                </tr>
 
-        {% for adjustment in order.orderAdjustments %}
-            <tr>
-                <td>
-                    <strong>{{ adjustment.type|title|t('commerce') }} {{ "Adjustment"|t('commerce') }}</strong><br>{{ adjustment.name|title }}
-                    <span class="info"><strong>{{ adjustment.type|title|t('commerce') }} {{ "Adjustment"|t('commerce') }}</strong><br> {{ adjustment.description }}</span>
-                </td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td>
-                    <span class="right">{{ adjustment.amount|currency(order.currency) }}</span>
-                </td>
-                <td></td>
-            </tr>
-        {% endfor %}
         <tr>
             <td></td>
             <td>
-                {% if order.isPaid and order.totalPrice > 0 %}
-                    <div class="paidLogo">
-                        <span>{{ 'PAID'|t('commerce') }}</div>
-                {% endif %}
+                <div class="isPaid">
+                    <span>{{ 'PAID'|t('enupal-paypal') }}</div>
             </td>
             <td></td>
             <td></td>
-            <td><h2>{{ "Total Price"|t('commerce') }}</h2></td>
+            <td><h2>{{ "Total Amount"|t('enupal-paypal') }}</h2></td>
             <td>
                 <h2 class="right">{{ order.totalPrice|currency(order.currency) }}</h2>
             </td>

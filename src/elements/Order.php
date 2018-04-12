@@ -354,9 +354,17 @@ class Order extends Element
      */
     public function getButton()
     {
-        $button = PaypalPlugin::$app->buttons->getButtonById($this->id);
+        $button = PaypalPlugin::$app->buttons->getButtonById($this->buttonId);
 
         return $button;
+    }
+
+
+    public function getBasePrice()
+    {
+        $price = $this->totalPrice - $this->tax - $this->shipping;
+
+        return $price;
     }
 
     public function getStatusName()

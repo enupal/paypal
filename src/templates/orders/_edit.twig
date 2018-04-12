@@ -3,11 +3,11 @@
 
 {% set selectedSubnavItem = "orders" %}
 
+{% set title = "Order: "~order.number %}
+
 {% set crumbs = [
     {    label: "Orders"|t('enupal-paypal'), url: url('enupal-paypal/orders') }
 ] %}
-
-{% set pdfUrl = order.getPdfUrl() %}
 
 {% hook "cp.enupal-paypal.order.edit" %}
 
@@ -48,14 +48,29 @@
 {% block details %}
 
     <div class="meta">
-        {% include 'commerce/orders/_orderInfo' %}
-        {#{% include 'commerce/orders/_addresses' %}#}
+        {% include 'enupal-paypal/orders/_orderInfo' %}
+        {#{% include 'enupal-paypal/orders/_addresses' %}#}
     </div>
 
 {% endblock %}
 
 {% block content %}
 
-    {% include 'commerce/orders/_orderDetails' %}
+    {% include 'enupal-paypal/orders/_orderDetails' %}
 
 {% endblock %}
+
+{% css %}
+    .isPaid {
+    font-weight: bold;
+    position: absolute;
+    top: 80px;
+    right: 350px;
+    font-family: 'Helvetica', serif;
+    color: rgba(211, 65, 50, 0.5);
+    font-size: 35px;
+    -ms-transform: rotate(-20deg);
+    -webkit-transform: rotate(-20deg);
+    transform: rotate(-20deg);
+    }
+{% endcss %}

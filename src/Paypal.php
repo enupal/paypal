@@ -168,6 +168,9 @@ class Paypal extends Plugin
             'enupal-paypal/buttons/edit/<buttonId:\d+>' =>
                 'enupal-paypal/buttons/edit-button',
 
+            'enupal-paypal/orders/edit/<orderId:\d+>' =>
+                'enupal-paypal/orders/edit-order',
+
             'enupal-paypal/payments/new' =>
                 'enupal-paypal/payments/edit-button',
 

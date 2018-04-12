@@ -109,6 +109,8 @@ class OrdersQuery extends ElementQuery
             'enupalpaypal_orders.number',
             'enupalpaypal_orders.currency',
             'enupalpaypal_orders.totalPrice',
+            'enupalpaypal_orders.tax',
+            'enupalpaypal_orders.shipping',
             'enupalpaypal_orders.buttonId',
             'enupalpaypal_orders.quantity',
             'enupalpaypal_orders.paypalTransactionId',
