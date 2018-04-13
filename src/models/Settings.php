@@ -53,6 +53,10 @@ class Settings extends Model
                 ['liveAccount'],
                 'required', 'on' => 'general'
             ],
+            [
+                ['customerNotificationSenderEmail'],
+                'email', 'on' => 'customerNotification'
+            ],
         ];
     }
 }

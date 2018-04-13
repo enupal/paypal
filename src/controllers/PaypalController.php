@@ -131,6 +131,8 @@ class PaypalController extends BaseController
             }
         }
 
+        Paypal::$app->orders->sendCustomerNotification($order);
+
         return $this->asJson(['success' => 'true']);
     }
 

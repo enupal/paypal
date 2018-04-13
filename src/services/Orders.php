@@ -196,7 +196,7 @@ class Orders extends Component
     {
         $settings = Paypal::$app->settings->getSettings();
 
-        if ($settings->enableCustomerNotification){
+        if (!$settings->enableCustomerNotification){
             return false;
         }
 
@@ -214,21 +214,25 @@ class Orders extends Component
         $textBody = $view->renderString("Thank you! your order number is: {{order.number}}", $variables);
 
         // @todo add support to users change the email
-
-        $htmlBody = $view->renderTemplate('enupal-paypal/_emails/customer', $variables);
+        $originalPath = $view->getTemplatesPath();
+        $view->setTemplatesPath($this->getEmailsPath());
+        $htmlBody = $view->renderTemplate('customer', $variables);
+        $view->setTemplatesPath($originalPath);
         $message->setSubject($subject);
         $message->setHtmlBody($htmlBody);
         $message->setTextBody($textBody);
         $message->setReplyTo($settings->customerNotificationReplyToEmail);
 
         $emails = explode(",", $settings->customerNotificationRecipients);
+        $message->setTo($emails);
 
         $mailer = Craft::$app->getMailer();
 
         try {
-            $result = $mailer->setTo($emails)->send($message);
+            $result = $mailer->send($message);
         } catch (\Throwable $e) {
             Craft::$app->getErrorHandler()->logException($e);
+            $result = false;
         }
 
         if ($result) {
@@ -238,5 +242,15 @@ class Orders extends Component
         }
 
         return $result;
+    }
+
+    /**
+     * @return bool|string
+     */
+    public function getEmailsPath()
+    {
+        $defaultTemplate = Craft::getAlias('@enupal/paypal/templates/_emails/');
+
+        return $defaultTemplate;
     }
 }

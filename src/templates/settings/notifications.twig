@@ -24,52 +24,60 @@
 {% set content %}
     <input type="hidden" name="action"
            value="enupal-paypal/settings/save-settings">
-    <input type="hidden" name="paypalScenario" value="notification">
+    <input type="hidden" name="paypalScenario" value="customerNotification">
     <div id="settings-cp">
         {% namespace 'settings' %}
 
             {{ forms.lightswitchField({
                 first: true,
-                label: "Enable Email Notification"|t('enupal-paypal'),
-                id: 'enableNotification',
-                name: 'enableNotification',
-                on: settings.enableNotification,
+                label: "Enable Customer Email Notification"|t('enupal-paypal'),
+                id: 'enableCustomerNotification',
+                name: 'enableCustomerNotification',
+                on: settings.enableCustomerNotification,
                 onLabel: "Enable",
                 offLabel: "Disable",
-                errors: settings.getErrors('enableNotification')
+                errors: settings.getErrors('enableCustomerNotification')
+            }) }}
+
+            {{ forms.textField({
+                label: "Subject"|t('enupal-paypal'),
+                instructions: "The email Subject"|t('enupal-paypal'),
+                name: 'customerNotificationSubject',
+                value: settings.customerNotificationSubject,
+                errors: (settings is defined ? settings.getErrors('customerNotificationSubject') : null)
             }) }}
 
             {{ forms.textField({
                 label: 'Email Recipients'|t('enupal-paypal'),
                 instructions: "A comma-delimited list of email addresses to notify when your backup is finished."|t('enupal-paypal'),
-                name: 'notificationRecipients',
-                value: settings.notificationRecipients,
-                errors: (settings is defined ? settings.getErrors('notificationRecipients') : null),
+                name: 'customerNotificationRecipients',
+                value: settings.customerNotificationRecipients,
+                errors: (settings is defined ? settings.getErrors('customerNotificationRecipients') : null),
                 first: true
             }) }}
 
             {{ forms.textField({
                 label: "Sender Name"|t('enupal-paypal'),
                 instructions: "The name of the sender of your notification email"|t('enupal-paypal'),
-                name: 'notificationSenderName',
-                value: settings.notificationSenderName,
-                errors: (settings is defined ? settings.getErrors('notificationSenderName') : null)
+                name: 'customerNotificationSenderName',
+                value: settings.customerNotificationSenderName,
+                errors: (settings is defined ? settings.getErrors('customerNotificationSenderName') : null)
             }) }}
 
             {{ forms.textField({
                 label: "Sender Email Address"|t('enupal-paypal'),
                 instructions: "The 'From' email address of your notification email"|t('enupal-paypal'),
-                name: 'notificationSenderEmail',
-                value: settings.notificationSenderEmail,
-                errors: (settings is defined ? settings.getErrors('notificationSenderEmail') : null)
+                name: 'customerNotificationSenderEmail',
+                value: settings.customerNotificationSenderEmail,
+                errors: (settings is defined ? settings.getErrors('customerNotificationSenderEmail') : null)
             }) }}
 
             {{ forms.textField({
                 label: "Reply To Email Address"|t('enupal-paypal'),
                 instructions: "The 'Reply To' email address of your notification email"|t('enupal-paypal'),
-                name: 'notificationReplyToEmail',
-                value: settings.notificationReplyToEmail,
-                errors: (settings is defined ? settings.getErrors('notificationReplyToEmail') : null)
+                name: 'customerNotificationReplyToEmail',
+                value: settings.customerNotificationReplyToEmail,
+                errors: (settings is defined ? settings.getErrors('customerNotificationReplyToEmail') : null)
             }) }}
 
         {% endnamespace %}
