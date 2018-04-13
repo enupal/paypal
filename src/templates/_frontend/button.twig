@@ -11,7 +11,7 @@
         {% set hiddenFieldsHtml = '' %}
         <div class="form-group">
             <label class="pricedVariantsLabel" for="os0">{{ pricedOptionsBlock.variantName }}</label>
-            <select class=form-control pricedVariants" name="os0" id="os0">
+            <select class="form-control pricedVariants" name="os0" id="os0">
                 {% for row in pricedOptionsBlock.options %}
                     {% if loop.first %}
                         <option value="">{{ "Select a"|t }} {{ pricedOptionsBlock.variantName|t }}</option>
@@ -29,15 +29,17 @@
         {% set pricedOptionsBlock = button.enupalPaypalBasicVariants.first() %}
         {% for basicOptionsBlock in button.enupalPaypalBasicVariants %}
             <input type="hidden" name="on{{ loop.index }}" value="{{ basicOptionsBlock.variantName }}">
-            <label class="basicVariantsLabel" for="os{{ loop.index }}">{{ basicOptionsBlock.variantName }}</label>
-            <select class="select-style basicVariants" name="os{{ loop.index }}" id="os{{ loop.index }}">
-                {% for row in basicOptionsBlock.options %}
-                    {% if loop.first %}
-                        <option value="">{{ "Select a"|t }} {{ basicOptionsBlock.variantName }}</option>
-                    {% endif %}
-                    <option value="{{ row.handle }}">{{ row.optionLabel|t }}</option>
-                {% endfor %}
-            </select>
+            <div class="form-group">
+                <label class="basicVariantsLabel" for="os{{ loop.index }}">{{ basicOptionsBlock.variantName }}</label>
+                <select class="form-control basicVariants" name="os{{ loop.index }}" id="os{{ loop.index }}">
+                    {% for row in basicOptionsBlock.options %}
+                        {% if loop.first %}
+                            <option value="">{{ "Select a"|t }} {{ basicOptionsBlock.variantName }}</option>
+                        {% endif %}
+                        <option value="{{ row.handle }}">{{ row.optionLabel|t }}</option>
+                    {% endfor %}
+                </select>
+            </div>
             <br>
         {% endfor %}
     {% endif %}
