@@ -11,11 +11,11 @@ namespace enupal\paypal;
 use Craft;
 use craft\events\RegisterUrlRulesEvent;
 use craft\web\UrlManager;
+use enupal\paypal\events\OrderCompleteEvent;
 use enupal\paypal\services\App;
+use enupal\paypal\services\Orders;
 use yii\base\Event;
 use craft\web\twig\variables\CraftVariable;
-use craft\services\SystemMessages;
-use craft\events\RegisterEmailMessagesEvent;
 
 use enupal\paypal\variables\PaypalVariable;
 use enupal\paypal\models\Settings;
@@ -59,19 +59,9 @@ class Paypal extends Plugin
             }
         );
 
-        Event::on(
-            SystemMessages::class,
-            SystemMessages::EVENT_REGISTER_MESSAGES,
-            function(RegisterEmailMessagesEvent $event) {
-                array_push($event->messages,
-                    [
-                        'key' => 'enupal_paypal_notification',
-                        'subject' => 'You have received a payment',
-                        'body' => 'We are happy to inform you that the you have received payment with id: {{payment.transactionId}}'
-                    ]
-                );
-            }
-        );
+        Event::on(Orders::class, Orders::EVENT_AFTER_ORDER_COMPLETE, function(OrderCompleteEvent $e) {
+            Paypal::$app->orders->sendCustomerNotification($e->order);
+        });
     }
 
     /**

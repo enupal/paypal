@@ -12,12 +12,31 @@ use Craft;
 use craft\mail\Message;
 use enupal\paypal\elements\Order;
 use enupal\paypal\enums\OrderStatus;
+use enupal\paypal\events\OrderCompleteEvent;
 use yii\base\Component;
 use enupal\paypal\Paypal;
 use enupal\paypal\records\Order as OrderRecord;
 
 class Orders extends Component
 {
+    /**
+     * @event OrderCompleteEvent The event that is triggered after a payment is made
+     *
+     * Plugins can get notified after a payment is made
+     *
+     * ```php
+     * use enupal\paypal\events\OrderCompleteEvent;
+     * use enupal\paypal\services\Orders;
+     * use yii\base\Event;
+     *
+     * Event::on(Orders::class, Orders::EVENT_AFTER_ORDER_COMPLETE, function(OrderCompleteEvent $e) {
+     *      $order = $e->order;
+     *     // Do something
+     * });
+     * ```
+     */
+    const EVENT_AFTER_ORDER_COMPLETE = 'afterOrderComplete';
+
     /**
      * Returns a Order model if one is found in the database by id
      *
@@ -87,6 +106,12 @@ class Orders extends Component
             $transaction = Craft::$app->db->beginTransaction();
             if (Craft::$app->elements->saveElement($order)) {
                 $transaction->commit();
+
+                $event = new OrderCompleteEvent([
+                    'order' => $order
+                ]);
+
+                $this->trigger(self::EVENT_AFTER_ORDER_COMPLETE, $event);
             }
         } catch (\Exception $e) {
             $transaction->rollback();
@@ -252,5 +277,71 @@ class Orders extends Component
         $defaultTemplate = Craft::getAlias('@enupal/paypal/templates/_emails/');
 
         return $defaultTemplate;
+    }
+
+    /**
+     * @return Order
+     * @throws \Exception
+     */
+    public function populateOrder()
+    {
+        $order = new Order();
+        $order->orderStatusId = OrderStatus::NEW;
+        $order->transactionInfo = json_encode($_POST);
+        $order->number = $this->getRandomStr();
+        $order->paypalTransactionId = $this->getPostValue('txn_id');
+        $order->email = $this->getPostValue('payer_email');
+        $order->firstName = $this->getPostValue('first_name');
+        $order->lastName = $this->getPostValue('last_name');
+        $order->totalPrice = $this->getPostValue('mc_gross');
+        $order->currency = $this->getPostValue('mc_currency');
+        $order->quantity = $this->getPostValue('quantity');
+        $order->shipping = $this->getPostValue('shipping') ?? 0;
+        $order->tax = $this->getPostValue('tax') ?? 0;
+        $order->discount = $this->getPostValue('discount') ?? 0;
+        // Shipping
+        $order->addressCity = $this->getPostValue('address_city');
+        $order->addressCountry = $this->getPostValue('address_country');
+        $order->addressState = $this->getPostValue('address_state');
+        $order->addressCountryCode = $this->getPostValue('address_country_code');
+        $order->addressName = $this->getPostValue('address_name');
+        $order->addressStreet = $this->getPostValue('address_street');
+        $order->addressZip = $this->getPostValue('address_zip');
+        $order->testMode = 0;
+        $order->transactionInfo = json_encode($_POST);
+        // Variants
+        $variants = [];
+        $search = "option_selection";
+        $search_length = strlen($search);
+        $pos = 1;
+        foreach ($_POST as $key => $value) {
+            if (substr($key, 0, $search_length) == $search) {
+                $name = $_POST['option_name'.$pos] ?? $pos;
+                $variants[$name] = $value;
+                $pos++;
+            }
+        }
+
+        $order->variants = json_encode($variants);
+
+        if ($this->getPostValue('test_ipn')){
+            $order->testMode = 1;
+        }
+
+        return $order;
+    }
+
+    /**
+     * @param $key
+     *
+     * @return string|null
+     */
+    private function getPostValue($key)
+    {
+        if (!isset($_POST[$key])){
+            return null;
+        }
+
+        return $_POST[$key];
     }
 }

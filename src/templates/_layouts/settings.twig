@@ -41,7 +41,12 @@
             </li>
             <li>
                 <a href="{{ cpUrl('enupal-paypal/settings/notifications') }}" {% if selectedSidebarItem == 'notifications' %} class="sel" {% endif %}><i
-                            class="fa fa-envelope fa-fw" aria-hidden="true"></i>&nbsp;{{ "Notifications"|t('enupal-paypal') }}
+                            class="fa fa-envelope fa-fw" aria-hidden="true"></i>&nbsp;{{ "Customer Notifications"|t('enupal-paypal') }}
+                </a>
+            </li>
+            <li>
+                <a href="{{ cpUrl('enupal-paypal/settings/adminnotifications') }}" {% if selectedSidebarItem == 'notifications' %} class="sel" {% endif %}><i
+                            class="fa fa-envelope fa-fw" aria-hidden="true"></i>&nbsp;{{ "Admin Notifications"|t('enupal-paypal') }}
                 </a>
             </li>
         </ul>

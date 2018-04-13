@@ -54,7 +54,11 @@ class Settings extends Model
                 'required', 'on' => 'general'
             ],
             [
-                ['customerNotificationSenderEmail'],
+                ['customerNotificationSenderEmail', 'customerNotificationReplyToEmail'],
+                'email', 'on' => 'customerNotification'
+            ],
+            [
+                ['adminNotificationSenderEmail', 'adminNotificationReplyToEmail'],
                 'email', 'on' => 'customerNotification'
             ],
         ];

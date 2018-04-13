@@ -40,58 +40,18 @@ class PaypalController extends BaseController
             }
 
             if ($ipn->verifyIPN()) {
-                $order = new Order();
+                $order = Paypal::$app->orders->populateOrder();
                 $button = Paypal::$app->buttons->getButtonBySku($this->getValue('item_number'));
+
                 if ($button){
                     $order->buttonId = $button->id;
                 }
-
-                $order->orderStatusId = OrderStatus::NEW;
-                $order->transactionInfo = json_encode($_POST);
-                $order->number = Paypal::$app->orders->getRandomStr();
-                $order->paypalTransactionId = $this->getValue('txn_id');
-                $order->email = $this->getValue('payer_email');
-                $order->firstName = $this->getValue('first_name');
-                $order->lastName = $this->getValue('last_name');
-                $order->totalPrice = $this->getValue('mc_gross');
-                $order->currency = $this->getValue('mc_currency');
-                $order->quantity = $this->getValue('quantity');
-                $order->shipping = $this->getValue('shipping') ?? 0;
-                $order->tax = $this->getValue('tax') ?? 0;
-                $order->discount = $this->getValue('discount') ?? 0;
-                // Shipping
-                $order->addressCity = $this->getValue('address_city');
-                $order->addressCountry = $this->getValue('address_country');
-                $order->addressState = $this->getValue('address_state');
-                $order->addressCountryCode = $this->getValue('address_country_code');
-                $order->addressName = $this->getValue('address_name');
-                $order->addressStreet = $this->getValue('address_street');
-                $order->addressZip = $this->getValue('address_zip');
-                $order->testMode = 0;
-                // Variants
-                $variants = [];
-                $search = "option_selection";
-                $search_length = strlen($search);
-                $pos = 1;
-                foreach ($_POST as $key => $value) {
-                    if (substr($key, 0, $search_length) == $search) {
-                        $name = $_POST['option_name'.$pos] ?? $pos;
-                        $variants[$name] = $value;
-                        $pos++;
-                    }
-                }
-
-                $order->variants = json_encode($variants);
 
                 // Stock
                 $saveButton = false;
                 if (!$button->hasUnlimitedStock && (int)$button->quantity > 0){
                     $button->quantity -= $order->quantity;
                     $saveButton = true;
-                }
-
-                if ($this->getValue('test_ipn')){
-                    $order->testMode = 1;
                 }
 
                 $receiverEmail = $this->getValue('receiver_email');
@@ -102,8 +62,6 @@ class PaypalController extends BaseController
                 if ($order->testMode){
                     $result = ($settings->sandboxAccount ==  $receiverEmail || $settings->sandboxAccount == $receiverId);
                 }
-
-                $order->transactionInfo = json_encode($_POST);
 
                 if (!$result){
                     Craft::error('PayPal receiverEmail does not match', __METHOD__);
@@ -126,8 +84,6 @@ class PaypalController extends BaseController
                 return $this->asJson(['success' => 'false']);
             }
         }
-
-        Paypal::$app->orders->sendCustomerNotification($order);
 
         return $this->asJson(['success' => 'true']);
     }
