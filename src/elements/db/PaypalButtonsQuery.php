@@ -129,7 +129,7 @@ class PaypalButtonsQuery extends ElementQuery
         }
 
         if ($this->orderBy !== null && empty($this->orderBy) && !$this->structureId && !$this->fixedOrder) {
-            $this->orderBy = 'elements.dateCreated desc';
+            $this->orderBy = 'dateCreated desc';
         }
 
         return parent::beforePrepare();

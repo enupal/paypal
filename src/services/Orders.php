@@ -213,7 +213,7 @@ class Orders extends Component
         $subject = $view->renderString($settings->customerNotificationSubject, $variables);
         $textBody = $view->renderString("Thank you! your order number is: {{order.number}}", $variables);
 
-        // @todo add support to users change the email
+        // @todo add support to users change the email template
         $originalPath = $view->getTemplatesPath();
         $view->setTemplatesPath($this->getEmailsPath());
         $htmlBody = $view->renderTemplate('customer', $variables);

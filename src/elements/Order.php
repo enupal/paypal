@@ -256,8 +256,12 @@ class Order extends Element
     {
         $attributes['number'] = ['label' => PaypalPlugin::t('Order Number')];
         $attributes['totalPrice'] = ['label' => PaypalPlugin::t('Total')];
+        $attributes['firstName'] = ['label' => PaypalPlugin::t('Amount')];
+        $attributes['lastName'] = ['label' => PaypalPlugin::t('Amount')];
+        $attributes['address'] = ['label' => PaypalPlugin::t('Shipping Address')];
+        $attributes['email'] = ['label' => PaypalPlugin::t('Customer Email')];
+        $attributes['paypalTransactionId'] = ['label' => PaypalPlugin::t('PayPal Transaction Id')];
         $attributes['dateOrdered'] = ['label' => PaypalPlugin::t('Date Ordered')];
-        $attributes['status'] = ['label' => PaypalPlugin::t('Status')];
 
         return $attributes;
     }
@@ -274,7 +278,7 @@ class Order extends Element
 
     protected static function defineDefaultTableAttributes(string $source): array
     {
-        $attributes = ['number', 'totalPrice', 'dateOrdered', 'status'];
+        $attributes = ['number', 'totalPrice', 'email', 'dateOrdered'];
 
         return $attributes;
     }
@@ -293,6 +297,15 @@ class Order extends Element
 
                     return Craft::$app->getFormatter()->asCurrency($this->$attribute * -1, $this->currency);
                 }
+            case 'address':
+                {
+                    return $this->getShippingAddress();
+                }
+            case 'email':
+                {
+                    return '<a href="mailto:'.$this->email.'">'.$this->email.'</a>';
+                }
+
         }
 
         return parent::tableAttributeHtml($attribute);
@@ -318,6 +331,7 @@ class Order extends Element
 
         $record->dateOrdered = Db::prepareDateForDb(new \DateTime());
         $record->number = $this->number;
+        $record->orderStatusId = $this->orderStatusId;
         $record->currency = $this->currency;
         $record->totalPrice = $this->totalPrice;
         $record->buttonId = $this->buttonId;
@@ -400,5 +414,16 @@ class Order extends Element
         }
 
         return $variants;
+    }
+
+    /**
+     * @return string
+     */
+    public function getShippingAddress()
+    {
+        $address = "<address>{{ order.addressName }}<br>{{ order.addressStreet }}<br>{{ order.addressCity }}, {{ order.addressState }} {{ order.addressZip }}<br>{{ order.addressCountry }}</address>";
+        $address = Craft::$app->getView()->renderString($address, ['order'=>$this]);
+
+        return $address;
     }
 }

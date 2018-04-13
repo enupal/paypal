@@ -464,6 +464,16 @@ class PaypalButton extends Element
 
     /**
      * @inheritdoc
+     */
+    public function datetimeAttributes(): array
+    {
+        $attributes = parent::datetimeAttributes();
+        $attributes[] = 'dateCreated';
+        return $attributes;
+    }
+
+    /**
+     * @inheritdoc
      * @throws Exception if reasons
      */
     public function afterSave(bool $isNew)

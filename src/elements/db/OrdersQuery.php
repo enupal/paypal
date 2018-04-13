@@ -20,6 +20,7 @@ class OrdersQuery extends ElementQuery
     public $number;
     public $buttonId;
     public $paypalTransactionId;
+    public $orderStatusId;
     public $totalPrice;
     public $tax;
     public $dateOrdered;
@@ -143,6 +144,13 @@ class OrdersQuery extends ElementQuery
                 'enupalpaypal_orders.paypalTransactionId', $this->paypalTransactionId)
             );
         }
+
+        if ($this->orderStatusId) {
+            $this->subQuery->andWhere(Db::parseParam(
+                'enupalpaypal_orders.orderStatusId', $this->orderStatusId)
+            );
+        }
+
 
         if ($this->dateCreated) {
             $this->subQuery->andWhere(Db::parseDateParam('enupalpaypal_orders.dateCreated', $this->dateCreated));

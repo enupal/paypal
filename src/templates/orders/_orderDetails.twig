@@ -125,11 +125,6 @@
 {% if order.addressCity %}
     <br>
     <h3>{{ 'Shipping Address'|t('enupal-paypal') }}</h3>
-    <address>
-        {{ order.addressName }}<br>
-        {{ order.addressStreet }}<br>
-        {{ order.addressCity }}, {{ order.addressState }} {{ order.addressZip }}<br>
-        {{ order.addressCountry }}
-    </address>
+    {{ order.getShippingAddress()|raw }}
 {% endif %}
 
