@@ -126,6 +126,7 @@ class OrdersQuery extends ElementQuery
             'enupalpaypal_orders.addressName',
             'enupalpaypal_orders.addressStreet',
             'enupalpaypal_orders.addressZip',
+            'enupalpaypal_orders.variants',
             'enupalpaypal_orders.dateOrdered'
         ]);
 

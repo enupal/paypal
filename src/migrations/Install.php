@@ -96,6 +96,7 @@ class Install extends Migration
             'totalPrice' => $this->decimal(14, 4)->defaultValue(0),
             'shipping' => $this->decimal(14, 4)->defaultValue(0),
             'tax' => $this->decimal(14, 4)->defaultValue(0),
+            'discount' => $this->decimal(14, 4)->defaultValue(0),
             'quantity' => $this->integer(),
             'dateOrdered' => $this->dateTime(),
             'orderStatusId' => $this->integer(),
@@ -111,6 +112,7 @@ class Install extends Migration
             'addressName' => $this->string(),
             'addressStreet' => $this->string(),
             'addressZip' => $this->string(),
+            'variants' => $this->text(),
             //
             'dateCreated' => $this->dateTime()->notNull(),
             'dateUpdated' => $this->dateTime()->notNull(),

@@ -5,30 +5,32 @@
     <input name="amount" value="{{ button.amount|number }}" type="hidden">
     {% endif %}
     {# <!-- Provide a drop-down menu option field with prices. --> #}
-    {% if button.enupalPaypalPricedVariants is defined and button.enupalPaypalPricedVariants %}
+    {% if button.enupalPaypalPricedVariants is defined and button.enupalPaypalPricedVariants and button.enupalPaypalPricedVariants.first()  %}
         {% set pricedOptionsBlock = button.enupalPaypalPricedVariants.first() %}
         <input type="hidden" name="on0" value="{{ pricedOptionsBlock.variantName }}">
-        <label class="pricedVariantsLabel" for="os0">{{ pricedOptionsBlock.variantName }}</label>
         {% set hiddenFieldsHtml = '' %}
-        <select class="pricedVariants" name="os0" id="os0">
-            {% for row in pricedOptionsBlock.options %}
-                {% if loop.first %}
-                    <option value="">{{ "Select a"|t }} {{ pricedOptionsBlock.variantName|t }}</option>
-                {% endif %}
-                <option value="{{ row.handle }}">{{ row.optionLabel|t }}</option>
-                {% set hiddenFieldsHtml = hiddenFieldsHtml ~ '<input type="hidden" name="option_select'~loop.index0~'" value="'~row.handle~'"><input type="hidden" name="option_amount'~loop.index0~'" value="'~row.price|number~'">' %}
-            {% endfor %}
-        </select>
+        <div class="form-group">
+            <label class="pricedVariantsLabel" for="os0">{{ pricedOptionsBlock.variantName }}</label>
+            <select class=form-control pricedVariants" name="os0" id="os0">
+                {% for row in pricedOptionsBlock.options %}
+                    {% if loop.first %}
+                        <option value="">{{ "Select a"|t }} {{ pricedOptionsBlock.variantName|t }}</option>
+                    {% endif %}
+                    <option value="{{ row.handle }}">{{ row.optionLabel|t }}</option>
+                    {% set hiddenFieldsHtml = hiddenFieldsHtml ~ '<input type="hidden" name="option_select'~loop.index0~'" value="'~row.handle~'"><input type="hidden" name="option_amount'~loop.index0~'" value="'~row.price|number~'">' %}
+                {% endfor %}
+            </select>
+        </div>
         {{ hiddenFieldsHtml|raw }}
         <br>
     {% endif %}
     {# <!-- Provide a drop-down menu option basic variants. --> #}
-    {% if button.enupalPaypalBasicVariants is defined and button.enupalPaypalBasicVariants %}
+    {% if button.enupalPaypalBasicVariants is defined and button.enupalPaypalBasicVariants and button.enupalPaypalBasicVariants.first() %}
         {% set pricedOptionsBlock = button.enupalPaypalBasicVariants.first() %}
         {% for basicOptionsBlock in button.enupalPaypalBasicVariants %}
             <input type="hidden" name="on{{ loop.index }}" value="{{ basicOptionsBlock.variantName }}">
             <label class="basicVariantsLabel" for="os{{ loop.index }}">{{ basicOptionsBlock.variantName }}</label>
-            <select class="basicVariants" name="os{{ loop.index }}" id="os{{ loop.index }}">
+            <select class="select-style basicVariants" name="os{{ loop.index }}" id="os{{ loop.index }}">
                 {% for row in basicOptionsBlock.options %}
                     {% if loop.first %}
                         <option value="Select a {{ basicOptionsBlock.variantName }}">{{ "Select a"|t }} {{ basicOptionsBlock.variantName }}</option>
@@ -51,7 +53,8 @@
     {% if button.shippingAmount %}
     <input name="shipping" value="{{ button.shippingAmount|number }}" type="hidden">
     {% endif %}
-    <input name="notify_url" value="{{ button.getIpnUrl() }}" type="hidden">
+    {# @todo {{ button.getIpnUrl() }} #}
+    <input name="notify_url" value="https://enupal.com/enupal/paypalIpn" type="hidden">
     <input name="return" value="{{ button.getReturnUrl() }}" type="hidden">
     <input name="lc" value="{{ button.language }}" type="hidden">
     <input name="cancel_return" value="{{ button.getCancelUrl() }}" type="hidden">

@@ -63,6 +63,7 @@ class Order extends Element
     public $totalPrice;
     public $shipping;
     public $tax;
+    public $discount;
     public $email;
     public $firstName;
     public $lastName;
@@ -74,6 +75,8 @@ class Order extends Element
     public $addressName;
     public $addressStreet;
     public $addressZip;
+    // variants
+    public $variants;
 
     public $dateCreated;
     public $dateOrdered;
@@ -325,6 +328,7 @@ class Order extends Element
         $record->lastName = $this->lastName;
         $record->shipping = $this->shipping;
         $record->tax = $this->tax;
+        $record->discount = $this->discount;
         $record->addressCity = $this->addressCity;
         $record->addressCountry = $this->addressCountry;
         $record->addressState = $this->addressState;
@@ -332,6 +336,8 @@ class Order extends Element
         $record->addressName = $this->addressName;
         $record->addressStreet = $this->addressStreet;
         $record->addressZip = $this->addressZip;
+        $record->variants = $this->variants;
+        $record->transactionInfo = $this->transactionInfo;
         $record->save(false);
 
         parent::afterSave($isNew);
