@@ -33,7 +33,7 @@
             <select class="select-style basicVariants" name="os{{ loop.index }}" id="os{{ loop.index }}">
                 {% for row in basicOptionsBlock.options %}
                     {% if loop.first %}
-                        <option value="Select a {{ basicOptionsBlock.variantName }}">{{ "Select a"|t }} {{ basicOptionsBlock.variantName }}</option>
+                        <option value="">{{ "Select a"|t }} {{ basicOptionsBlock.variantName }}</option>
                     {% endif %}
                     <option value="{{ row.handle }}">{{ row.optionLabel|t }}</option>
                 {% endfor %}

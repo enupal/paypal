@@ -338,6 +338,7 @@ class Order extends Element
         $record->addressZip = $this->addressZip;
         $record->variants = $this->variants;
         $record->transactionInfo = $this->transactionInfo;
+        $record->testMode = $this->testMode;
         $record->save(false);
 
         parent::afterSave($isNew);

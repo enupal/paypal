@@ -69,6 +69,12 @@ class PaypalVariable
         }
 
         if ($button) {
+            if (!$button->hasUnlimitedStock && (int)$button->quantity < 0) {
+                $buttonHtml = '<span class="error">Out of Stock</span>';
+
+                return TemplateHelper::raw($buttonHtml);
+            }
+
             $view = Craft::$app->getView();
 
             $view->setTemplatesPath($templatePath);
