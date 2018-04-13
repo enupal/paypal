@@ -24,7 +24,7 @@ use craft\base\Plugin;
 class Paypal extends Plugin
 {
     /**
-     * Enable use of PaypalButton::$app-> in place of Craft::$app->
+     * Enable use of Paypal::$app-> in place of Craft::$app->
      *
      * @var App
      */
@@ -129,21 +129,6 @@ class Paypal extends Plugin
     public static function t($message, array $params = [])
     {
         return Craft::t('enupal-paypal', $message, $params);
-    }
-
-    public static function log($message, $type = 'info')
-    {
-        Craft::$type(self::t($message), __METHOD__);
-    }
-
-    public static function info($message)
-    {
-        Craft::info(self::t($message), __METHOD__);
-    }
-
-    public static function error($message)
-    {
-        Craft::error(self::t($message), __METHOD__);
     }
 
     /**

@@ -176,9 +176,9 @@ class Buttons extends Component
         }
 
         if ($emailSent) {
-            Paypal::info('Notification Email sent successfully!');
+            Craft::info('Notification Email sent successfully!', __METHOD__);
         } else {
-            Paypal::error('There was an error sending the Notification email');
+            Craft::error('There was an error sending the Notification email', __METHOD__);
         }
 
         return $emailSent;
@@ -204,7 +204,7 @@ class Buttons extends Component
 
             if (!$success) {
                 $transaction->rollback();
-                Paypal::error("Couldn’t delete Paypal Button");
+                Craft::error("Couldn’t delete Paypal Button", __METHOD__);
 
                 return false;
             }
@@ -420,7 +420,7 @@ class Buttons extends Component
         if (is_null($matrixPricedField) || is_null($matrixBasicField)){
             // Can't add variants to this button (Someone delete the fields)
             // Let's not throw an exception and just return the Button element with not variants
-            Paypal::error("Can't add variants to PayPal Button");
+            Craft::error("Can't add variants to PayPal Button", __METHOD__);
             return $button;
         }
 

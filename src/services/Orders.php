@@ -141,7 +141,7 @@ class Orders extends Component
 
             if (!$success) {
                 $transaction->rollback();
-                Paypal::error("Couldn’t delete Paypal Order");
+                Craft::error("Couldn’t delete Paypal Order", __METHOD__);
 
                 return false;
             }
