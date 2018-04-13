@@ -4,7 +4,7 @@
         <thead>
         <tr>
             <th scope="col">{{ 'Button'|t('enupal-paypal') }}</th>
-            <th scope="col">{{ 'Price'|t('enupal-paypal') }}</span></th>
+            <th scope="col"></th>
             <th scope="col">{{ 'Quantity'|t('enupal-paypal') }}</th>
             <th scope="col"></th>
             <th scope="col"></th>
@@ -18,7 +18,6 @@
                 <a href="{{ button.cpEditUrl }}">{{ button.name }}</a>
             </td>
             <td>
-                {{ button.getBasePrice()|currency(order.currency) }}
             </td>
             <td>
                 {{ order.quantity }}
@@ -26,11 +25,8 @@
             <td></td>
             <td></td>
             <td>
-                <span class="right">{{ order.getBasePrice()|currency(order.currency) }}</span>
             </td>
             <td>
-                    <span class="tableRowInfo" data-icon="info"
-                          href="#"></span>
             </td>
         </tr>
                 {# SHIPPING AND TAX #}
@@ -60,6 +56,19 @@
                     </td>
                     <td></td>
                 </tr>
+                <tr>
+                    <td></td>
+                    <td>
+                        <strong>{{ "Discount "|t('enupal-paypal')}}</strong><br>
+                    </td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>
+                        <span class="right">-{{ order.discount|currency(order.currency) }}</span>
+                    </td>
+                    <td></td>
+                </tr>
 
         <tr>
             <td></td>
@@ -78,3 +87,37 @@
         </tbody>
     </table>
 </div>
+{% for key, variant in order.getVariants() %}
+    {% if loop.first %}
+        <h3>Variants</h3>
+        <div class="order-details pane">
+            <table id="" class="data fullwidth collapsible">
+            <thead>
+            <tr>
+                <th scope="col">{{ 'Label'|t('enupal-paypal') }}</th>
+                <th scope="col"></th>
+                <th scope="col">{{ 'Value'|t('enupal-paypal') }}</th>
+                <th scope="col"></th>
+            </tr>
+            </thead>
+        <tbody>
+    {% endif %}
+        <tr class="infoRow">
+            <td>
+                {{ key }}
+            </td>
+            <td>
+            </td>
+            <td>
+                {{ variant }}
+            </td>
+            <td>
+            </td>
+        </tr>
+    {% if loop.last %}
+          </tbody>
+        </table>
+    </div>
+    {% endif %}
+{% endfor %}
+

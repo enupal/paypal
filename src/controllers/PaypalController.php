@@ -60,9 +60,9 @@ class PaypalController extends BaseController
                 $order->totalPrice = $this->getValue('mc_gross');
                 $order->currency = $this->getValue('mc_currency');
                 $order->quantity = $this->getValue('quantity');
-                $order->shipping = $this->getValue('shipping');
-                $order->tax = $this->getValue('tax');
-                $order->discount = $this->getValue('discount');
+                $order->shipping = $this->getValue('shipping') ?? 0;
+                $order->tax = $this->getValue('tax') ?? 0;
+                $order->discount = $this->getValue('discount') ?? 0;
                 // Shipping
                 $order->addressCity = $this->getValue('address_city');
                 $order->addressCountry = $this->getValue('address_country');

@@ -366,7 +366,9 @@ class Order extends Element
         return $button;
     }
 
-
+    /**
+     * @return mixed
+     */
     public function getBasePrice()
     {
         $price = $this->totalPrice - $this->tax - $this->shipping;
@@ -374,6 +376,9 @@ class Order extends Element
         return $price;
     }
 
+    /**
+     * @return string
+     */
     public function getStatusName()
     {
         $statuses = OrderStatus::getConstants();
@@ -381,5 +386,19 @@ class Order extends Element
         $statuses = array_flip($statuses);
 
         return ucwords(strtolower($statuses[$this->orderStatusId]));
+    }
+
+    /**
+     * @return array|mixed
+     */
+    public function getVariants()
+    {
+        $variants = [];
+
+        if ($this->variants){
+            $variants = json_decode($this->variants, true);
+        }
+
+        return $variants;
     }
 }

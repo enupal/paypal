@@ -21,6 +21,7 @@ class OrdersQuery extends ElementQuery
     public $buttonId;
     public $paypalTransactionId;
     public $totalPrice;
+    public $tax;
     public $dateOrdered;
 
     /**
@@ -110,6 +111,7 @@ class OrdersQuery extends ElementQuery
             'enupalpaypal_orders.currency',
             'enupalpaypal_orders.totalPrice',
             'enupalpaypal_orders.tax',
+            'enupalpaypal_orders.discount',
             'enupalpaypal_orders.shipping',
             'enupalpaypal_orders.buttonId',
             'enupalpaypal_orders.quantity',
