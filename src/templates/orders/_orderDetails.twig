@@ -4,8 +4,8 @@
         <thead>
         <tr>
             <th scope="col">{{ 'Button'|t('enupal-paypal') }}</th>
-            <th scope="col"></th>
             <th scope="col">{{ 'Quantity'|t('enupal-paypal') }}</th>
+            <th scope="col"></th>
             <th scope="col"></th>
             <th scope="col"></th>
             <th scope="col"></th>
@@ -18,9 +18,9 @@
                 <a href="{{ button.cpEditUrl }}">{{ button.name }}</a>
             </td>
             <td>
+                {{ order.quantity }}
             </td>
             <td>
-                {{ order.quantity }}
             </td>
             <td></td>
             <td></td>
@@ -89,6 +89,7 @@
 </div>
 {% for key, variant in order.getVariants() %}
     {% if loop.first %}
+        <br>
         <h3>Variants</h3>
         <div class="order-details pane">
             <table id="" class="data fullwidth collapsible">
@@ -120,4 +121,15 @@
     </div>
     {% endif %}
 {% endfor %}
+
+{% if order.addressCity %}
+    <br>
+    <h3>{{ 'Shipping Address'|t('enupal-paypal') }}</h3>
+    <address>
+        {{ order.addressName }}<br>
+        {{ order.addressStreet }}<br>
+        {{ order.addressCity }}, {{ order.addressState }} {{ order.addressZip }}<br>
+        {{ order.addressCountry }}
+    </address>
+{% endif %}
 

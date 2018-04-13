@@ -10,7 +10,7 @@
                 </td>
             </tr>
             <tr>
-                <h6>Customer</h6>
+                <h4>{{ 'Information'|t('enupal-test') }}</h4>
             </tr>
             <tr>
                 <td><strong>{{ "First Name"|t('enupal-paypal') }}</strong>
@@ -38,7 +38,7 @@
                     <strong>{{ "Order Date"|t('enupal-paypal') }}</strong>
                 </td>
                 <td>
-                    <div id="order-completion" class="hidden">
+                    <div id="order-completion">
                         <span title="{{ order.dateOrdered|date('r') }}">{{ order.dateOrdered|date('D jS M Y') }}</span>
                     </div>
                 </td>

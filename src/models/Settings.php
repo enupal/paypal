@@ -14,24 +14,34 @@ use enupal\paypal\enums\DiscountType;
 class Settings extends Model
 {
     // General
-    public $liveAccount = '';
-    public $sandboxAccount = '';
+    public $liveAccount;
+    public $sandboxAccount;
     public $testMode = 1;
     // Globals
-    public $returnUrl = '';
-    public $cancelUrl = '';
+    public $returnUrl;
+    public $cancelUrl;
     public $defaultCurrency = 'USD';
-    public $returnToMerchantText = '';
+    public $returnToMerchantText;
     public $weightUnit = 'g';
     // Tax
     public $taxType = DiscountType::RATE;
-    public $tax = '';
-    // Notification
-    public $enableNotification = '';
-    public $notificationRecipients = '';
-    public $notificationSenderName = '';
-    public $notificationSenderEmail = '';
-    public $notificationReplyToEmail = '';
+    public $tax;
+    // Notification Customer
+    public $enableCustomerNotification;
+    public $customerNotificationRecipients;
+    public $customerNotificationSubject;
+    public $customerNotificationSenderName;
+    public $customerNotificationSenderEmail;
+    public $customerNotificationReplyToEmail;
+    public $customerNotificationTemplate;
+    // Notification Admin
+    public $enableAdminNotification;
+    public $adminNotificationRecipients;
+    public $adminNotificationSenderName;
+    public $adminNotificationSubject;
+    public $adminNotificationSenderEmail;
+    public $adminNotificationReplyToEmail;
+    public $adminNotificationTemplate;
 
     /**
      * @inheritdoc

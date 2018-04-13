@@ -9,6 +9,7 @@
 namespace enupal\paypal\services;
 
 use Craft;
+use craft\mail\Message;
 use enupal\paypal\elements\Order;
 use enupal\paypal\enums\OrderStatus;
 use yii\base\Component;
@@ -182,5 +183,60 @@ class Orders extends Component
         $order->setAttributes($postFields, false);
 
         return $order;
+    }
+
+    /**
+     * @param Order $order
+     *
+     * @return bool
+     * @throws \Twig_Error_Loader
+     * @throws \yii\base\Exception
+     */
+    public function sendCustomerNotification(Order $order)
+    {
+        $settings = Paypal::$app->settings->getSettings();
+
+        if ($settings->enableCustomerNotification){
+            return false;
+        }
+
+        $message = new Message();
+
+        $message->setFrom([$settings->customerNotificationSenderEmail => $settings->customerNotificationSenderName]);
+
+        $view = Craft::$app->getView();
+
+        $variables = [];
+
+        $variables['order'] = $order;
+
+        $subject = $view->renderString($settings->customerNotificationSubject, $variables);
+        $textBody = $view->renderString("Thank you! your order number is: {{order.number}}", $variables);
+
+        // @todo add support to users change the email
+
+        $htmlBody = $view->renderTemplate('enupal-paypal/_emails/customer', $variables);
+        $message->setSubject($subject);
+        $message->setHtmlBody($htmlBody);
+        $message->setTextBody($textBody);
+        $message->setReplyTo($settings->customerNotificationReplyToEmail);
+
+        $emails = explode(",", $settings->customerNotificationRecipients);
+
+        $mailer = Craft::$app->getMailer();
+
+        try {
+            $result = $mailer->setTo($emails)->send($message);
+        } catch (\Throwable $e) {
+            Craft::$app->getErrorHandler()->logException($e);
+        }
+
+        if ($result) {
+            Craft::info('Customer email sent succesfully',__METHOD__);
+        } else {
+            Craft::error('Unable to send customer email',__METHOD__);
+        }
+
+        return $result;
     }
 }
