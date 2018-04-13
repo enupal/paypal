@@ -59,7 +59,7 @@ class Settings extends Model
             ],
             [
                 ['adminNotificationSenderEmail', 'adminNotificationReplyToEmail'],
-                'email', 'on' => 'customerNotification'
+                'email', 'on' => 'adminNotification'
             ],
         ];
     }

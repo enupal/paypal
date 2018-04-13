@@ -61,6 +61,7 @@ class Paypal extends Plugin
 
         Event::on(Orders::class, Orders::EVENT_AFTER_ORDER_COMPLETE, function(OrderCompleteEvent $e) {
             Paypal::$app->orders->sendCustomerNotification($e->order);
+            Paypal::$app->orders->sendAdminNotification($e->order);
         });
     }
 

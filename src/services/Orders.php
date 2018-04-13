@@ -225,16 +225,11 @@ class Orders extends Component
             return false;
         }
 
-        $message = new Message();
-
-        $message->setFrom([$settings->customerNotificationSenderEmail => $settings->customerNotificationSenderName]);
-
-        $view = Craft::$app->getView();
-
         $variables = [];
-
+        $view = Craft::$app->getView();
+        $message = new Message();
+        $message->setFrom([$settings->customerNotificationSenderEmail => $settings->customerNotificationSenderName]);
         $variables['order'] = $order;
-
         $subject = $view->renderString($settings->customerNotificationSubject, $variables);
         $textBody = $view->renderString("Thank you! your order number is: {{order.number}}", $variables);
 
@@ -261,9 +256,63 @@ class Orders extends Component
         }
 
         if ($result) {
-            Craft::info('Customer email sent succesfully',__METHOD__);
+            Craft::info('Customer email sent successfully',__METHOD__);
         } else {
             Craft::error('Unable to send customer email',__METHOD__);
+        }
+
+        return $result;
+    }
+
+    /**
+     * @param Order $order
+     *
+     * @return bool
+     * @throws \Twig_Error_Loader
+     * @throws \yii\base\Exception
+     */
+    public function sendAdminNotification(Order $order)
+    {
+        $settings = Paypal::$app->settings->getSettings();
+
+        if (!$settings->enableAdminNotification){
+            return false;
+        }
+
+        $variables = [];
+        $view = Craft::$app->getView();
+        $message = new Message();
+        $message->setFrom([$settings->adminNotificationSenderEmail => $settings->adminNotificationSenderName]);
+        $variables['order'] = $order;
+        $subject = $view->renderString($settings->adminNotificationSubject, $variables);
+        $textBody = $view->renderString("Congratulations! you have received a payment, total: {{ order.totalPrice }} order number: {{order.number}}", $variables);
+
+        // @todo add support to users change the email template
+        $originalPath = $view->getTemplatesPath();
+        $view->setTemplatesPath($this->getEmailsPath());
+        $htmlBody = $view->renderTemplate('admin', $variables);
+        $view->setTemplatesPath($originalPath);
+        $message->setSubject($subject);
+        $message->setHtmlBody($htmlBody);
+        $message->setTextBody($textBody);
+        $message->setReplyTo($settings->adminNotificationReplyToEmail);
+
+        $emails = explode(",", $settings->adminNotificationRecipients);
+        $message->setTo($emails);
+
+        $mailer = Craft::$app->getMailer();
+
+        try {
+            $result = $mailer->send($message);
+        } catch (\Throwable $e) {
+            Craft::$app->getErrorHandler()->logException($e);
+            $result = false;
+        }
+
+        if ($result) {
+            Craft::info('Admin email sent successfully',__METHOD__);
+        } else {
+            Craft::error('Unable to send admin email',__METHOD__);
         }
 
         return $result;
