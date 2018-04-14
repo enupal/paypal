@@ -42,6 +42,7 @@
             {{ forms.textField({
                 label: "Subject"|t('enupal-paypal'),
                 instructions: "The email Subject"|t('enupal-paypal'),
+                placeholder: 'Payment Recieved: {{ order.number }} - {{ order.getButton().name }}',
                 name: 'adminNotificationSubject',
                 value: settings.adminNotificationSubject,
                 errors: (settings is defined ? settings.getErrors('adminNotificationSubject') : null)
@@ -49,7 +50,7 @@
 
             {{ forms.textField({
                 label: 'Email Recipients'|t('enupal-paypal'),
-                instructions: "A comma-delimited list of email addresses to notify when your backup is finished."|t('enupal-paypal'),
+                instructions: "A comma-delimited list of email addresses to notify when a payment is recieved"|t('enupal-paypal'),
                 name: 'adminNotificationRecipients',
                 value: settings.adminNotificationRecipients,
                 errors: (settings is defined ? settings.getErrors('adminNotificationRecipients') : null),

@@ -241,8 +241,8 @@ class Orders extends Component
         $message->setHtmlBody($htmlBody);
         $message->setTextBody($textBody);
         $message->setReplyTo($settings->customerNotificationReplyToEmail);
-
-        $emails = explode(",", $settings->customerNotificationRecipients);
+        // customer email
+        $emails = [$order->email];
         $message->setTo($emails);
 
         $mailer = Craft::$app->getMailer();

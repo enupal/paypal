@@ -28,7 +28,6 @@ class Settings extends Model
     public $tax;
     // Notification Customer
     public $enableCustomerNotification;
-    public $customerNotificationRecipients;
     public $customerNotificationSubject;
     public $customerNotificationSenderName;
     public $customerNotificationSenderEmail;

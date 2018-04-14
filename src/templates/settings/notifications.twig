@@ -43,17 +43,9 @@
                 label: "Subject"|t('enupal-paypal'),
                 instructions: "The email Subject"|t('enupal-paypal'),
                 name: 'customerNotificationSubject',
+                placeholder: 'Order Recieved: {{ order.number }}, {{ order.getButton().name }}',
                 value: settings.customerNotificationSubject,
                 errors: (settings is defined ? settings.getErrors('customerNotificationSubject') : null)
-            }) }}
-
-            {{ forms.textField({
-                label: 'Email Recipients'|t('enupal-paypal'),
-                instructions: "A comma-delimited list of email addresses to notify when your backup is finished."|t('enupal-paypal'),
-                name: 'customerNotificationRecipients',
-                value: settings.customerNotificationRecipients,
-                errors: (settings is defined ? settings.getErrors('customerNotificationRecipients') : null),
-                first: true
             }) }}
 
             {{ forms.textField({
