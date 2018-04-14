@@ -98,9 +98,9 @@ class OrdersController extends BaseController
     }
 
     /**
-     * Delete a Order.
+     *  Delete a Order.
      *
-     * @return bool
+     * @return \yii\web\Response
      * @throws \Exception
      * @throws \Throwable
      * @throws \yii\db\Exception
@@ -112,12 +112,12 @@ class OrdersController extends BaseController
 
         $request = Craft::$app->getRequest();
 
-        $orderId = $request->getRequiredBodyParam('id');
+        $orderId = $request->getRequiredBodyParam('orderId');
         $order = Paypal::$app->orders->getOrderById($orderId);
 
         // @TODO - handle errors
-        $success = Paypal::$app->orders->deleteOrder($order);
+        Paypal::$app->orders->deleteOrder($order);
 
-        return $success;
+        return $this->redirectToPostedUrl($order);
     }
 }

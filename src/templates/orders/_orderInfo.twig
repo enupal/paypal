@@ -1,3 +1,4 @@
+{% import "_includes/forms" as forms %}
 <div class="order-info">
 
     <div class="order-info-box">
@@ -62,5 +63,16 @@
                 <td>{{ order.currency }}</td>
             </tr>
         </table>
+    </div>
+    <div class="meta">
+        {% set orderStatusOptions = craft.paypalButton.getOrderStatuses() %}
+        {{ forms.selectField({
+            label: "Order Status"|t('enupal-paypal'),
+            id: 'orderStatusId',
+            name: 'orderStatusId',
+            options: orderStatusOptions,
+            value: order.orderStatusId,
+            errors: order.getErrors('orderStatusId')
+        }) }}
     </div>
 </div>

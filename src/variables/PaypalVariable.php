@@ -8,8 +8,10 @@
 
 namespace enupal\paypal\variables;
 
+use enupal\paypal\enums\OrderStatus;
 use enupal\paypal\Paypal;
 use enupal\paypal\PaypalButtons;
+use Craft;
 
 /**
  * EnupalPaypal provides an API for accessing information about paypal buttons. It is accessible from templates via `craft.enupalPaypal`.
@@ -60,34 +62,66 @@ class PaypalVariable
         return Paypal::$app->buttons->getButtonHtml($sku, $options);
     }
 
+    /**
+     * @return array
+     */
     public function getCurrencyIsoOptions()
     {
         return Paypal::$app->buttons->getIsoCurrencies();
     }
 
+    /**
+     * @return array
+     */
     public function getCurrencyOptions()
     {
         return Paypal::$app->buttons->getCurrencies();
     }
 
+    /**
+     * @return array
+     */
     public function getSizeOptions()
     {
         return Paypal::$app->buttons->getSizeOptions();
     }
 
+    /**
+     * @return array
+     */
     public function getLanguageOptions()
     {
         return Paypal::$app->buttons->getLanguageOptions();
     }
 
+    /**
+     * @return array
+     */
     public function getDiscountOptions()
     {
         return Paypal::$app->buttons->getDiscountOptions();
     }
 
+    /**
+     * @return array
+     */
     public function getShippingOptions()
     {
         return Paypal::$app->buttons->getShippingOptions();
+    }
+
+    /**
+     * @return array
+     */
+    public function getOrderStatuses()
+    {
+        $statuses = OrderStatus::getConstants();
+        $newStatues = [];
+        foreach ($statuses as $key => $status) {
+            $newStatues[$status] = ucwords($key);
+        }
+
+        return $newStatues;
     }
 }
 
