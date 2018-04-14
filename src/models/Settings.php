@@ -10,6 +10,7 @@ namespace enupal\paypal\models;
 
 use craft\base\Model;
 use enupal\paypal\enums\DiscountType;
+use enupal\paypal\validators\TaxValidator;
 
 class Settings extends Model
 {
@@ -59,6 +60,10 @@ class Settings extends Model
             [
                 ['adminNotificationSenderEmail', 'adminNotificationReplyToEmail'],
                 'email', 'on' => 'adminNotification'
+            ],
+            [
+                ['tax'],
+                TaxValidator::class, 'on' => 'taxes'
             ],
         ];
     }

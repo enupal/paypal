@@ -13,6 +13,7 @@ use craft\base\Element;
 use craft\behaviors\FieldLayoutBehavior;
 use craft\elements\db\ElementQueryInterface;
 use enupal\paypal\enums\DiscountType;
+use enupal\paypal\validators\DiscountValidator;
 use yii\base\ErrorHandler;
 use craft\helpers\UrlHelper;
 use craft\elements\actions\Delete;
@@ -522,6 +523,10 @@ class PaypalButton extends Element
             [['name', 'sku'], 'required'],
             [['name', 'sku'], 'string', 'max' => 255],
             [['name', 'sku'], UniqueValidator::class, 'targetClass' => PaypalButtonRecord::class],
+            [
+                ['discount'],
+                DiscountValidator::class
+            ],
         ];
     }
 
