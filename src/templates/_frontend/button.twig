@@ -55,8 +55,7 @@
     {% if button.shippingAmount %}
     <input name="shipping" value="{{ button.shippingAmount|number }}" type="hidden">
     {% endif %}
-    {# @todo {{ button.getIpnUrl() }} #}
-    <input name="notify_url" value="https://enupal.com/enupal/paypalIpn" type="hidden">
+    <input name="notify_url" value="{{ button.getIpnUrl() }}" type="hidden">
     <input name="return" value="{{ button.getReturnUrl() }}" type="hidden">
     <input name="lc" value="{{ button.language }}" type="hidden">
     <input name="cancel_return" value="{{ button.getCancelUrl() }}" type="hidden">
