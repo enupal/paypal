@@ -1,57 +1,50 @@
 <p align="center">
 	<a href="https://enupal.com/en/craft-plugins/enupal-paypal/docs/" target="_blank">
-	<img width="312" height="312" src="https://enupal.com/assets/docs/backup-icon.svg" alt="Enupal Backup"></a>
+	<img width="212" height="212" src="https://enupal.com/assets/docs/paypal-icon.svg" alt="Enupal Backup"></a>
 </p>
 
-# Enupal Paypal Plugin for Craft CMS 3.x
+# Paypal Buy Now Buttons Plugin for Craft CMS 3.x
 
-Create PayPal Buy Now & Donation type buttons
+Sell products or services on your website using a PayPal Buy Now Button
 
 ## Features
 
-### Simplifies Backups for Craft CMS. Manual or scheduled your Backups and upload it securely to:
+### Allows customers from around the world can start buying products or services from your website using PayPal.
 
-* Amazon S3
-* Dropbox
-* Softlayer Object Storage
-* FTP/SFTP.
-
-### Choose the files you want to backup:
-
-* Database
-* Templates
-* Assets
-* Logs
-
-### Schedule your backups
-
-* You can configure a cron job to call the Enupal Backup webhook and automatically create a backup each night, rather than doing a manual Backup every time.
-
-### Receive Email Notifications
-
-* Enupal Backup allows setup an email notification for when the Backup process has finished, it will send a report with useful info about your Backup.
-
-### Encrypt your data, keep secure.
-
-* Enupal Backup can encrypt your backup using openssl
+ * Manage buttons
+ * View sales in your control panel
+ * Send out email notifications for admins and costumers
+ * Inventory management for each button
+ * Add variants with priced options
+ * Add variants with basic options
+ * Charge Tax & Shipping 
+ * Add Discounts 
+ * Change Quantity 
+ * PayPal Sandbox and Live accounts
+ * Events: After Order Create and Before Send Email
+ * Support for 18 languages
+ * Support 25 currencies 
+ * Field type
 
 ## Documentation
 
 https://enupal.com/en/craft-plugins/enupal-paypal/docs/
 
-## Enupal Backup Support
+## PayPal Support
 
 Via Email:
 
-Send us a note at: info@enupal.com
+Send us a note at: support@enupal.com
+
+Create an [issue](https://github.com/enupal/paypal/issues) on Github
 
 ------------------------------------------------------------
 
 Brought to you by [enupal](https://enupal.com/en)
 
 <p align="center">
-	<a href="https://enupal.com/en" target="_blank">
-	<img width="169" height="35" src="https://enupal.com/assets/docs/enupal-logo.png" alt="Enupal Backup"></a>
+  <a href="https://enupal.com/en" target="_blank">
+  <img width="169" height="35" src="https://enupal.com/assets/docs/enupal-logo.png" alt="Enupal"></a>
 </p>
 
 
