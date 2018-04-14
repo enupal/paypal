@@ -122,7 +122,6 @@ class Orders extends Component
         return true;
     }
 
-
     /**
      * @param Order $order
      *

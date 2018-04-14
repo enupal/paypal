@@ -104,10 +104,14 @@ class ButtonsController extends BaseController
         return $this->renderTemplate('enupal-paypal/buttons/_edit', $variables);
     }
 
+
     /**
      * Delete a Paypal Button.
      *
-     * @return void
+     * @return \yii\web\Response
+     * @throws \Exception
+     * @throws \Throwable
+     * @throws \yii\db\Exception
      * @throws \yii\web\BadRequestHttpException
      */
     public function actionDeleteButton()
@@ -116,12 +120,12 @@ class ButtonsController extends BaseController
 
         $request = Craft::$app->getRequest();
 
-        $buttonId = $request->getRequiredBodyParam('id');
-        $button = Paypal::$app->buttons>getButtonById($buttonId);
+        $buttonId = $request->getRequiredBodyParam('buttonId');
+        $button = Paypal::$app->buttons->getButtonById($buttonId);
 
         // @TODO - handle errors
-        $success = Paypal::$app->sliders->deleteButton($button);
+        Paypal::$app->buttons->deleteButton($button);
 
-        return $success;
+        return $this->redirectToPostedUrl($button);
     }
 }

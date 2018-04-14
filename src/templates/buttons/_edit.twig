@@ -20,7 +20,7 @@
 {% block actionButton %}
     <input type="hidden" name="action" value="enupal-paypal/buttons/save-button">
     {{ redirectInput('enupal-paypal/buttons') }}
-    <input type="hidden" id="buttonId" name="id" value="{{ paypalButton.id is defined ? paypalButton.id : '' }}">
+    <input type="hidden" id="buttonId" name="buttonId" value="{{ paypalButton.id is defined ? paypalButton.id : '' }}">
 
     <div class="btngroup submit first">
         <input type="submit" class="btn submit" value="{{ 'Save'|t('enupal-paypal') }}">
@@ -34,7 +34,7 @@
                 <ul>
                     <li><a class="formsubmit error"
                            data-action="enupal-paypal/buttons/delete-button"
-                           data-confirm='{{ "Are you sure you want to delete this Paypal Button, and all of it's data?"|t('enupal-paypal') }}'
+                           data-confirm='{{ "Are you sure you want to delete this Paypal Button, and all of it's orders?"|t('enupal-paypal') }}'
                            data-redirect="{{ 'enupal-paypal/buttons'|hash }}">{{ "Delete"|t('enupal-paypal') }}</a>
                     </li>
                 </ul>

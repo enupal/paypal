@@ -390,7 +390,7 @@ class PaypalButton extends Element
         // Delete
         $actions[] = Craft::$app->getElements()->createAction([
             'type' => Delete::class,
-            'confirmationMessage' => PaypalPlugin::t('Are you sure you want to delete the selected buttons?'),
+            'confirmationMessage' => PaypalPlugin::t("Are you sure you want to delete this Paypal Button, and all of it's orders?"),
             'successMessage' => PaypalPlugin::t('Payapal Buttons deleted.'),
         ]);
 

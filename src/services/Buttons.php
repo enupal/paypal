@@ -13,7 +13,6 @@ use craft\base\Field;
 use craft\fields\Matrix;
 use craft\fields\PlainText;
 use craft\fields\Table;
-use enupal\paypal\elements\PaypalButton;
 use enupal\paypal\enums\DiscountType;
 use enupal\paypal\enums\ShippingOptions;
 use yii\base\Component;
@@ -183,41 +182,6 @@ class Buttons extends Component
         }
 
         return $emailSent;
-    }
-
-    /**
-     * Removes a Paypal Button
-     *
-     * @param ButtonElement $button
-     *
-     * @throws \CDbException
-     * @throws \Exception
-     * @return boolean
-     * @throws \Throwable
-     */
-    public function deleteBackup(ButtonElement $button)
-    {
-        $transaction = Craft::$app->db->beginTransaction();
-
-        try {
-            // Delete the Element and PaypalButton
-            $success = Craft::$app->elements->deleteElementById($button->id);
-
-            if (!$success) {
-                $transaction->rollback();
-                Craft::error("Couldn’t delete Paypal Button", __METHOD__);
-
-                return false;
-            }
-
-            $transaction->commit();
-        } catch (\Exception $e) {
-            $transaction->rollback();
-
-            throw $e;
-        }
-
-        return true;
     }
 
     /**
@@ -723,5 +687,38 @@ class Buttons extends Component
         }
 
         return TemplateHelper::raw($buttonHtml);
+    }
+
+    /**
+     * @param ButtonElement $button
+     *
+     * @return bool
+     * @throws \Exception
+     * @throws \Throwable
+     * @throws \yii\db\Exception
+     */
+    public function deleteButton(ButtonElement $button)
+    {
+        $transaction = Craft::$app->db->beginTransaction();
+
+        try {
+            // Delete the Button Element
+            $success = Craft::$app->elements->deleteElementById($button->id);
+
+            if (!$success) {
+                $transaction->rollback();
+                Craft::error("Couldn’t delete Paypal Button", __METHOD__);
+
+                return false;
+            }
+
+            $transaction->commit();
+        } catch (\Exception $e) {
+            $transaction->rollback();
+
+            throw $e;
+        }
+
+        return true;
     }
 }
