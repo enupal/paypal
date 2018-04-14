@@ -260,6 +260,8 @@ class Order extends Element
         $attributes['lastName'] = ['label' => PaypalPlugin::t('Amount')];
         $attributes['address'] = ['label' => PaypalPlugin::t('Shipping Address')];
         $attributes['email'] = ['label' => PaypalPlugin::t('Customer Email')];
+        $attributes['itemName'] = ['label' => PaypalPlugin::t('Item Name')];
+        $attributes['itemSku'] = ['label' => PaypalPlugin::t('Item SKU')];
         $attributes['paypalTransactionId'] = ['label' => PaypalPlugin::t('PayPal Transaction Id')];
         $attributes['dateOrdered'] = ['label' => PaypalPlugin::t('Date Ordered')];
 
@@ -278,7 +280,7 @@ class Order extends Element
 
     protected static function defineDefaultTableAttributes(string $source): array
     {
-        $attributes = ['number', 'totalPrice', 'email', 'dateOrdered'];
+        $attributes = ['number', 'itemName', 'itemSku', 'totalPrice', 'email', 'dateOrdered'];
 
         return $attributes;
     }
@@ -304,6 +306,14 @@ class Order extends Element
             case 'email':
                 {
                     return '<a href="mailto:'.$this->email.'">'.$this->email.'</a>';
+                }
+            case 'itemName':
+                {
+                    return $this->getButton()->name;
+                }
+            case 'itemSku':
+                {
+                    return '<a href="'.$this->getButton()->getCpEditUrl().'">'.$this->getButton()->sku.'</a>';
                 }
 
         }
