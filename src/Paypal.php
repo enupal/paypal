@@ -9,23 +9,27 @@
 namespace enupal\paypal;
 
 use Craft;
+use craft\events\RegisterComponentTypesEvent;
 use craft\events\RegisterUrlRulesEvent;
+use craft\services\Fields;
 use craft\web\UrlManager;
+use enupal\paypal\events\OrderCompleteEvent;
+use enupal\paypal\services\App;
+use enupal\paypal\services\Orders;
 use yii\base\Event;
-use craft\events\DefineComponentsEvent;
 use craft\web\twig\variables\CraftVariable;
-use craft\services\SystemMessages;
-use craft\events\RegisterEmailMessagesEvent;
+use enupal\paypal\fields\Buttons as BuyNowButtonField;
 
 use enupal\paypal\variables\PaypalVariable;
 use enupal\paypal\models\Settings;
+use craft\base\Plugin;
 
-class Paypal extends \craft\base\Plugin
+class Paypal extends Plugin
 {
     /**
-     * Enable use of PaypalButton::$app-> in place of Craft::$app->
+     * Enable use of Paypal::$app-> in place of Craft::$app->
      *
-     * @var [type]
+     * @var App
      */
     public static $app;
 
@@ -54,38 +58,55 @@ class Paypal extends \craft\base\Plugin
             function(Event $event) {
                 /** @var CraftVariable $variable */
                 $variable = $event->sender;
-                $variable->set('enupalPaypal', PaypalVariable::class);
+                $variable->set('paypalButton', PaypalVariable::class);
             }
         );
 
-        Event::on(
-            SystemMessages::class,
-            SystemMessages::EVENT_REGISTER_MESSAGES,
-            function(RegisterEmailMessagesEvent $event) {
-                array_push($event->messages,
-                    [
-                        'key' => 'enupal_paypal_notification',
-                        'subject' => 'You have received a payment',
-                        'body' => 'We are happy to inform you that the you have received payment with id: {{payment.transactionId}}'
-                    ]
-                );
-            }
-        );
+        Event::on(Orders::class, Orders::EVENT_AFTER_ORDER_COMPLETE, function(OrderCompleteEvent $e) {
+            Paypal::$app->orders->sendCustomerNotification($e->order);
+            Paypal::$app->orders->sendAdminNotification($e->order);
+        });
+
+        Event::on(Fields::class, Fields::EVENT_REGISTER_FIELD_TYPES, function(RegisterComponentTypesEvent $event) {
+            $event->types[] = BuyNowButtonField::class;
+        });
     }
 
+    /**
+     * @inheritdoc
+     */
+    protected function afterInstall()
+    {
+        Paypal::$app->buttons->createDefaultVariantFields();
+    }
+
+    /**
+     * @inheritdoc
+     */
+    protected function afterUninstall()
+    {
+        Paypal::$app->buttons->deleteVariantFields();
+    }
+
+    /**
+     * @inheritdoc
+     */
     protected function createSettingsModel()
     {
         return new Settings();
     }
 
+    /**
+     * @inheritdoc
+     */
     public function getCpNavItem()
     {
         $parent = parent::getCpNavItem();
         return array_merge($parent, [
             'subnav' => [
-                'payments' => [
-                    "label" => self::t("Payments"),
-                    "url" => 'enupal-paypal/payments'
+                'orders' => [
+                    "label" => self::t("Orders"),
+                    "url" => 'enupal-paypal/orders'
                 ],
                 'buttons' => [
                     "label" => self::t("Buttons"),
@@ -100,9 +121,7 @@ class Paypal extends \craft\base\Plugin
     }
 
     /**
-     * Settings HTML
-     *
-     * @return string
+     * @inheritdoc
      */
     protected function settingsHtml()
     {
@@ -120,35 +139,26 @@ class Paypal extends \craft\base\Plugin
         return Craft::t('enupal-paypal', $message, $params);
     }
 
-    public static function log($message, $type = 'info')
-    {
-        Craft::$type(self::t($message), __METHOD__);
-    }
-
-    public static function info($message)
-    {
-        Craft::info(self::t($message), __METHOD__);
-    }
-
-    public static function error($message)
-    {
-        Craft::error(self::t($message), __METHOD__);
-    }
-
     /**
      * @return array
      */
     private function getCpUrlRules()
     {
         return [
-            'enupal-paypal/run' =>
-                'enupal-paypal/buttons/run',
-
             'enupal-paypal/buttons/new' =>
                 'enupal-paypal/buttons/edit-button',
 
-            'enupal-paypal/payments/view/<paymentId:\d+>' =>
-                'enupal-paypal/payments/view-payment',
+            'enupal-paypal/buttons/edit/<buttonId:\d+>' =>
+                'enupal-paypal/buttons/edit-button',
+
+            'enupal-paypal/orders/edit/<orderId:\d+>' =>
+                'enupal-paypal/orders/edit-order',
+
+            'enupal-paypal/payments/new' =>
+                'enupal-paypal/payments/edit-button',
+
+            'enupal-paypal/payments/edit/<paymentId:\d+>' =>
+                'enupal-paypal/payments/edit-button',
         ];
     }
 
@@ -159,7 +169,7 @@ class Paypal extends \craft\base\Plugin
     {
         return [
             'enupal-paypal/ipn' =>
-                'enupal-paypal/webhook/ipn'
+                'enupal-paypal/paypal/ipn'
         ];
     }
 }

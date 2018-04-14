@@ -19,7 +19,7 @@ class PaypalButtonsQuery extends ElementQuery
     public $id;
     public $dateCreated;
     public $name;
-    public $handle;
+    public $sku;
 
     /**
      * @inheritdoc
@@ -27,6 +27,38 @@ class PaypalButtonsQuery extends ElementQuery
     public function __set($name, $value)
     {
         parent::__set($name, $value);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function sku($value)
+    {
+        $this->sku = $value;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getSku()
+    {
+        return $this->sku;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function name($value)
+    {
+        $this->name = $value;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getName()
+    {
+        return $this->name;
     }
 
     /**
@@ -54,16 +86,34 @@ class PaypalButtonsQuery extends ElementQuery
         $this->joinElementTable('enupalpaypal_buttons');
 
         $this->query->select([
+            'enupalpaypal_buttons.id',
             'enupalpaypal_buttons.name',
-            'enupalpaypal_buttons.handle',
-            'enupalpaypal_buttons.type',
+            'enupalpaypal_buttons.size',
             'enupalpaypal_buttons.currency',
+            'enupalpaypal_buttons.language',
             'enupalpaypal_buttons.amount',
-            'enupalpaypal_buttons.itemId',
-            'enupalpaypal_buttons.options',
+            'enupalpaypal_buttons.sku',
+            'enupalpaypal_buttons.quantity',
+            'enupalpaypal_buttons.hasUnlimitedStock',
+            'enupalpaypal_buttons.customerQuantity',
+            'enupalpaypal_buttons.soldOut',
+            'enupalpaypal_buttons.soldOutMessage',
+            'enupalpaypal_buttons.discountType',
+            'enupalpaypal_buttons.discount',
+            'enupalpaypal_buttons.shippingAmount',
+            'enupalpaypal_buttons.shippingOption',
+            'enupalpaypal_buttons.itemWeight',
+            'enupalpaypal_buttons.itemWeightUnit',
+            'enupalpaypal_buttons.priceMenuName',
+            'enupalpaypal_buttons.priceMenuOptions',
+            'enupalpaypal_buttons.showItemName',
+            'enupalpaypal_buttons.showItemPrice',
+            'enupalpaypal_buttons.showItemCurrency',
+            'enupalpaypal_buttons.input1',
+            'enupalpaypal_buttons.input2',
             'enupalpaypal_buttons.returnUrl',
-            'enupalpaypal_buttons.cancelURL',
-            'enupalpaypal_buttons.buttonName'
+            'enupalpaypal_buttons.cancelUrl',
+            'enupalpaypal_buttons.buttonName',
         ]);
 
         if ($this->name) {
@@ -72,14 +122,14 @@ class PaypalButtonsQuery extends ElementQuery
             );
         }
 
-        if ($this->handle) {
+        if ($this->sku) {
             $this->subQuery->andWhere(Db::parseParam(
-                'enupalpaypal_buttons.handle', $this->handle)
+                'enupalpaypal_buttons.sku', $this->sku)
             );
         }
 
         if ($this->orderBy !== null && empty($this->orderBy) && !$this->structureId && !$this->fixedOrder) {
-            $this->orderBy = 'elements.dateCreated desc';
+            $this->orderBy = 'dateCreated desc';
         }
 
         return parent::beforePrepare();

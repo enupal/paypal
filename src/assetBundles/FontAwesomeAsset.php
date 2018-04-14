@@ -16,7 +16,7 @@ class FontAwesomeAsset extends AssetBundle
     public function init()
     {
         // define the path that your publishable resources live
-        $this->sourcePath = '@enupal/backup/resources/';
+        $this->sourcePath = '@enupal/paypal/resources/';
 
         // define the dependencies
         // define the relative path to CSS/JS files that should be registered with the page

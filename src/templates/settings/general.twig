@@ -10,7 +10,7 @@
 {% extends "enupal-paypal/_layouts/settings" %}
 {% import "_includes/forms" as forms %}
 
-{% set settings = craft.enupalbackup.getSettings() %}
+{% set settings = craft.paypalButton.getSettings() %}
 {% set fullPageForm = true %}
 {% set saveShortcutRedirect = 'enupal-paypal/settings/general' %}
 
@@ -24,6 +24,7 @@
 
     <input type="hidden" name="action"
            value="enupal-paypal/settings/save-settings">
+    <input type="hidden" name="paypalScenario" value="general">
 
     <div id="settings-cp">
 
@@ -44,24 +45,26 @@
                 errors: settings.getErrors('testMode'),
             }) }}
 
+            <hr>
+
             {{ forms.textField({
-                label: "Global Return URL"|t('enupal-paypal'),
-                instructions: "Redirect the user to this URL when the pay is successfully"|t('enupal-paypal'),
-                id: 'returnUrl',
-                name: 'returnUrl',
-                value: settings.returnUrl,
+                label: "Live Account"|t('enupal-paypal'),
+                instructions: "PayPal ID or an email address associated with your PayPal account. You can find your Merchant account ID in your PayPal account under Profile -> My business info -> Merchant account ID"|t('enupal-paypal'),
+                id: 'liveAccount',
+                name: 'liveAccount',
+                value: settings.liveAccount,
                 autofocus: true,
-                errors: settings.getErrors('returnUrl')
+                errors: settings.getErrors('liveAccount')
             }) }}
 
             {{ forms.textField({
-                label: "Global Cancel URL"|t('enupal-paypal'),
-                instructions: "Redirect the user to this URL when they click the cancel button"|t('enupal-paypal'),
-                id: 'cancelUrL',
-                name: 'cancelUrL',
-                value: settings.cancelUrL,
+                label: "Sandbox Account"|t('enupal-paypal'),
+                instructions: "The PayPal Sandbox is a self-contained, virtual testing environment that mimics the live PayPal production environment. Use your existing PayPal account to log in to the Developer website at <a href='developer.paypal.com'>developer.paypal.com</a>, or create a new PayPal account by clicking the Sign Up button on this site."|t('enupal-paypal'),
+                id: 'sandboxAccount',
+                name: 'sandboxAccount',
+                value: settings.sandboxAccount,
                 autofocus: true,
-                errors: settings.getErrors('cancelUrL')
+                errors: settings.getErrors('sandboxAccount')
             }) }}
 
         {% endnamespace %}

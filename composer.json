@@ -1,17 +1,20 @@
 {
   "name": "enupal/paypal",
-  "description": "Create PayPal Buy Now & Donation type buttons",
+  "description": "Sell products or services on your website using a PayPal Buy Now Button",
   "type": "craft-plugin",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "keywords": [
     "craft",
     "cms",
     "craftcms",
     "craft-plugin",
     "paypal",
+    "buy now",
+    "sell",
+    "payment",
+    "credit card",
     "pay",
     "checkout",
-    "donation",
     "e-commerce"
   ],
   "autoload": {
@@ -31,11 +34,10 @@
     "docs": "https://enupal.com/en/craft-plugins/enupal-paypal/docs"
   },
   "require": {
-    "craftcms/cms": "^3.0.0-RC1",
-    "mikehaertl/php-shellcommand": "~1.2.5"
+    "craftcms/cms": "^3.0.0"
   },
   "extra": {
-    "name": "Enupal Paypal",
+    "name": "PayPal",
     "handle": "enupal-paypal",
     "schemaVersion": "1.0.0",
     "hasSettings": true,

@@ -1,14 +1,69 @@
-<form class="paypal-button" method="post" action="{{ button.url }}" target="_top">
-    <div id="errorBox" class="hide"></div>
-    <input name="button" value="{{ button.type }}" type="hidden">
+{% spaceless %}
+<form class="paypal-button" method="post" action="{{ button.getPaypalUrl() }}" target="_blank">
     <input name="item_name" value="{{ button.name }}" type="hidden">
-    <input name="amount" value="{{ button.amount }}" type="hidden">
-    <input name="env" value="{{ button.env }}" type="hidden">
-    <input name="return" value="{{ button.returnUrl }}" type="hidden">
-    {#<input name="rm" value="2" type="hidden">#}
+    {% if button.amount %}
+    <input name="amount" value="{{ button.amount|number }}" type="hidden">
+    {% endif %}
+    {# <!-- Provide a drop-down menu option field with prices. --> #}
+    {% if button.enupalPaypalPricedVariants is defined and button.enupalPaypalPricedVariants and button.enupalPaypalPricedVariants.first()  %}
+        {% set pricedOptionsBlock = button.enupalPaypalPricedVariants.first() %}
+        <input type="hidden" name="on0" value="{{ pricedOptionsBlock.variantName }}">
+        {% set hiddenFieldsHtml = '' %}
+        <div class="form-group">
+            <label class="pricedVariantsLabel" for="os0">{{ pricedOptionsBlock.variantName }}</label>
+            <select class="form-control pricedVariants" name="os0" id="os0">
+                {% for row in pricedOptionsBlock.options %}
+                    {% if loop.first %}
+                        <option value="">{{ "Select a"|t }} {{ pricedOptionsBlock.variantName|t }}</option>
+                    {% endif %}
+                    <option value="{{ row.handle }}">{{ row.optionLabel|t }}</option>
+                    {% set hiddenFieldsHtml = hiddenFieldsHtml ~ '<input type="hidden" name="option_select'~loop.index0~'" value="'~row.handle~'"><input type="hidden" name="option_amount'~loop.index0~'" value="'~row.price|number~'">' %}
+                {% endfor %}
+            </select>
+        </div>
+        {{ hiddenFieldsHtml|raw }}
+        <br>
+    {% endif %}
+    {# <!-- Provide a drop-down menu option basic variants. --> #}
+    {% if button.enupalPaypalBasicVariants is defined and button.enupalPaypalBasicVariants and button.enupalPaypalBasicVariants.first() %}
+        {% set pricedOptionsBlock = button.enupalPaypalBasicVariants.first() %}
+        {% for basicOptionsBlock in button.enupalPaypalBasicVariants %}
+            <input type="hidden" name="on{{ loop.index }}" value="{{ basicOptionsBlock.variantName }}">
+            <div class="form-group">
+                <label class="basicVariantsLabel" for="os{{ loop.index }}">{{ basicOptionsBlock.variantName }}</label>
+                <select class="form-control basicVariants" name="os{{ loop.index }}" id="os{{ loop.index }}">
+                    {% for row in basicOptionsBlock.options %}
+                        {% if loop.first %}
+                            <option value="">{{ "Select a"|t }} {{ basicOptionsBlock.variantName }}</option>
+                        {% endif %}
+                        <option value="{{ row.handle }}">{{ row.optionLabel|t }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <br>
+        {% endfor %}
+    {% endif %}
+    <input name="item_number" value="{{ button.sku }}" type="hidden">
+    <input name="no_shipping" value="{{ button.shippingOption }}" type="hidden">
+    <input name="undefined_quantity" value="{{ button.customerQuantity }}" type="hidden">
+    {% if button.getTax() %}
+    <input name="{{ button.getTaxType() }}" value="{{ button.getTax()|number }}" type="hidden">
+    {% endif %}
+    {% if button.getDiscount() %}
+    <input name="{{ button.getDiscountType() }}" value="{{ button.getDiscount()|number }}" type="hidden">
+    {% endif %}
+    {% if button.shippingAmount %}
+    <input name="shipping" value="{{ button.shippingAmount|number }}" type="hidden">
+    {% endif %}
+    <input name="notify_url" value="{{ button.getIpnUrl() }}" type="hidden">
+    <input name="return" value="{{ button.getReturnUrl() }}" type="hidden">
+    <input name="lc" value="{{ button.language }}" type="hidden">
+    <input name="cancel_return" value="{{ button.getCancelUrl() }}" type="hidden">
+    <input name="rm" value="2" type="hidden">
     <input name="currency_code" value="{{ button.currency }}" type="hidden">
-    <input name="cmd" value="{{ button.cmd }}" type="hidden">
-    <input name="business" value="{{ settings.paypalEmail }}" type="hidden">
-    <input name="bn" value="JavaScriptButton_{{ button.type }}" type="hidden">
-    <button class="paypal-button large" type="submit">{{ button.buttonName }}</button>
+    <input name="cmd" value="_xclick" type="hidden">
+    <input name="business" value="{{ button.getBusiness() }}" type="hidden">
+    <input name="bn" value="craft_plugin_paypal" type="hidden">
+    <input style='border: none;' class='paypalbuttonimage' type='image' src='{{ button.getButtonUrl() }}' border='0' name='submit' alt='{{ "PayPal - The safer, easier way to pay online!"|t('enupal-paypal')}}'>
 </form>
+{% endspaceless %}

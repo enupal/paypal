@@ -9,12 +9,12 @@
 namespace enupal\paypal\enums;
 
 /**
- * Paypal type button
+ * Order statuses
  */
-abstract class PaypalType extends BaseEnum
+abstract class OrderStatus extends BaseEnum
 {
     // Constants
     // =========================================================================
-    const PAY = 0;
-    const DONATION = 1;
+    const NEW = 0;
+    const SHIPPED = 1;
 }

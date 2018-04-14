@@ -9,12 +9,13 @@
 namespace enupal\paypal\controllers;
 
 use Craft;
+use craft\helpers\UrlHelper;
 use craft\web\Controller as BaseController;
 use enupal\paypal\Paypal;
 use yii\web\NotFoundHttpException;
 use yii\base\Exception;
 
-use enupal\paypal\enums\PaypalType;
+use enupal\paypal\enums\PaypalSize;
 use enupal\paypal\PaypalButtons;
 use enupal\paypal\elements\PaypalButton as ButtonElement;
 
@@ -23,6 +24,9 @@ class ButtonsController extends BaseController
     /**
      * Save a Button
      *
+     * @return null|\yii\web\Response
+     * @throws \Exception
+     * @throws \Throwable
      * @throws \yii\web\BadRequestHttpException
      */
     public function actionSaveButton()
@@ -33,17 +37,11 @@ class ButtonsController extends BaseController
         $button = new ButtonElement;
 
         $buttonId = $request->getBodyParam('buttonId');
-        $isNew = true;
 
         if ($buttonId) {
             $button = Paypal::$app->buttons->getButtonById($buttonId);
-
-            if ($button) {
-                $isNew = false;
-            }
         }
 
-        //$button->groupId     = $request->getBodyParam('groupId');
         $button = Paypal::$app->buttons->populateButtonFromPost($button);
 
         // Save it
@@ -70,8 +68,10 @@ class ButtonsController extends BaseController
      * @param ButtonElement|null $button   The button send back by setRouteParams if any errors on saveButton
      *
      * @return \yii\web\Response
-     * @throws HttpException
      * @throws Exception
+     * @throws NotFoundHttpException
+     * @throws \Exception
+     * @throws \Throwable
      */
     public function actionEditButton(int $buttonId = null, ButtonElement $button = null)
     {
@@ -80,15 +80,15 @@ class ButtonsController extends BaseController
             $button = Paypal::$app->buttons->createNewButton();
 
             if ($button->id) {
-                $url = UrlHelper::cpUrl('enupal-paypal/button/edit/'.$button->id);
+                $url = UrlHelper::cpUrl('enupal-paypal/buttons/edit/'.$button->id);
                 return $this->redirect($url);
             } else {
-                throw new Exception(Craft::t('Error creating Button'));
+                throw new Exception(Paypal::t('Error creating Button'));
             }
         } else {
             if ($buttonId !== null) {
                 if ($button === null) {
-                    // Get the Slider
+                    // Get the button
                     $button = Paypal::$app->buttons->getButtonById($buttonId);
 
                     if (!$button) {
@@ -99,34 +99,38 @@ class ButtonsController extends BaseController
         }
 
         $variables['buttonId'] = $buttonId;
-        $variables['button'] = $button;
+        $variables['paypalButton'] = $button;
 
         // Set the "Continue Editing" URL
-        $variables['continueEditingUrl'] = 'enupal-paypal/button/edit/{id}';
+        $variables['continueEditingUrl'] = 'enupal-paypal/buttons/edit/{id}';
 
         $variables['settings'] = Paypal::$app->settings->getSettings();
 
         return $this->renderTemplate('enupal-paypal/buttons/_edit', $variables);
     }
 
+
     /**
-     * Delete a slider.
+     * Delete a Paypal Button.
      *
-     * @return void
+     * @return \yii\web\Response
+     * @throws \Exception
+     * @throws \Throwable
+     * @throws \yii\db\Exception
      * @throws \yii\web\BadRequestHttpException
      */
-    public function actionDeleteSlider()
+    public function actionDeleteButton()
     {
         $this->requirePostRequest();
 
         $request = Craft::$app->getRequest();
 
-        $buttonId = $request->getRequiredBodyParam('id');
-        $button = Paypal::$app->buttons>getButtonById($buttonId);
+        $buttonId = $request->getRequiredBodyParam('buttonId');
+        $button = Paypal::$app->buttons->getButtonById($buttonId);
 
         // @TODO - handle errors
-        $success = Paypal::$app->sliders->deleteButton($button);
+        Paypal::$app->buttons->deleteButton($button);
 
-        return $success;
+        return $this->redirectToPostedUrl($button);
     }
 }

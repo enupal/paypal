@@ -25,8 +25,9 @@ class SettingsController extends BaseController
         $this->requirePostRequest();
         $request = Craft::$app->getRequest();
         $settings = $request->getBodyParam('settings');
+        $scenario = $request->getBodyParam('paypalScenario');
 
-        if (!Paypal::$app->settings->saveSettings($settings)) {
+        if (!Paypal::$app->settings->saveSettings($settings, $scenario)) {
             Craft::$app->getSession()->setError(Paypal::t('Couldn’t save settings.'));
 
             // Send the settings back to the template
@@ -40,5 +41,23 @@ class SettingsController extends BaseController
         Craft::$app->getSession()->setNotice(Paypal::t('Settings saved.'));
 
         return $this->redirectToPostedUrl();
+    }
+
+    /**
+     * @return \yii\web\Response
+     * @throws \yii\base\Exception
+     * @throws \yii\web\BadRequestHttpException
+     */
+    public function actionGetSizeUrl()
+    {
+        $this->requireAcceptsJson();
+        $request = Craft::$app->getRequest();
+
+        $size = $request->getBodyParam('size');
+        $language = $request->getBodyParam('language');
+
+        $buttonUrl = Paypal::$app->buttons->getButtonSizeUrl($size, $language);
+
+        return $this->asJson(['buttonUrl' => $buttonUrl]);
     }
 }

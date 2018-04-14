@@ -9,15 +9,39 @@
 namespace enupal\paypal\models;
 
 use craft\base\Model;
+use enupal\paypal\enums\DiscountType;
+use enupal\paypal\validators\TaxValidator;
 
 class Settings extends Model
 {
     // General
-    public $paypalEmail = '';
-    public $returnUrl = '';
-    public $cancelUrL = '';
-    public $testMode = 0;
-    public $defaultCurrency = '';
+    public $liveAccount;
+    public $sandboxAccount;
+    public $testMode = 1;
+    // Globals
+    public $returnUrl;
+    public $cancelUrl;
+    public $defaultCurrency = 'USD';
+    public $returnToMerchantText;
+    public $weightUnit = 'g';
+    // Tax
+    public $taxType = DiscountType::RATE;
+    public $tax;
+    // Notification Customer
+    public $enableCustomerNotification;
+    public $customerNotificationSubject;
+    public $customerNotificationSenderName;
+    public $customerNotificationSenderEmail;
+    public $customerNotificationReplyToEmail;
+    public $customerNotificationTemplate;
+    // Notification Admin
+    public $enableAdminNotification;
+    public $adminNotificationRecipients;
+    public $adminNotificationSenderName;
+    public $adminNotificationSubject;
+    public $adminNotificationSenderEmail;
+    public $adminNotificationReplyToEmail;
+    public $adminNotificationTemplate;
 
     /**
      * @inheritdoc
@@ -25,7 +49,22 @@ class Settings extends Model
     public function rules()
     {
         return [
-            [['paypalEmail'], ['required', 'email']]
+            [
+                ['liveAccount'],
+                'required', 'on' => 'general'
+            ],
+            [
+                ['customerNotificationSenderEmail', 'customerNotificationReplyToEmail'],
+                'email', 'on' => 'customerNotification'
+            ],
+            [
+                ['adminNotificationSenderEmail', 'adminNotificationReplyToEmail'],
+                'email', 'on' => 'adminNotification'
+            ],
+            [
+                ['tax'],
+                TaxValidator::class, 'on' => 'taxes'
+            ],
         ];
     }
 }
