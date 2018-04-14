@@ -584,4 +584,18 @@ class PaypalButton extends Element
 
         return null;
     }
+
+    /**
+     * Returns a complete PayPal Button for display in template
+     *
+     * @param array|null $options
+     *
+     * @return string
+     * @throws \Twig_Error_Loader
+     * @throws \yii\base\Exception
+     */
+    public function displayButton(array $options = null)
+    {
+        return PaypalPlugin::$app->buttons->getButtonHtml($this->sku, $options);
+    }
 }

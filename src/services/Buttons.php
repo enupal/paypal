@@ -21,6 +21,7 @@ use enupal\paypal\Paypal;
 use enupal\paypal\elements\PaypalButton as ButtonElement;
 use enupal\paypal\records\PaypalButton as PaypalButtonRecord;
 use enupal\paypal\enums\PaypalSize;
+use craft\helpers\Template as TemplateHelper;
 
 use yii\base\Exception;
 use craft\models\MailSettings;
@@ -674,5 +675,53 @@ class Buttons extends Component
         $options[ShippingOptions::PROMPTANDREQUIRE] = Paypal::t('Prompt for an address and require one.');
 
         return $options;
+    }
+
+    /**
+     * Returns a complete Paypal Button for display in template
+     *
+     * @param string     $sku
+     * @param array|null $options
+     *
+     * @return string
+     * @throws \Twig_Error_Loader
+     * @throws \yii\base\Exception
+     */
+    public function getButtonHtml($sku, array $options = null)
+    {
+        $button = Paypal::$app->buttons->getButtonBySku($sku);
+        $templatePath = Paypal::$app->buttons->getEnupalPaypalPath();
+        $buttonHtml = null;
+        $settings = Paypal::$app->settings->getSettings();
+
+        if (!$settings->liveAccount || !$settings->sandboxAccount){
+            return Paypal::t("Please add a valid PayPal account on the plugin settings");
+        }
+
+        if ($button) {
+            if (!$button->hasUnlimitedStock && (int)$button->quantity < 0) {
+                $buttonHtml = '<span class="error">Out of Stock</span>';
+
+                return TemplateHelper::raw($buttonHtml);
+            }
+
+            $view = Craft::$app->getView();
+
+            $view->setTemplatesPath($templatePath);
+
+            $buttonHtml = $view->renderTemplate(
+                'button', [
+                    'button' => $button,
+                    'settings' => $settings,
+                    'options' => $options
+                ]
+            );
+
+            $view->setTemplatesPath(Craft::$app->path->getSiteTemplatesPath());
+        } else {
+            $buttonHtml = Paypal::t("PayPal Button not found or disabled");
+        }
+
+        return TemplateHelper::raw($buttonHtml);
     }
 }

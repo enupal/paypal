@@ -9,13 +9,16 @@
 namespace enupal\paypal;
 
 use Craft;
+use craft\events\RegisterComponentTypesEvent;
 use craft\events\RegisterUrlRulesEvent;
+use craft\services\Fields;
 use craft\web\UrlManager;
 use enupal\paypal\events\OrderCompleteEvent;
 use enupal\paypal\services\App;
 use enupal\paypal\services\Orders;
 use yii\base\Event;
 use craft\web\twig\variables\CraftVariable;
+use enupal\paypal\fields\Buttons as BuyNowButtonField;
 
 use enupal\paypal\variables\PaypalVariable;
 use enupal\paypal\models\Settings;
@@ -62,6 +65,10 @@ class Paypal extends Plugin
         Event::on(Orders::class, Orders::EVENT_AFTER_ORDER_COMPLETE, function(OrderCompleteEvent $e) {
             Paypal::$app->orders->sendCustomerNotification($e->order);
             Paypal::$app->orders->sendAdminNotification($e->order);
+        });
+
+        Event::on(Fields::class, Fields::EVENT_REGISTER_FIELD_TYPES, function(RegisterComponentTypesEvent $event) {
+            $event->types[] = BuyNowButtonField::class;
         });
     }
 

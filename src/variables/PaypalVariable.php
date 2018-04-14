@@ -8,10 +8,8 @@
 
 namespace enupal\paypal\variables;
 
-use Craft;
 use enupal\paypal\Paypal;
 use enupal\paypal\PaypalButtons;
-use craft\helpers\Template as TemplateHelper;
 
 /**
  * EnupalPaypal provides an API for accessing information about paypal buttons. It is accessible from templates via `craft.enupalPaypal`.
@@ -48,7 +46,7 @@ class PaypalVariable
     }
 
     /**
-     * Returns a complete Paypal Button for display in template
+     * Returns a complete PayPal Button for display in template
      *
      * @param string     $sku
      * @param array|null $options
@@ -59,40 +57,7 @@ class PaypalVariable
      */
     public function displayButton($sku, array $options = null)
     {
-        $button = Paypal::$app->buttons->getButtonBySku($sku);
-        $templatePath = Paypal::$app->buttons->getEnupalPaypalPath();
-        $buttonHtml = null;
-        $settings = Paypal::$app->settings->getSettings();
-
-        if (!$settings->liveAccount || !$settings->sandboxAccount){
-            return Paypal::t("Please add a valid PayPal account on the plugin settings");
-        }
-
-        if ($button) {
-            if (!$button->hasUnlimitedStock && (int)$button->quantity < 0) {
-                $buttonHtml = '<span class="error">Out of Stock</span>';
-
-                return TemplateHelper::raw($buttonHtml);
-            }
-
-            $view = Craft::$app->getView();
-
-            $view->setTemplatesPath($templatePath);
-
-            $buttonHtml = $view->renderTemplate(
-                'button', [
-                    'button' => $button,
-                    'settings' => $settings,
-                    'options' => $options
-                ]
-            );
-
-            $view->setTemplatesPath(Craft::$app->path->getSiteTemplatesPath());
-        } else {
-            $buttonHtml = Paypal::t("PayPal Button not found or disabled");
-        }
-
-        return TemplateHelper::raw($buttonHtml);
+        return Paypal::$app->buttons->getButtonHtml($sku, $options);
     }
 
     public function getCurrencyIsoOptions()
