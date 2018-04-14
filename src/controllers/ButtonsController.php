@@ -24,6 +24,9 @@ class ButtonsController extends BaseController
     /**
      * Save a Button
      *
+     * @return null|\yii\web\Response
+     * @throws \Exception
+     * @throws \Throwable
      * @throws \yii\web\BadRequestHttpException
      */
     public function actionSaveButton()
@@ -65,8 +68,10 @@ class ButtonsController extends BaseController
      * @param ButtonElement|null $button   The button send back by setRouteParams if any errors on saveButton
      *
      * @return \yii\web\Response
-     * @throws HttpException
      * @throws Exception
+     * @throws NotFoundHttpException
+     * @throws \Exception
+     * @throws \Throwable
      */
     public function actionEditButton(int $buttonId = null, ButtonElement $button = null)
     {

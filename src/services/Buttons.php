@@ -33,18 +33,12 @@ class Buttons extends Component
     const VARIANTS_PRICED_HANDLE = 'enupalPaypalPricedVariants';
     const VARIANTS_BASIC_HANDLE = 'enupalPaypalBasicVariants';
 
-    /**
-     * Constructor
-     *
-     * @param object $buttonRecord
-     */
-    public function __construct($buttonRecord = null)
+    public function init()
     {
-        $this->buttonRecord = $buttonRecord;
-
         if (is_null($this->buttonRecord)) {
             $this->buttonRecord = new PaypalButtonRecord();
         }
+        parent::init();
     }
 
     /**
@@ -147,6 +141,8 @@ class Buttons extends Component
      * Enupal PaypalButton send notification service
      *
      * @param $button ButtonElement
+     *
+     * @return bool
      */
     public function sendNotification(ButtonElement $button)
     {

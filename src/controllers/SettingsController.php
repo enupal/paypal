@@ -45,6 +45,7 @@ class SettingsController extends BaseController
 
     /**
      * @return \yii\web\Response
+     * @throws \yii\base\Exception
      * @throws \yii\web\BadRequestHttpException
      */
     public function actionGetSizeUrl()
