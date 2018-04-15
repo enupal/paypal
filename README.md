@@ -7,6 +7,8 @@
 
 Sell products or services on your website using a PayPal Buy Now Button
 
+![Screenshot](https://enupal.com/assets/docs/5-paypal.png)
+
 ## Features
 
 ### Allows customers from around the world can start buying products or services from your website using PayPal.
