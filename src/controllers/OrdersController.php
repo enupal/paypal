@@ -9,14 +9,11 @@
 namespace enupal\paypal\controllers;
 
 use Craft;
-use craft\helpers\UrlHelper;
 use craft\web\Controller as BaseController;
 use enupal\paypal\Paypal;
 use yii\web\NotFoundHttpException;
 use yii\base\Exception;
 
-use enupal\paypal\enums\PaypalSize;
-use enupal\paypal\PaypalButtons;
 use enupal\paypal\elements\PaypalButton as ButtonElement;
 
 class OrdersController extends BaseController
