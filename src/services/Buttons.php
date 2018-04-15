@@ -13,7 +13,9 @@ use craft\base\Field;
 use craft\fields\Matrix;
 use craft\fields\PlainText;
 use craft\fields\Table;
+use enupal\paypal\elements\PaypalButton;
 use enupal\paypal\enums\DiscountType;
+use enupal\paypal\enums\OpenWindow;
 use enupal\paypal\enums\ShippingOptions;
 use yii\base\Component;
 use enupal\paypal\Paypal;
@@ -62,7 +64,7 @@ class Buttons extends Component
      * @param string $sku
      * @param int $siteId
      *
-     * @return null|\craft\base\ElementInterface
+     * @return null|\craft\base\ElementInterface|array
      */
     public function getButtonBySku($sku, int $siteId = null)
     {
@@ -138,49 +140,6 @@ class Buttons extends Component
     }
 
     /**
-     * Enupal PaypalButton send notification service
-     *
-     * @param $button ButtonElement
-     *
-     * @return bool
-     */
-    public function sendNotification(ButtonElement $button)
-    {
-        $settings = new MailSettings();
-        $buttonSettings = Paypal::$app->settings->getSettings();
-        $templatePath = 'enupal-paypal/_notification/email';
-        $emailSettings = Craft::$app->getSystemSettings()->getSettings('email');
-
-        $settings->fromEmail = $buttonSettings->notificationSenderEmail;
-        $settings->fromName = $buttonSettings->notificationSenderName;
-        $settings->template = $templatePath;
-        $settings->transportType = $emailSettings['transportType'];
-        $settings->transportSettings = $emailSettings['transportSettings'];
-
-        $mailer = MailerHelper::createMailer($settings);
-
-        $emails = explode(",", $buttonSettings->notificationRecipients);
-
-        try {
-            $emailSent = $mailer
-                ->composeFromKey('enupal_paypal_notification', ['button' => $button])
-                ->setTo($emails)
-                ->send();
-        } catch (\Throwable $e) {
-            Craft::$app->getErrorHandler()->logException($e);
-            $emailSent = false;
-        }
-
-        if ($emailSent) {
-            Craft::info('Notification Email sent successfully!', __METHOD__);
-        } else {
-            Craft::error('There was an error sending the Notification email', __METHOD__);
-        }
-
-        return $emailSent;
-    }
-
-    /**
      * @return bool|string
      */
     public function getEnupalPaypalPath()
@@ -201,7 +160,7 @@ class Buttons extends Component
 
         $postFields = $request->getBodyParam('fields');
 
-        $button->setAttributes($postFields, false);
+        $button->setAttributes(/** @scrutinizer ignore-type */$postFields, false);
 
         return $button;
     }
@@ -324,8 +283,8 @@ class Buttons extends Component
     }
 
     /**
-     * @param null $name
-     * @param null $handle
+     * @param string $name
+     * @param string $handle
      *
      * @return ButtonElement
      * @throws \Exception
@@ -347,6 +306,7 @@ class Buttons extends Component
         $button->currency = $settings->defaultCurrency ? $settings->defaultCurrency : 'USD';
         $button->enabled = 1;
         $button->language = 'en_US';
+        $button->openIn = OpenWindow::NEWWINDOW;
 
         // Set default variant
         $button = $this->addDefaultVariant($button);
@@ -366,7 +326,7 @@ class Buttons extends Component
      */
     public function addDefaultVariant(ButtonElement $button)
     {
-        if (!$button) {
+        if (is_null($button)) {
             return null;
         }
 
@@ -513,7 +473,6 @@ class Buttons extends Component
      */
     public function getFieldAsNew($field, $value)
     {
-        $newField = null;
         $i = 1;
         $band = true;
         do {
@@ -716,5 +675,17 @@ class Buttons extends Component
         }
 
         return true;
+    }
+
+    /**
+     * @return array
+     */
+    public function getOpenOptions()
+    {
+        $options = [];
+        $options[OpenWindow::NEWWINDOW] = Paypal::t('New Window');
+        $options[OpenWindow::SAMEWINDOW] = Paypal::t('Same Window');
+
+        return $options;
     }
 }

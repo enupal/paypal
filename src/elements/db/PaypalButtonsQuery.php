@@ -114,6 +114,7 @@ class PaypalButtonsQuery extends ElementQuery
             'enupalpaypal_buttons.returnUrl',
             'enupalpaypal_buttons.cancelUrl',
             'enupalpaypal_buttons.buttonName',
+            'enupalpaypal_buttons.openIn',
         ]);
 
         if ($this->name) {

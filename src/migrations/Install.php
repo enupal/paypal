@@ -81,6 +81,7 @@ class Install extends Migration
             'returnUrl' => $this->string(),
             'cancelUrl' => $this->string(),
             'buttonName' => $this->string(),
+            'openIn' => $this->integer(),
             //
             'dateCreated' => $this->dateTime()->notNull(),
             'dateUpdated' => $this->dateTime()->notNull(),
