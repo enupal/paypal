@@ -13,9 +13,10 @@ Sell products or services on your website using a PayPal Buy Now Button
 
 ### Allows customers from around the world can start buying products or services from your website using PayPal.
 
+ * One line of Code: `{{ craft.paypalButton.displayButton('sku') }} `
  * Manage buttons
  * View sales in your control panel
- * Send out email notifications for admins and costumers
+ * Send out email notifications for admins and customers
  * Inventory management for each button
  * Add variants with priced options
  * Add variants with basic options

@@ -78,6 +78,15 @@
                 <p>
                 <img id="button-preview" src="" alt="">
                 </p>
+                <div style="flex-grow: 1;">
+                    {% set oneline = "{{ craft.paypalButton.displayButton('"~paypalButton.sku~"') }}"%}
+                    <span id="one-line" class ="short-url"> {{oneline}} </span>
+                    <span class="fa-stack fa-lg clipbtn" data-clipboard-target="#fields-one-line" alt="Copy to clipboard">
+                    <i class="fa fa-square-o fa-stack-2x"></i>
+                    <i class="fa fa-files-o fa-stack-1x"></i>
+                </span>
+                </div>
+                <span class="paypal-instructions"><p>{{ "One line of code, use it in your templates."|t('enupal-paypal') }}</p> </span>
             </div>
         {% endset %}
 
@@ -127,6 +136,12 @@
 {% do view.registerAssetBundle("enupal\\paypal\\assetbundles\\FontAwesomeAsset") %}
 {% js %}
     $(document).ready(function() {
+        var clipboard = new Clipboard('.clipbtn');
+
+        clipboard.on('success', function(e) {
+        Craft.cp.displayNotice(Craft.t('enupal-paypal','Copied!'));
+            e.clearSelection();
+        });
         new EnupalPaypal();
     });
 {% endjs %}
@@ -135,5 +150,47 @@
     .paypal-instructions {
     margin-top: 2px;
     color: #8f98a3;
+    }
+
+    .clipboard {
+    display: inline-block;
+    }
+    .clipboard input {
+    position: relative;
+    width: 100%;
+    min-height: 34px;
+    padding: 7px 8px;
+    font-size: 13px;
+    color: #333;
+    vertical-align: middle;
+    background-color: #fff;
+    background-repeat: no-repeat;
+    background-position: right 8px center;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    outline: none;
+    box-shadow: inset 0 1px 2px rgba(0,0,0,0.075);
+    }
+
+    .short-url {
+    margin-bottom: 20px;
+    padding: 8px 8px 9px 8px;
+    font-size: 15px;
+    background-color: #eee;
+    border-radius: 5px;
+    }
+
+    .clipbtn {
+    margin-left: 5px;
+    cursor: pointer;
+    padding: 8px 8px 9px 8px;
+    position: relative;
+    border-radius: 50%;
+    color: #333f4dcc;
+    }
+
+    .clear-button {
+    display: block;
+    margin-left: 5px;
     }
 {% endcss %}
