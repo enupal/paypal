@@ -115,13 +115,19 @@ class PaypalVariable
      */
     public function getOrderStatuses()
     {
-        $statuses = OrderStatus::getConstants();
-        $newStatues = [];
-        foreach ($statuses as $key => $status) {
-            $newStatues[$status] = ucwords($key);
-        }
+        $options = [];
+        $options[OrderStatus::NEW] = Paypal::t('New');
+        $options[OrderStatus::SHIPPED] = Paypal::t('Shipped');
 
-        return $newStatues;
+        return $options;
+    }
+
+    /**
+     * @return array
+     */
+    public function getOpenInOptions()
+    {
+        return Paypal::$app->buttons->getOpenOptions();
     }
 }
 

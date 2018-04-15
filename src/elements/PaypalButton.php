@@ -92,6 +92,7 @@ class PaypalButton extends Element
     public $returnUrl;
     public $cancelUrl;
     public $buttonName;
+    public $openIn;
 
     protected $env;
     protected $paypalUrl;
@@ -504,6 +505,7 @@ class PaypalButton extends Element
         $record->shippingAmount = $this->shippingAmount;
         $record->shippingOption = $this->shippingOption;
         $record->customerQuantity = $this->customerQuantity ? $this->customerQuantity : 0;
+        $record->openIn = $this->openIn;
 
         $record->returnUrl = $this->returnUrl;
         $record->cancelUrl = $this->cancelUrl;

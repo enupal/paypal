@@ -13,6 +13,7 @@
 {% set languageOptions = craft.paypalButton.getLanguageOptions() %}
 {% set discountOptions = craft.paypalButton.getDiscountOptions() %}
 {% set shippingOptions = craft.paypalButton.getShippingOptions() %}
+{% set openInOptions = craft.paypalButton.getOpenInOptions() %}
 
 <div class="meta">
     <h6>{{ 'General'|t('sprout-forms') }}</h6>
@@ -108,6 +109,14 @@
         id: 'customerQuantity',
         name: 'customerQuantity',
         on: paypalButton.customerQuantity
+    }) }}
+
+    {{ forms.selectField({
+        label: "Open In"|t('enupal-paypal'),
+        id: 'openIn',
+        name: 'openIn',
+        options: openInOptions,
+        value: paypalButton.openIn
     }) }}
 </div>
 <hr>

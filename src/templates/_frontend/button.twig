@@ -1,5 +1,5 @@
 {% spaceless %}
-<form class="paypal-button" method="post" action="{{ button.getPaypalUrl() }}" target="_blank">
+<form class="paypal-button" method="post" action="{{ button.getPaypalUrl() }}" {% if button.openIn == 1 %} target="_blank" {% endif %}>
     <input name="item_name" value="{{ button.name }}" type="hidden">
     {% if button.amount %}
     <input name="amount" value="{{ button.amount|number }}" type="hidden">
