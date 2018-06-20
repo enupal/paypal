@@ -129,5 +129,37 @@ class PaypalVariable
     {
         return Paypal::$app->buttons->getOpenOptions();
     }
+
+    /**
+     * @param $number
+     * @return array|\craft\base\ElementInterface
+     */
+    public function getOrderByNumber($number)
+    {
+        $order = Paypal::$app->orders->getOrderByNumber($number);
+
+        return $order;
+    }
+
+    /**
+     * @param $id
+     * @return \craft\base\ElementInterface|null
+     */
+    public function getOrderById($id)
+    {
+        $order = Paypal::$app->orders->getOrderById($id);
+
+        return $order;
+    }
+
+    /**
+     * @return \enupal\paypal\elements\Order[]|null
+     */
+    public function getAllOrders()
+    {
+        $orders = Paypal::$app->orders->getAllOrders();
+
+        return $orders;
+    }
 }
 
