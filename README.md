@@ -1,5 +1,5 @@
 <p align="center">
-	<a href="https://enupal.com/en/craft-plugins/enupal-paypal/docs/" target="_blank">
+	<a href="https://enupal.com/craft-plugins/paypal" target="_blank">
 	<img width="212" height="212" src="https://enupal.com/assets/docs/paypal-icon.svg" alt="Enupal Backup"></a>
 </p>
 
@@ -31,7 +31,7 @@ Sell products or services on your website using a PayPal Buy Now Button
 
 ## Documentation
 
-https://enupal.com/en/craft-plugins/enupal-paypal/docs/
+https://enupal.com/craft-plugins/paypal/docs/
 
 ## PayPal Support
 
