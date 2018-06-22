@@ -1,5 +1,9 @@
 # Enupal PayPal Changelog
 
+## 1.0.3- 2018.06.22
+### Added
+- Added id to the PayPal Form
+
 ## 1.0.2 - 2018.06.19
 ### Added
 - Added `getOrderByNumber`, `getOrderById` and `getAllOrders` to the `paypalButton` variable
