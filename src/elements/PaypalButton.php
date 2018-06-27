@@ -134,15 +134,9 @@ class PaypalButton extends Element
      * @return string
      * @throws \yii\base\Exception
      */
-    public function getReturnUrl()
+    public function getCompletePaymentUrl()
     {
-        $returnUrl = null;
-
-        if ($this->returnUrl){
-            $returnUrl = $this->getSiteUrl($this->returnUrl);
-        }
-
-        return $returnUrl;
+        return $this->getSiteUrl('/enupal-paypal/complete-payment');
     }
 
     /**
