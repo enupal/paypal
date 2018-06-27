@@ -173,7 +173,7 @@
         id: 'returnUrl',
         name: 'returnUrl',
         value: paypalButton.returnUrl,
-        placeholder: '/thank-you',
+        placeholder: '/order?number={number}',
         autofocus: true,
         errors: paypalButton.getErrors('returnUrl')
     }) }}
