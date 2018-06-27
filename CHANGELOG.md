@@ -1,5 +1,13 @@
 # Enupal PayPal Changelog
 
+## 1.0.4- 2018.06.27
+### Added
+- Added better Return Url functionality
+- Added `getOrders()` to PayPal Variable
+
+### Fixed
+- Fixed bug on `getOrderByNumber` service function
+ 
 ## 1.0.3- 2018.06.22
 ### Added
 - Added id to the PayPal Form
