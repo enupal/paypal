@@ -21,7 +21,7 @@ class PaypalController extends BaseController
     // Disable CSRF validation for the entire controller
     public $enableCsrfValidation = false;
 
-    protected $allowAnonymous = ['actionIpn'];
+    protected $allowAnonymous = ['actionIpn', 'actionCompletePayment'];
 
     /**
      * @return \yii\web\Response
@@ -86,6 +86,40 @@ class PaypalController extends BaseController
         }
 
         return $this->asJson(['success' => 'true']);
+    }
+
+
+    /**
+     * @return \yii\web\Response
+     * @throws \HttpException
+     * @throws \yii\base\Exception
+     */
+    public function actionCompletePayment()
+    {
+        $txnId = Craft::$app->getRequest()->getParam('txn_id');
+        $order = null;
+        // By default return to home page
+        $returnUrl = '/?order={number}';
+        // Lets wait 10 seconds until IPN is done
+        sleep(10);
+
+        if ($txnId){
+            $order = Paypal::$app->orders->getOrderByPaypalTransactionId($txnId);
+
+            if (!$order) {
+                throw new \HttpException(400, Craft::t('enupal-paypal', 'Can not find the order for missing PayPal transaction id.'));
+            }
+
+            $button = $order->getButton();
+
+            if ($button->returnUrl){
+                $returnUrl = $button->returnUrl;
+            }
+        }
+
+        $url = Craft::$app->getView()->renderObjectTemplate($returnUrl, $order);
+
+        return $this->redirect($url);
     }
 
     /**

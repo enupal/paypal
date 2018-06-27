@@ -169,7 +169,9 @@ class Paypal extends Plugin
     {
         return [
             'enupal-paypal/ipn' =>
-                'enupal-paypal/paypal/ipn'
+                'enupal-paypal/paypal/ipn',
+            'enupal-paypal/complete-payment' =>
+                'enupal-paypal/paypal/complete-payment'
         ];
     }
 }

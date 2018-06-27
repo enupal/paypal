@@ -53,6 +53,21 @@ class Orders extends Component
     }
 
     /**
+     * Returns a Order model by Paypal Reference
+     *
+     * @param string $paypalTransactionId
+     * @param int $siteId
+     *
+     * @return null|\craft\base\ElementInterface
+     */
+    public function getOrderByPaypalTransactionId($paypalTransactionId, int $siteId = null)
+    {
+        $order = Order::find()->paypalTransactionId($paypalTransactionId)->one();
+
+        return $order;
+    }
+
+    /**
      * Returns a Order model if one is found in the database by number
      *
      * @param string $number
@@ -63,7 +78,7 @@ class Orders extends Component
     public function getOrderByNumber($number, int $siteId = null)
     {
         $query = Order::find();
-        $query->sku($number);
+        $query->number($number);
         $query->siteId($siteId);
 
         return $query->one();
@@ -335,6 +350,7 @@ class Orders extends Component
     {
         $order = new Order();
         $order->orderStatusId = OrderStatus::NEW;
+
         $order->transactionInfo = json_encode($_POST);
         $order->number = $this->getRandomStr();
         $order->paypalTransactionId = $this->getPostValue('txn_id');
@@ -356,12 +372,12 @@ class Orders extends Component
         $order->addressStreet = $this->getPostValue('address_street');
         $order->addressZip = $this->getPostValue('address_zip');
         $order->testMode = 0;
-        $order->transactionInfo = json_encode($_POST);
         // Variants
         $variants = [];
         $search = "option_selection";
         $search_length = strlen($search);
         $pos = 1;
+
         foreach ($_POST as $key => $value) {
             if (substr($key, 0, $search_length) == $search) {
                 $name = $_POST['option_name'.$pos] ?? $pos;

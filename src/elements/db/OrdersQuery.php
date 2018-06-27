@@ -19,6 +19,7 @@ class OrdersQuery extends ElementQuery
     public $dateCreated;
     public $number;
     public $buttonId;
+    public $email;
     public $paypalTransactionId;
     public $orderStatusId;
     public $totalPrice;
@@ -39,6 +40,8 @@ class OrdersQuery extends ElementQuery
     public function number($value)
     {
         $this->number = $value;
+
+        return $this;
     }
 
     /**
@@ -55,6 +58,8 @@ class OrdersQuery extends ElementQuery
     public function totalPrice($value)
     {
         $this->totalPrice = $value;
+
+        return $this;
     }
 
     /**
@@ -68,9 +73,29 @@ class OrdersQuery extends ElementQuery
     /**
      * @inheritdoc
      */
+    public function email($value)
+    {
+        $this->email = $value;
+
+        return $this;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getEmail()
+    {
+        return $this->email;
+    }
+
+    /**
+     * @inheritdoc
+     */
     public function paypalTransactionId($value)
     {
         $this->paypalTransactionId = $value;
+
+        return $this;
     }
 
     /**
@@ -151,6 +176,11 @@ class OrdersQuery extends ElementQuery
             );
         }
 
+        if ($this->email) {
+            $this->subQuery->andWhere(Db::parseParam(
+                'enupalpaypal_orders.email', $this->email)
+            );
+        }
 
         if ($this->dateCreated) {
             $this->subQuery->andWhere(Db::parseDateParam('enupalpaypal_orders.dateCreated', $this->dateCreated));

@@ -1,5 +1,6 @@
 {% spaceless %}
 <form class="paypal-button" id="paypal-button-{{ button.id }}" method="post" action="{{ button.getPaypalUrl() }}" {% if button.openIn == 1 %} target="_blank" {% endif %}>
+    {{ csrfInput() }}
     <input name="item_name" value="{{ button.name }}" type="hidden">
     {% if button.amount %}
     <input name="amount" value="{{ button.amount|number }}" type="hidden">
@@ -56,7 +57,7 @@
     <input name="shipping" value="{{ button.shippingAmount|number }}" type="hidden">
     {% endif %}
     <input name="notify_url" value="{{ button.getIpnUrl() }}" type="hidden">
-    <input name="return" value="{{ button.getReturnUrl() }}" type="hidden">
+    <input name="return" value="{{ button.getCompletePaymentUrl() }}" type="hidden">
     <input name="lc" value="{{ button.language }}" type="hidden">
     <input name="cancel_return" value="{{ button.getCancelUrl() }}" type="hidden">
     <input name="rm" value="2" type="hidden">

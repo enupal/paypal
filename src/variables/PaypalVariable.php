@@ -8,6 +8,10 @@
 
 namespace enupal\paypal\variables;
 
+use enupal\paypal\elements\db\OrdersQuery;
+use enupal\paypal\elements\db\PaypalButtonsQuery;
+use enupal\paypal\elements\Order;
+use enupal\paypal\elements\PaypalButton;
 use enupal\paypal\enums\OrderStatus;
 use enupal\paypal\Paypal;
 use enupal\paypal\PaypalButtons;
@@ -160,6 +164,16 @@ class PaypalVariable
         $orders = Paypal::$app->orders->getAllOrders();
 
         return $orders;
+    }
+
+    /**
+     * @return OrdersQuery
+     */
+    public function getOrders()
+    {
+        $query = Order::find();
+
+        return $query;
     }
 }
 
