@@ -39,7 +39,7 @@
                 instructions: "Redirect buyers' to this URL after they complete their payments"|t('enupal-paypal'),
                 id: 'returnUrl',
                 name: 'returnUrl',
-                placeholder: '/thank-you',
+                placeholder: '/order?number={number}',
                 value: settings.returnUrl,
                 autofocus: true,
                 errors: settings.getErrors('returnUrl')
