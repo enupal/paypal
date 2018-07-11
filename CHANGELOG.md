@@ -1,5 +1,9 @@
 # Enupal PayPal Changelog
 
+## 1.0.5 - 2018.07.11
+### Added
+- Added `getButton(sku)` to PayPal Variable
+
 ## 1.0.4 - 2018.06.27
 ### Added
 - Added better Return Url functionality
