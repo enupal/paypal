@@ -175,5 +175,16 @@ class PaypalVariable
 
         return $query;
     }
+
+    /**
+     * @param $sku
+     * @return array|\craft\base\ElementInterface|null
+     */
+    public function getButton($sku)
+    {
+        $button = Paypal::$app->buttons->getButtonBySku($sku);
+
+        return $button;
+    }
 }
 

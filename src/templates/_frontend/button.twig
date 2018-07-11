@@ -27,7 +27,6 @@
     {% endif %}
     {# <!-- Provide a drop-down menu option basic variants. --> #}
     {% if button.enupalPaypalBasicVariants is defined and button.enupalPaypalBasicVariants and button.enupalPaypalBasicVariants.first() %}
-        {% set pricedOptionsBlock = button.enupalPaypalBasicVariants.first() %}
         {% for basicOptionsBlock in button.enupalPaypalBasicVariants %}
             <input type="hidden" name="on{{ loop.index }}" value="{{ basicOptionsBlock.variantName }}">
             <div class="form-group">
