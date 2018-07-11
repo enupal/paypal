@@ -43,10 +43,10 @@ Create an [issue](https://github.com/enupal/paypal/issues) on Github
 
 ------------------------------------------------------------
 
-Brought to you by [enupal](https://enupal.com/en)
+Brought to you by [enupal](https://enupal.com)
 
 <p align="center">
-  <a href="https://enupal.com/en" target="_blank">
+  <a href="https://enupal.com" target="_blank">
   <img width="169" height="35" src="https://enupal.com/assets/docs/enupal-logo.png" alt="Enupal"></a>
 </p>
 
