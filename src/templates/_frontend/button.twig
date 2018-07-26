@@ -6,8 +6,8 @@
     <input name="amount" value="{{ button.amount|number }}" type="hidden">
     {% endif %}
     {# <!-- Provide a drop-down menu option field with prices. --> #}
-    {% if button.enupalPaypalPricedVariants is defined and button.enupalPaypalPricedVariants and button.enupalPaypalPricedVariants.first()  %}
-        {% set pricedOptionsBlock = button.enupalPaypalPricedVariants.first() %}
+    {% if button.enupalPaypalPricedVariants is defined and button.enupalPaypalPricedVariants and button.enupalPaypalPricedVariants.one()  %}
+        {% set pricedOptionsBlock = button.enupalPaypalPricedVariants.one() %}
         <input type="hidden" name="on0" value="{{ pricedOptionsBlock.variantName }}">
         {% set hiddenFieldsHtml = '' %}
         <div class="form-group">
@@ -26,7 +26,7 @@
         <br>
     {% endif %}
     {# <!-- Provide a drop-down menu option basic variants. --> #}
-    {% if button.enupalPaypalBasicVariants is defined and button.enupalPaypalBasicVariants and button.enupalPaypalBasicVariants.first() %}
+    {% if button.enupalPaypalBasicVariants is defined and button.enupalPaypalBasicVariants and button.enupalPaypalBasicVariants.one() %}
         {% for basicOptionsBlock in button.enupalPaypalBasicVariants %}
             <input type="hidden" name="on{{ loop.index }}" value="{{ basicOptionsBlock.variantName }}">
             <div class="form-group">
