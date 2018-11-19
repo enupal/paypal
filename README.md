@@ -1,4 +1,7 @@
 <p align="center">
+<img src="https://scrutinizer-ci.com/g/enupal/paypal/badges/quality-score.png?b=master"> <img src="https://scrutinizer-ci.com/g/enupal/paypal/badges/coverage.png?b=master"> <img src="https://scrutinizer-ci.com/g/enupal/paypal/badges/build.png?b=master"> <img src="https://scrutinizer-ci.com/g/enupal/paypal/badges/code-intelligence.svg?b=master">
+</p>
+<p align="center">
 	<a href="https://enupal.com/craft-plugins/paypal" target="_blank">
 	<img width="212" height="212" src="https://enupal.com/assets/docs/paypal-icon.svg" alt="Enupal Backup"></a>
 </p>
