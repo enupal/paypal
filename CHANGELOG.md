@@ -1,6 +1,29 @@
 # Enupal PayPal Changelog
 
-## 1.0.3- 2018.06.22
+## 1.0.7 - 2018.11.19
+### Fixed
+- Fixed error where `HttpException` class does not exists
+
+### Updated
+-  Updated `assetBundles` folder to `web`
+
+## 1.0.6 - 2018.07.26
+### Fixed
+- Fixed deprecation errors
+
+## 1.0.5 - 2018.07.11
+### Added
+- Added `getButton(sku)` to PayPal Variable
+
+## 1.0.4 - 2018.06.27
+### Added
+- Added better Return Url functionality
+- Added `getOrders()` to PayPal Variable
+
+### Fixed
+- Fixed bug on `getOrderByNumber` service function
+ 
+## 1.0.3 - 2018.06.22
 ### Added
 - Added id to the PayPal Form
 

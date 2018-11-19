@@ -10,7 +10,7 @@
 {% extends "enupal-paypal/_layouts/elementindex" %}
 {% set title = "Paypal Buttons"|t %}
 {% set elementType = 'enupal\\paypal\\elements\\PaypalButton' %}
-{% do view.registerAssetBundle("enupal\\paypal\\assetBundles\\FontAwesomeAsset") %}
+{% do view.registerAssetBundle("enupal\\paypal\\web\\FontAwesomeAsset") %}
 {% block actionButton %}
     <div class="buttons">
         <a class="btn submit add icon" href="{{ url('enupal-paypal/buttons/new') }}">{{ "New Paypal Button"|t('enupal-paypal') }}</a>

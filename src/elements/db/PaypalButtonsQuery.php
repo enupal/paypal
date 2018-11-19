@@ -35,6 +35,8 @@ class PaypalButtonsQuery extends ElementQuery
     public function sku($value)
     {
         $this->sku = $value;
+
+        return $this;
     }
 
     /**
@@ -51,6 +53,8 @@ class PaypalButtonsQuery extends ElementQuery
     public function name($value)
     {
         $this->name = $value;
+
+        return $this;
     }
 
     /**

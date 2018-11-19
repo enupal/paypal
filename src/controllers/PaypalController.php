@@ -12,8 +12,7 @@ use Craft;
 use craft\web\Controller as BaseController;
 
 use enupal\paypal\contracts\PaypalIPN;
-use enupal\paypal\elements\Order;
-use enupal\paypal\enums\OrderStatus;
+use yii\web\NotFoundHttpException;
 use enupal\paypal\Paypal;
 
 class PaypalController extends BaseController
@@ -88,10 +87,10 @@ class PaypalController extends BaseController
         return $this->asJson(['success' => 'true']);
     }
 
-
     /**
      * @return \yii\web\Response
-     * @throws \HttpException
+     * @throws NotFoundHttpException
+     * @throws \Throwable
      * @throws \yii\base\Exception
      */
     public function actionCompletePayment()
@@ -106,8 +105,8 @@ class PaypalController extends BaseController
         if ($txnId){
             $order = Paypal::$app->orders->getOrderByPaypalTransactionId($txnId);
 
-            if (!$order) {
-                throw new \HttpException(400, Craft::t('enupal-paypal', 'Can not find the order for missing PayPal transaction id.'));
+            if (is_null($order)) {
+                throw new NotFoundHttpException(Craft::t('enupal-paypal', 'Order does not exists'));
             }
 
             $button = $order->getButton();
