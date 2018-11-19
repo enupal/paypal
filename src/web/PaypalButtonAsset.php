@@ -6,12 +6,12 @@
  * @copyright Copyright (c) 2018 Enupal
  */
 
-namespace enupal\paypal\assetbundles;
+namespace enupal\paypal\web;
 
 use craft\web\AssetBundle;
 use craft\web\assets\cp\CpAsset;
 
-class FontAwesomeAsset extends AssetBundle
+class PaypalButtonAsset extends AssetBundle
 {
     public function init()
     {
@@ -19,11 +19,16 @@ class FontAwesomeAsset extends AssetBundle
         $this->sourcePath = '@enupal/paypal/resources/';
 
         // define the dependencies
+        $this->depends = [
+            CpAsset::class,
+        ];
+
+        // define the dependencies
         // define the relative path to CSS/JS files that should be registered with the page
         // when this asset bundle is registered
-
-        $this->css = [
-            'css/font/css/font-awesome.min.css'
+        $this->js = [
+            'clipboard/clipboard.min.js',
+            'js/enupalpaypalbutton.js'
         ];
 
         parent::init();

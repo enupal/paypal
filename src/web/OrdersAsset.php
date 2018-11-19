@@ -6,7 +6,7 @@
  * @copyright Copyright (c) 2018 Enupal
  */
 
-namespace enupal\paypal\assetbundles;
+namespace enupal\paypal\web;
 
 use craft\web\AssetBundle;
 use craft\web\assets\cp\CpAsset;
