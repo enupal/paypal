@@ -1,5 +1,12 @@
 # Enupal PayPal Changelog
 
+## 1.0.7 - 2018.11.19
+### Fixed
+- Fixed error where `HttpException` class does not exists
+
+### Updated
+-  Updated `assetBundles` folder to `web`
+
 ## 1.0.6 - 2018.07.26
 ### Fixed
 - Fixed deprecation errors
