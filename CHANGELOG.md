@@ -1,5 +1,9 @@
 # Enupal PayPal Changelog
 
+## 1.0.8 - 2019.07.11
+### Added
+- Added support for Craft 3.2
+
 ## 1.0.7 - 2018.11.19
 ### Fixed
 - Fixed error where `HttpException` class does not exists
