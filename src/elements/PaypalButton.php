@@ -127,7 +127,7 @@ class PaypalButton extends Element
         $this->cancelUrl = $this->cancelUrl ? $this->cancelUrl : $this->settings->cancelUrl;
         $this->currency = $this->currency ? $this->currency : $this->settings->defaultCurrency;
 
-        $this->business = $this->settings->testMode ? $this->settings->sandboxAccount : $this->settings->liveAccount;
+        $this->business = $this->settings->testMode ? trim(Craft::parseEnv($this->settings->sandboxAccount)) : trim(Craft::parseEnv($this->settings->liveAccount));
     }
 
     /**
@@ -180,7 +180,7 @@ class PaypalButton extends Element
      */
     public function getBusiness()
     {
-        $this->business = $this->settings->testMode ? $this->settings->sandboxAccount : $this->settings->liveAccount;
+        $this->business = $this->settings->testMode ? trim(Craft::parseEnv($this->settings->sandboxAccount)) : trim(Craft::parseEnv($this->settings->liveAccount));
 
         return $this->business;
     }

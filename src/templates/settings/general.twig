@@ -47,23 +47,25 @@
 
             <hr>
 
-            {{ forms.textField({
+            {{ forms.autosuggestField({
                 label: "Live Account"|t('enupal-paypal'),
                 instructions: "PayPal ID or an email address associated with your PayPal account. You can find your Merchant account ID in your PayPal account under Profile -> My business info -> Merchant account ID"|t('enupal-paypal'),
                 id: 'liveAccount',
                 name: 'liveAccount',
                 value: settings.liveAccount,
-                autofocus: true,
+                class: 'ltr',
+                suggestEnvVars: true,
                 errors: settings.getErrors('liveAccount')
             }) }}
 
-            {{ forms.textField({
+            {{ forms.autosuggestField({
                 label: "Sandbox Account"|t('enupal-paypal'),
                 instructions: "The PayPal Sandbox is a self-contained, virtual testing environment that mimics the live PayPal production environment. Use your existing PayPal account to log in to the Developer website at <a href='https://developer.paypal.com/'>developer.paypal.com</a>, or create a new PayPal account by clicking the Sign Up button on this site."|t('enupal-paypal'),
                 id: 'sandboxAccount',
                 name: 'sandboxAccount',
                 value: settings.sandboxAccount,
-                autofocus: true,
+                class: 'ltr',
+                suggestEnvVars: true,
                 errors: settings.getErrors('sandboxAccount')
             }) }}
 
