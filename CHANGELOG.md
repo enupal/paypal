@@ -1,5 +1,9 @@
 # Enupal PayPal Changelog
 
+## 1.0.9 - 2019.08.29
+### Added
+- Added support for project config and environmental variables
+
 ## 1.0.8 - 2019.07.11
 ### Added
 - Added support for Craft 3.2
