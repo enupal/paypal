@@ -1,5 +1,9 @@
 # Enupal PayPal Changelog
 
+## 1.0.10 - 2019.09.02
+### Fixed
+- Fixed issue when generating the IPN url
+
 ## 1.0.9 - 2019.08.29
 ### Added
 - Added support for project config and environmental variables

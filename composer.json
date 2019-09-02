@@ -2,7 +2,7 @@
   "name": "enupal/paypal",
   "description": "Sell products or services on your website using a PayPal Buy Now Button",
   "type": "craft-plugin",
-  "version": "1.0.9",
+  "version": "1.0.10",
   "keywords": [
     "craft",
     "cms",
