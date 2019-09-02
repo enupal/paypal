@@ -164,13 +164,13 @@ class PaypalButton extends Element
         return $this->paypalUrl;
     }
 
-    /**
-     * @return string
-     * @throws \craft\errors\SiteNotFoundException
-     */
-    public function getIpnUrl()
+	/**
+	 * @return string
+	 * @throws \yii\base\Exception
+	 */
+	public function getIpnUrl()
     {
-        $this->ipnUrl = Craft::getAlias(Craft::$app->getSites()->getPrimarySite()->baseUrl.'enupal-paypal/ipn');
+        $this->ipnUrl = $this->getSiteUrl('/enupal-paypal/ipn');
 
         return $this->ipnUrl;
     }
