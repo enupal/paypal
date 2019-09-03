@@ -34,11 +34,14 @@ class PaypalController extends BaseController
             $ipn = new PaypalIPN();
             $ipn->usePHPCerts();
 
+	        Craft::info("IPN Received:  ".json_encode($_POST), __METHOD__);
+
             if ($settings->testMode){
                 $ipn->useSandbox();
             }
 
             if ($ipn->verifyIPN()) {
+	            Craft::info("IPN validated", __METHOD__);
                 $order = Paypal::$app->orders->populateOrder();
                 $button = Paypal::$app->buttons->getButtonBySku($this->getValue('item_number'));
 
@@ -53,24 +56,12 @@ class PaypalController extends BaseController
                     $saveButton = true;
                 }
 
-                $receiverEmail = $this->getValue('receiver_email');
-                $receiverId = $this->getValue('receiver_id');
-
-                $result = ($settings->liveAccount ==  $receiverEmail || $settings->liveAccount != $receiverId);
-
-                if ($order->testMode){
-                    $result = ($settings->sandboxAccount ==  $receiverEmail || $settings->sandboxAccount == $receiverId);
-                }
-
-                if (!$result){
-                    Craft::error('PayPal receiverEmail does not match', __METHOD__);
-                    return $this->asJson(['success' => 'false']);
-                }
-
                 if (!Paypal::$app->orders->saveOrder($order)){
                     Craft::error('Something went wrong saving the order: '.json_encode($order->getErrors()), __METHOD__);
                     return $this->asJson(['success' => 'false']);
                 }
+
+	            Craft::info("Paypal Order created id: ".$order->id, __METHOD__);
                 // Let's update the stock
                 if ($saveButton){
                     if (!Paypal::$app->buttons->saveButton($button)){
