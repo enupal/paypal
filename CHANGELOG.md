@@ -1,5 +1,9 @@
 # Enupal PayPal Changelog
 
+## 1.0.11 - 2019.09.03
+### Fixed
+- Fixed issue that prevent create the order when the IPN is received
+
 ## 1.0.10 - 2019.09.02
 ### Fixed
 - Fixed issue when generating the IPN url
