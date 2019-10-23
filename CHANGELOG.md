@@ -1,5 +1,9 @@
 # Enupal PayPal Changelog
 
+## 1.1.0 - 2019.10.23
+### Added
+- Added custom URL and HTML button options to button appearance setting
+
 ## 1.0.11 - 2019.09.03
 ### Fixed
 - Fixed issue that prevent create the order when the IPN is received
