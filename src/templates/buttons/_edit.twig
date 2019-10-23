@@ -73,7 +73,31 @@
                     }) }}
                 </div>
             </div>
-            <div class="header" style="text-align: center;">
+            <div id="custom-size-url" class="{% if paypalButton.size != 7 %}hidden{% endif %}">
+                {{ forms.textField({
+                    label: "Custom Button URL"|t('sprout-forms'),
+                    id: 'buttonSizeCustomUrl',
+                    name: 'buttonSizeCustomUrl',
+                    value: settings.buttonSizeCustomUrl
+                }) }}
+            </div>
+
+            <div id="custom-size-class" class="{% if paypalButton.size != 8 %}hidden{% endif %}">
+                {{ forms.textField({
+                    label: "Custom Button Name"|t('sprout-forms'),
+                    id: 'buttonSizeCustomName',
+                    name: 'buttonSizeCustomName',
+                    value: settings.buttonSizeCustomName
+                }) }}
+
+                {{ forms.textField({
+                    label: "Custom Button Class"|t('sprout-forms'),
+                    id: 'buttonSizeCustomClass',
+                    name: 'buttonSizeCustomClass',
+                    value: settings.buttonSizeCustomClass
+                }) }}
+            </div>
+            <div id="preview-wrapper" class="header {% if paypalButton.size > 6 %}hidden{% endif %}" style="text-align: center;">
                 <span class="paypal-instructions"><p>{{ "Preview:"|t('enupal-paypal') }}</p> </span>
                 <p>
                 <img id="button-preview" src="" alt="">

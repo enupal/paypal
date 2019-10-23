@@ -278,6 +278,8 @@ class Buttons extends Component
         $sizes[PaypalSize::PAYSMALL] = Paypal::t('Pay Now - Small');
         $sizes[PaypalSize::PAYBIG] = Paypal::t('Pay Now - Big');
         $sizes[PaypalSize::PAYBIGCC] = Paypal::t('Pay Now - Big with Credit Cards');
+        $sizes[PaypalSize::CUSTOM_URL] = Paypal::t('Custom URL');
+        $sizes[PaypalSize::BUTTON_CLASS] = Paypal::t('HTML Button');
 
         return $sizes;
     }
