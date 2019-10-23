@@ -78,7 +78,7 @@
                     label: "Custom Button URL"|t('sprout-forms'),
                     id: 'buttonSizeCustomUrl',
                     name: 'buttonSizeCustomUrl',
-                    value: settings.buttonSizeCustomUrl
+                    value: paypalButton.buttonSizeCustomUrl
                 }) }}
             </div>
 
@@ -87,14 +87,14 @@
                     label: "Custom Button Name"|t('sprout-forms'),
                     id: 'buttonSizeCustomName',
                     name: 'buttonSizeCustomName',
-                    value: settings.buttonSizeCustomName
+                    value: paypalButton.buttonSizeCustomName
                 }) }}
 
                 {{ forms.textField({
                     label: "Custom Button Class"|t('sprout-forms'),
                     id: 'buttonSizeCustomClass',
                     name: 'buttonSizeCustomClass',
-                    value: settings.buttonSizeCustomClass
+                    value: paypalButton.buttonSizeCustomClass
                 }) }}
             </div>
             <div id="preview-wrapper" class="header {% if paypalButton.size > 6 %}hidden{% endif %}" style="text-align: center;">

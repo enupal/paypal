@@ -30,7 +30,8 @@
         {
             var value = this.$sizeSelect.val();
             var language = this.$languageSelect.val();
-            var data = {'size': value, 'language': language};
+            var buttonId = $("input[name='buttonId']").val();
+            var data = {'size': value, 'language': language, 'buttonId': buttonId};
 
             if (value < 7){
                 $("#fields-preview-wrapper").removeClass('hidden');

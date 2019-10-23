@@ -43,9 +43,6 @@ class Settings extends Model
     public $adminNotificationReplyToEmail;
     public $adminNotificationTemplate;
 
-    public $buttonSizeCustomUrl = '';
-    public $buttonSizeCustomName = 'Pay';
-    public $buttonSizeCustomClass = '';
     /**
      * @inheritdoc
      */

@@ -55,8 +55,9 @@ class SettingsController extends BaseController
 
         $size = $request->getBodyParam('size');
         $language = $request->getBodyParam('language');
+        $buttonId = $request->getBodyParam('buttonId');
 
-        $buttonUrl = Paypal::$app->buttons->getButtonSizeUrl($size, $language);
+        $buttonUrl = Paypal::$app->buttons->getButtonSizeUrl($size, $language, $buttonId);
 
         return $this->asJson(['buttonUrl' => $buttonUrl]);
     }

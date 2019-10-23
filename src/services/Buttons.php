@@ -509,15 +509,17 @@ class Buttons extends Component
      * @param int    $buttonSize
      *
      * @param string $language
+     * @param int $buttonId
      *
      * @return string
      * @throws Exception
      */
-    public function getButtonSizeUrl($buttonSize = 0, $language = 'en_ES')
+    public function getButtonSizeUrl($buttonSize = 0, $language = 'en_ES', $buttonId)
     {
         $buttonUrl = '';
         $basseUrl = 'https://www.paypalobjects.com/{language}{extra}/i/btn/';
         $extra = '';
+        $button = $this->getButtonById($buttonId);
 
         if ($language == 'nl_NL'){
             $extra = '/NL/';
@@ -563,7 +565,14 @@ class Buttons extends Component
                     $buttonUrl = $basseUrl.'btn_paynowCC_LG.gif';
                     break;
                 }
+
+            case PaypalSize::CUSTOM_URL:
+                {
+                    $buttonUrl = $button->buttonSizeCustomUrl;
+                    break;
+                }
         }
+
 
         $buttonUrl = Craft::$app->view->renderObjectTemplate($buttonUrl, [
             'language' => $language,
