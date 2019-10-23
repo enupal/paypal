@@ -100,6 +100,10 @@ class PaypalButton extends Element
     protected $business;
     protected $settings;
 
+    public $buttonSizeCustomUrl = '';
+    public $buttonSizeCustomName = 'Pay';
+    public $buttonSizeCustomClass = '';
+
     /**
      * @inheritdoc
      */
@@ -489,6 +493,9 @@ class PaypalButton extends Element
         $record->name = $this->name;
         $record->sku = $this->sku;
         $record->size = $this->size;
+        $record->buttonSizeCustomUrl = $this->buttonSizeCustomUrl;
+        $record->buttonSizeCustomName = $this->buttonSizeCustomName;
+        $record->buttonSizeCustomClass = $this->buttonSizeCustomClass;
         $record->currency = $this->currency;
         $record->language = $this->language;
         $record->amount = $this->amount;
@@ -550,7 +557,7 @@ class PaypalButton extends Element
         $buttonSize = $size ?? $this->size;
         $lang = $language ?? $this->language;
         // Small By default
-        $buttonUrl = PaypalPlugin::$app->buttons->getButtonSizeUrl($buttonSize, $lang);
+        $buttonUrl = PaypalPlugin::$app->buttons->getButtonSizeUrl($buttonSize, $lang, $this->id);
 
         return $buttonUrl;
     }

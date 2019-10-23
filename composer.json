@@ -2,7 +2,7 @@
   "name": "enupal/paypal",
   "description": "Sell products or services on your website using a PayPal Buy Now Button",
   "type": "craft-plugin",
-  "version": "1.0.11",
+  "version": "1.1.0",
   "keywords": [
     "craft",
     "cms",
@@ -39,7 +39,6 @@
   "extra": {
     "name": "PayPal",
     "handle": "enupal-paypal",
-    "schemaVersion": "1.0.0",
     "hasSettings": true,
     "changelogUrl": "https://raw.githubusercontent.com/enupal/paypal/master/CHANGELOG.md",
     "developer": "Enupal",

@@ -30,21 +30,39 @@
         {
             var value = this.$sizeSelect.val();
             var language = this.$languageSelect.val();
-            var data = {'size': value, 'language': language};
+            var buttonId = $("input[name='buttonId']").val();
+            var data = {'size': value, 'language': language, 'buttonId': buttonId};
 
-            Craft.postActionRequest('enupal-paypal/settings/get-size-url', data, $.proxy(function(response, textStatus)
-            {
-                var statusSuccess = (textStatus === 'success');
+            if (value < 7){
+                $("#fields-preview-wrapper").removeClass('hidden');
+                $("#fields-custom-size-url").addClass('hidden');
+                $("#fields-custom-size-class").addClass('hidden');
+                Craft.postActionRequest('enupal-paypal/settings/get-size-url', data, $.proxy(function(response, textStatus)
+                {
+                    var statusSuccess = (textStatus === 'success');
 
-                if(statusSuccess && response.buttonUrl)
-                {
-                    $("#fields-button-preview").attr("src",response.buttonUrl);
+                    if(statusSuccess && response.buttonUrl)
+                    {
+                        $("#fields-button-preview").attr("src",response.buttonUrl);
+                    }
+                    else
+                    {
+                        Craft.cp.displayError(Craft.t('enupal-paypal','An unknown error occurred.'));
+                    }
+                }, this));
+            }else{
+                if (value == 7){
+                    $("#fields-preview-wrapper").addClass('hidden');
+                    $("#fields-custom-size-class").addClass('hidden');
+                    $("#fields-custom-size-url").removeClass('hidden');
+                }else if(value == 8){
+                    $("#fields-preview-wrapper").addClass('hidden');
+                    $("#fields-custom-size-class").removeClass('hidden');
+                    $("#fields-custom-size-url").addClass('hidden');
                 }
-                else
-                {
-                    Craft.cp.displayError(Craft.t('enupal-paypal','An unknown error occurred.'));
-                }
-            }, this));
+            }
+
+
         },
 
         handleUnlimitedStock: function(option) {

@@ -22,4 +22,6 @@ abstract class PaypalSize extends BaseEnum
     const PAYSMALL = 4;
     const PAYBIG = 5;
     const PAYBIGCC = 6;
+    const CUSTOM_URL = 7;
+    const BUTTON_CLASS = 8;
 }

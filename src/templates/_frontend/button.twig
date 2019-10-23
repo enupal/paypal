@@ -64,6 +64,10 @@
     <input name="cmd" value="_xclick" type="hidden">
     <input name="business" value="{{ button.getBusiness() }}" type="hidden">
     <input name="bn" value="craft_plugin_paypal" type="hidden">
-    <input style='border: none;' class='paypalbuttonimage' type='image' src='{{ button.getButtonUrl() }}' border='0' name='submit' alt='{{ "PayPal - The safer, easier way to pay online!"|t('enupal-paypal')}}'>
+    {% if button.size <= 7 %}
+        <input style='border: none;' class='paypalbuttonimage' type='image' src='{{ button.getButtonUrl() }}' border='0' name='submit' alt='{{ "PayPal - The safer, easier way to pay online!"|t('enupal-paypal')}}'>
+    {% else %}
+        <button class="{{ button.buttonSizeCustomClass }}">{{ button.buttonSizeCustomName }}</button>
+    {% endif %}
 </form>
 {% endspaceless %}
