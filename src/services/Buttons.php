@@ -162,6 +162,14 @@ class Buttons extends Component
 
         $button->setAttributes(/** @scrutinizer ignore-type */$postFields, false);
 
+        if (isset($postFields[self::VARIANTS_BASIC_HANDLE])) {
+            $button->setFieldValue(self::VARIANTS_BASIC_HANDLE, $postFields[self::VARIANTS_BASIC_HANDLE]);
+        }
+
+        if (isset($postFields[self::VARIANTS_PRICED_HANDLE])) {
+            $button->setFieldValue(self::VARIANTS_PRICED_HANDLE, $postFields[self::VARIANTS_PRICED_HANDLE]);
+        }
+
         return $button;
     }
 
