@@ -1,5 +1,14 @@
 # Enupal PayPal Changelog
 
+## 1.2.0 - 2020.02.26
+### Added
+- Added support to Craft 3.4
+
+### Fixed
+- Fixed issue on amount with decimals ([#5])
+
+[#5]: https://github.com/enupal/paypal/issues/5
+
 ## 1.1.0 - 2019.10.23
 ### Added
 - Added custom URL and HTML button options to button appearance setting
