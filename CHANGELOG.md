@@ -1,5 +1,9 @@
 # Enupal PayPal Changelog
 
+## 1.3.0 - 2020.11.12
+### Added
+- Added support to PHP 7.4
+
 ## 1.2.0 - 2020.02.26
 ### Added
 - Added support to Craft 3.4
