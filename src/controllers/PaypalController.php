@@ -43,6 +43,12 @@ class PaypalController extends BaseController
             if ($ipn->verifyIPN()) {
 	            Craft::info("IPN validated", __METHOD__);
                 $order = Paypal::$app->orders->populateOrder();
+
+                if ($order->id) {
+                    Craft::info('IPN already processed with order id: '.$order->id, __METHOD__);
+                    return $this->asJson(['success' => 'true']);
+                }
+
                 $button = Paypal::$app->buttons->getButtonBySku($this->getValue('item_number'));
 
                 if ($button){
