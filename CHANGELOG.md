@@ -1,5 +1,9 @@
 # Enupal PayPal Changelog
 
+## 1.3.1 - 2021.01.29
+### Fixed
+- Fixed issue where duplicate orders during IPN
+
 ## 1.3.0 - 2020.11.12
 ### Added
 - Added support to PHP 7.4
