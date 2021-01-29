@@ -343,11 +343,16 @@ class Orders extends Component
     }
 
     /**
-     * @return Order
+     * @return Order|\craft\base\ElementInterface
      * @throws \Exception
      */
     public function populateOrder()
     {
+        $order = $this->getOrderByPaypalTransactionId($this->getPostValue('txn_id'));
+        if (!is_null($order)) {
+            return $order;
+        }
+
         $order = new Order();
         $order->orderStatusId = OrderStatus::NEW;
 
