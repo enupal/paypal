@@ -1,5 +1,9 @@
 # Enupal PayPal Changelog
 
+## 2.0.1 - 2022.11.19
+### Fixed
+- Fixed issue on field type
+
 ## 2.0.0 - 2022.11.19
 ### Added
 - Added support to Craft CMS 4
