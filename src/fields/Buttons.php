@@ -34,7 +34,7 @@ class Buttons extends BaseRelationField
     /**
      * @inheritdoc
      */
-    protected static function elementType(): string
+    public static function elementType(): string
     {
         return PaypalButton::class;
     }
