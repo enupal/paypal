@@ -29,7 +29,6 @@ class Order extends Element
 {
     // General - Properties
     // =========================================================================
-    public $id;
 
     public $testMode;
 
@@ -78,7 +77,6 @@ class Order extends Element
     // variants
     public $variants;
 
-    public $dateCreated;
     public $dateOrdered;
 
     /**
@@ -94,7 +92,7 @@ class Order extends Element
     /**
      * @inheritdoc
      */
-    public static function refHandle()
+    public static function refHandle(): ?string
     {
         return 'orders';
     }
@@ -134,7 +132,7 @@ class Order extends Element
     /**
      * @inheritdoc
      */
-    public function getCpEditUrl()
+    public function getCpEditUrl(): ?string
     {
         return UrlHelper::cpUrl(
             'enupal-paypal/orders/edit/'.$this->id
@@ -147,7 +145,7 @@ class Order extends Element
      * @return string
      */
     /** @noinspection PhpInconsistentReturnPointsInspection */
-    public function __toString()
+    public function __toString(): string
     {
         try {
             return $this->number;
@@ -170,7 +168,7 @@ class Order extends Element
      *
      * @return string|null
      */
-    public function getStatus()
+    public function getStatus(): ?string
     {
         $statusId = $this->orderStatusId ?? OrderStatus::NEW;
 
@@ -325,7 +323,7 @@ class Order extends Element
      * @inheritdoc
      * @throws Exception if reasons
      */
-    public function afterSave(bool $isNew)
+    public function afterSave(bool $isNew): void
     {
         // Get the Order record
         if (!$isNew) {
@@ -371,7 +369,7 @@ class Order extends Element
     /**
      * @inheritdoc
      */
-    public function rules()
+    public function rules(): array
     {
         return [
             [['number'], 'required'],

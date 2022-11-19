@@ -1,5 +1,9 @@
 # Enupal PayPal Changelog
 
+## 2.0.0 - 2022.11.19
+### Added
+- Added support to Craft CMS 4
+
 ## 1.3.1 - 2021.01.29
 ### Fixed
 - Fixed issue where duplicate orders during IPN

@@ -6,7 +6,7 @@
 	<img width="212" height="212" src="https://enupal.com/assets/docs/paypal-icon.svg" alt="Enupal Backup"></a>
 </p>
 
-# Paypal Buy Now Buttons Plugin for Craft CMS 3.x
+# Paypal Buy Now Buttons Plugin for Craft CMS 3.x and 4.x
 
 Sell products or services on your website using a PayPal Buy Now Button
 

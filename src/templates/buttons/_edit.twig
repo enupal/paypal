@@ -97,7 +97,7 @@
                     value: paypalButton.buttonSizeCustomClass
                 }) }}
             </div>
-            <div id="preview-wrapper" class="header {% if paypalButton.size > 6 %}hidden{% endif %}" style="text-align: center;">
+            <div id="preview-wrapper" class="header {% if paypalButton.size > 6 %}hidden{% endif %}" style="text-align: center; margin-top: 10px;">
                 <span class="paypal-instructions"><p>{{ "Preview:"|t('enupal-paypal') }}</p> </span>
                 <p>
                 <img id="button-preview" src="" alt="">
@@ -124,7 +124,7 @@
         <hr>
         {% for tab in paypalButton.getFieldLayout().getTabs() %}
 
-            {% set fields = tab.getFields() %}
+            {% set fields = tab.getLayout().getCustomFields() %}
 
             {% for field in fields %}
                 {% include "_includes/field" with {
@@ -172,7 +172,7 @@
 
 {% css %}
     .paypal-instructions {
-    margin-top: 2px;
+    margin-top: 8px;
     color: #8f98a3;
     }
 

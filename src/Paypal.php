@@ -33,9 +33,9 @@ class Paypal extends Plugin
      */
     public static $app;
 
-    public $hasCpSection = true;
-    public $hasCpSettings = true;
-    public $schemaVersion = '1.1.0';
+    public bool $hasCpSection = true;
+    public bool $hasCpSettings = true;
+    public string $schemaVersion = '1.5.0';
 
     public function init()
     {
@@ -75,7 +75,7 @@ class Paypal extends Plugin
     /**
      * @inheritdoc
      */
-    protected function afterInstall()
+    protected function afterInstall(): void
     {
         Paypal::$app->buttons->createDefaultVariantFields();
     }
@@ -83,7 +83,7 @@ class Paypal extends Plugin
     /**
      * @inheritdoc
      */
-    protected function afterUninstall()
+    protected function afterUninstall(): void
     {
         Paypal::$app->buttons->deleteVariantFields();
     }
@@ -91,7 +91,7 @@ class Paypal extends Plugin
     /**
      * @inheritdoc
      */
-    protected function createSettingsModel()
+    protected function createSettingsModel(): ?\craft\base\Model
     {
         return new Settings();
     }
@@ -99,7 +99,7 @@ class Paypal extends Plugin
     /**
      * @inheritdoc
      */
-    public function getCpNavItem()
+    public function getCpNavItem(): ?array
     {
         $parent = parent::getCpNavItem();
         return array_merge($parent, [
@@ -123,7 +123,7 @@ class Paypal extends Plugin
     /**
      * @inheritdoc
      */
-    protected function settingsHtml()
+    protected function settingsHtml(): ?string
     {
         return Craft::$app->getView()->renderTemplate('enupal-paypal/settings/index');
     }

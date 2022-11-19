@@ -58,7 +58,7 @@ class PaypalVariable
      * @param array|null $options
      *
      * @return string
-     * @throws \Twig_Error_Loader
+     * @throws \Twig\Error\LoaderError
      * @throws \yii\base\Exception
      */
     public function displayButton($sku, array $options = null)

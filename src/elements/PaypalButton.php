@@ -12,6 +12,7 @@ use Craft;
 use craft\base\Element;
 use craft\behaviors\FieldLayoutBehavior;
 use craft\elements\db\ElementQueryInterface;
+use craft\elements\User;
 use enupal\paypal\enums\DiscountType;
 use enupal\paypal\validators\DiscountValidator;
 use yii\base\ErrorHandler;
@@ -29,11 +30,6 @@ use craft\validators\UniqueValidator;
  */
 class PaypalButton extends Element
 {
-    /**
-     * @inheritdoc
-     */
-    public $id;
-
     /**
      * @var string Name.
      */
@@ -67,7 +63,7 @@ class PaypalButton extends Element
     /**
      * @inheritdoc
      */
-    public $enabled;
+    public bool $enabled;
 
     public $quantity;
     public $hasUnlimitedStock;
@@ -107,7 +103,7 @@ class PaypalButton extends Element
     /**
      * @inheritdoc
      */
-    public function behaviors()
+    public function behaviors(): array
     {
         return array_merge(parent::behaviors(), [
             'fieldLayout' => [
@@ -117,7 +113,7 @@ class PaypalButton extends Element
         ]);
     }
 
-    public function init()
+    public function init(): void
     {
         parent::init();
 
@@ -279,7 +275,7 @@ class PaypalButton extends Element
     /**
      * @inheritdoc
      */
-    public static function refHandle()
+    public static function refHandle(): ?string
     {
         return 'paypal-buttons';
     }
@@ -319,7 +315,7 @@ class PaypalButton extends Element
     /**
      * @inheritdoc
      */
-    public function getFieldLayout()
+    public function getFieldLayout(): ?\craft\models\FieldLayout
     {
         $behaviors = $this->getBehaviors();
         $fieldLayout = $behaviors['fieldLayout'];
@@ -330,7 +326,7 @@ class PaypalButton extends Element
     /**
      * @inheritdoc
      */
-    public function getCpEditUrl()
+    public function getCpEditUrl(): ?string
     {
         return UrlHelper::cpUrl(
             'enupal-paypal/buttons/edit/'.$this->id
@@ -343,7 +339,7 @@ class PaypalButton extends Element
      * @return string
      */
     /** @noinspection PhpInconsistentReturnPointsInspection */
-    public function __toString()
+    public function __toString(): string
     {
         try {
             // @todo - For some reason the Title returns null possible Craft3 bug
@@ -442,6 +438,14 @@ class PaypalButton extends Element
     /**
      * @inheritdoc
      */
+    public function canView(User $user): bool
+    {
+        return true;
+    }
+
+    /**
+     * @inheritdoc
+     */
     protected function tableAttributeHtml(string $attribute): string
     {
         switch ($attribute) {
@@ -476,7 +480,7 @@ class PaypalButton extends Element
      * @inheritdoc
      * @throws Exception if reasons
      */
-    public function afterSave(bool $isNew)
+    public function afterSave(bool $isNew): void
     {
         $record = new PaypalButtonRecord();
         // Get the PaypalButton record
@@ -520,7 +524,7 @@ class PaypalButton extends Element
     /**
      * @inheritdoc
      */
-    public function rules()
+    public function rules(): array
     {
         return [
             [['name', 'sku'], 'required'],
@@ -599,7 +603,7 @@ class PaypalButton extends Element
      * @param array|null $options
      *
      * @return string
-     * @throws \Twig_Error_Loader
+     * @throws \Twig\Error\LoaderError
      * @throws \yii\base\Exception
      */
     public function displayButton(array $options = null)

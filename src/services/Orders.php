@@ -228,7 +228,7 @@ class Orders extends Component
      * @param Order $order
      *
      * @return bool
-     * @throws \Twig_Error_Loader
+     * @throws \Twig\Error\LoaderError
      * @throws \yii\base\Exception
      */
     public function sendCustomerNotification(Order $order)
@@ -282,7 +282,7 @@ class Orders extends Component
      * @param Order $order
      *
      * @return bool
-     * @throws \Twig_Error_Loader
+     * @throws \Twig\Error\LoaderError
      * @throws \yii\base\Exception
      */
     public function sendAdminNotification(Order $order)
