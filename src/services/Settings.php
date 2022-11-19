@@ -9,8 +9,10 @@
 namespace enupal\paypal\services;
 
 use Craft;
+use craft\db\Query;
 use yii\base\Component;
 use enupal\paypal\models\Settings as SettingsModel;
+use yii\db\Exception;
 
 class Settings extends Component
 {

@@ -16,8 +16,6 @@ class PaypalButtonsQuery extends ElementQuery
 
     // General - Properties
     // =========================================================================
-    public mixed $id;
-    public mixed $dateCreated;
     public $name;
     public $sku;
 

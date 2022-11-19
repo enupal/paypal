@@ -29,7 +29,6 @@ class Order extends Element
 {
     // General - Properties
     // =========================================================================
-    public ?int $id;
 
     public $testMode;
 
@@ -78,7 +77,6 @@ class Order extends Element
     // variants
     public $variants;
 
-    public ?\DateTime $dateCreated;
     public $dateOrdered;
 
     /**

@@ -10,9 +10,11 @@ namespace enupal\paypal\services;
 
 use Craft;
 use craft\base\Field;
+use craft\fieldlayoutelements\CustomField;
 use craft\fields\Matrix;
 use craft\fields\PlainText;
 use craft\fields\Table;
+use craft\helpers\StringHelper;
 use enupal\paypal\elements\PaypalButton;
 use enupal\paypal\enums\DiscountType;
 use enupal\paypal\enums\OpenWindow;
@@ -356,21 +358,26 @@ class Buttons extends Component
         }
 
         // Create a tab
-        $tabName = "Tab1";
-        $requiredFields = [];
-        $postedFieldLayout = [];
+        $config['uid'] = StringHelper::UUID();
+        $config['tabs'][0] = [];
+        $config['tabs'][0]['name'] = "Tab1";
+        $config['tabs'][0]['uid'] = StringHelper::UUID();
 
         // Add our variant fields
         if ($matrixPricedField !== null && $matrixPricedField->id != null) {
-            $postedFieldLayout[$tabName][] = $matrixPricedField->id;
+            $config['tabs'][0]['elements'][0]['uid'] = StringHelper::UUID();
+            $config['tabs'][0]['elements'][0]['type'] = CustomField::class;
+            $config['tabs'][0]['elements'][0]['fieldUid'] = $matrixPricedField->uid;
         }
 
         if ($matrixBasicField !== null && $matrixBasicField->id != null) {
-            $postedFieldLayout[$tabName][] = $matrixBasicField->id;
+            $config['tabs'][0]['elements'][1]['uid'] = StringHelper::UUID();
+            $config['tabs'][0]['elements'][1]['type'] = CustomField::class;
+            $config['tabs'][0]['elements'][1]['fieldUid'] = $matrixBasicField->uid;
         }
 
         // Set the field layout
-        $fieldLayout = Craft::$app->fields->assembleLayout($postedFieldLayout, $requiredFields);
+        $fieldLayout = Craft::$app->fields->createLayout($config);
 
         $fieldLayout->type = PaypalButton::class;
         // Set the tab to the form

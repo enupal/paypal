@@ -12,6 +12,7 @@ use Craft;
 use craft\base\Element;
 use craft\behaviors\FieldLayoutBehavior;
 use craft\elements\db\ElementQueryInterface;
+use craft\elements\User;
 use enupal\paypal\enums\DiscountType;
 use enupal\paypal\validators\DiscountValidator;
 use yii\base\ErrorHandler;
@@ -29,11 +30,6 @@ use craft\validators\UniqueValidator;
  */
 class PaypalButton extends Element
 {
-    /**
-     * @inheritdoc
-     */
-    public ?int $id;
-
     /**
      * @var string Name.
      */
@@ -437,6 +433,14 @@ class PaypalButton extends Element
         $attributes = ['name', 'amount', 'sku', 'dateCreated'];
 
         return $attributes;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function canView(User $user): bool
+    {
+        return true;
     }
 
     /**
