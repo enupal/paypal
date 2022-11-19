@@ -622,7 +622,7 @@ class Buttons extends Component
      * @param array|null $options
      *
      * @return string
-     * @throws \Twig_Error_Loader
+     * @throws \Twig\Error\LoaderError
      * @throws \yii\base\Exception
      */
     public function getButtonHtml($sku, array $options = null)
