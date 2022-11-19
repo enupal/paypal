@@ -16,8 +16,6 @@
 {% set openInOptions = craft.paypalButton.getOpenInOptions() %}
 
 <div class="meta">
-    <h6>{{ 'General'|t('sprout-forms') }}</h6>
-
     {{ forms.textField({
         first: true,
         label: "SKU <span class='info'>How you’ll refer to this Paypal Button in the templates.</span>"|t('enupal-paypal'),
@@ -38,7 +36,6 @@
 </div>
 <hr>
 <div class="meta">
-    <h6>{{ 'Paypal Button'|t('sprout-forms') }}</h6>
     {% set amountInput %}
     <div class="flex">
         <div class="textwrapper">
@@ -121,7 +118,6 @@
 </div>
 <hr>
 <div class="meta">
-    <h6>{{ 'Discount'|t('sprout-forms') }}</h6>
     {{ forms.selectField({
         label: "Discount Type <span class='info'>Reduce the price by a percentage or amount, of the original price.</span>"|t('enupal-paypal'),
         id: 'discountType',
@@ -142,7 +138,6 @@
 </div>
 <hr>
 <div class="meta">
-    <h6>{{ 'Shipping'|t('sprout-forms') }}</h6>
 
     {{ forms.selectField({
         label: "Shipping Address"|t('enupal-paypal'),
@@ -166,7 +161,6 @@
 </div>
 <hr>
 <div class="meta">
-    <h6>{{ 'Advanced'|t('sprout-forms') }}</h6>
 
     {{ forms.textField({
         label: "Return URL <span class='info'>Redirect buyers' to this URL after they complete their payments</span>"|t('enupal-paypal'),

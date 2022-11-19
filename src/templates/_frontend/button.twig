@@ -1,4 +1,4 @@
-{% spaceless %}
+{% apply spaceless %}
 <form class="paypal-button" id="paypal-button-{{ button.id }}" method="post" action="{{ button.getPaypalUrl() }}" {% if button.openIn == 1 %} target="_blank" {% endif %}>
     {{ csrfInput() }}
     <input name="item_name" value="{{ button.name }}" type="hidden">
@@ -70,4 +70,4 @@
         <button class="{{ button.buttonSizeCustomClass }}">{{ button.buttonSizeCustomName }}</button>
     {% endif %}
 </form>
-{% endspaceless %}
+{% endapply %}
